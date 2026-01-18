@@ -1,1 +1,160 @@
 @import "tailwindcss";
+
+/* === RETRO TERMINAL CRT EFFECTS === */
+
+/* Base CRT styling */
+:root {
+  --terminal-green: #33ff33;
+  --terminal-green-dim: #1a8c1a;
+  --terminal-green-glow: rgba(51, 255, 51, 0.5);
+  --terminal-bg: #0a0a0a;
+  --terminal-bg-lighter: #111111;
+  --scanline-opacity: 0.03;
+}
+
+/* Phosphor glow effect for text */
+.terminal-glow {
+  text-shadow:
+    0 0 5px var(--terminal-green-glow),
+    0 0 10px var(--terminal-green-glow),
+    0 0 20px var(--terminal-green-glow);
+}
+
+.terminal-glow-subtle {
+  text-shadow:
+    0 0 3px var(--terminal-green-glow),
+    0 0 6px var(--terminal-green-glow);
+}
+
+/* Scanline overlay effect */
+.scanlines::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, var(--scanline-opacity)),
+    rgba(0, 0, 0, var(--scanline-opacity)) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  z-index: 9999;
+}
+
+/* CRT screen curvature effect */
+.crt-curve {
+  box-shadow:
+    inset 0 0 100px rgba(0, 0, 0, 0.5),
+    inset 0 0 50px rgba(0, 0, 0, 0.3);
+}
+
+/* Blinking cursor animation */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.cursor-blink::after {
+  content: "_";
+  animation: blink 1s infinite;
+  margin-left: 2px;
+}
+
+/* Boot-up flicker animation */
+@keyframes flicker {
+  0% { opacity: 0.97; }
+  5% { opacity: 0.9; }
+  10% { opacity: 0.98; }
+  15% { opacity: 0.92; }
+  20% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+.crt-flicker {
+  animation: flicker 0.15s ease-in-out;
+}
+
+/* Terminal button styling */
+.terminal-btn {
+  border: 1px solid var(--terminal-green);
+  background: transparent;
+  color: var(--terminal-green);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  transition: all 0.15s ease;
+}
+
+.terminal-btn:hover {
+  background: var(--terminal-green);
+  color: var(--terminal-bg);
+  box-shadow: 0 0 10px var(--terminal-green-glow);
+}
+
+/* Terminal card styling */
+.terminal-card {
+  border: 1px solid var(--terminal-green-dim);
+  background: var(--terminal-bg-lighter);
+  position: relative;
+}
+
+.terminal-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--terminal-green), transparent);
+}
+
+/* ASCII-style decorative border */
+.ascii-border {
+  border: 1px dashed var(--terminal-green-dim);
+}
+
+/* Type writer effect for headers */
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* Subtle screen noise */
+@keyframes noise {
+  0%, 100% { background-position: 0 0; }
+  10% { background-position: -5% -10%; }
+  20% { background-position: -15% 5%; }
+  30% { background-position: 7% -25%; }
+  40% { background-position: 20% 25%; }
+  50% { background-position: -25% 10%; }
+  60% { background-position: 15% 5%; }
+  70% { background-position: 0% 15%; }
+  80% { background-position: 25% 35%; }
+  90% { background-position: -10% 10%; }
+}
+
+/* Selection color */
+::selection {
+  background: var(--terminal-green);
+  color: var(--terminal-bg);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--terminal-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--terminal-green-dim);
+  border: 1px solid var(--terminal-green);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--terminal-green);
+}

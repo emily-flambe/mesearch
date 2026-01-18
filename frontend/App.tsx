@@ -6,7 +6,7 @@ function GitHubIcon() {
       href="https://github.com/emily-flambe/mesearch"
       target="_blank"
       rel="noopener noreferrer"
-      className="text-gray-400 hover:text-gray-600 transition-colors"
+      className="text-[#33ff33]/60 hover:text-[#33ff33] transition-colors terminal-glow-subtle"
       aria-label="View on GitHub"
     >
       <svg
@@ -22,39 +22,69 @@ function GitHubIcon() {
   );
 }
 
-function HomePage() {
+function TerminalHeader({ showNav = true }: { showNav?: boolean }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-indigo-600">MeSearch</h1>
-          <nav className="flex items-center gap-6">
-            <a href="#tests" className="text-gray-600 hover:text-indigo-600 transition-colors">Tests</a>
-            <a href="#about" className="text-gray-600 hover:text-indigo-600 transition-colors">About</a>
+    <header className="border-b border-[#1a8c1a] bg-[#0a0a0a]/95">
+      <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
+        <Link to="/" className="font-mono text-2xl font-bold text-[#33ff33] terminal-glow">
+          <span className="text-[#33ff33]/60">[</span>MeSearch<span className="text-[#33ff33]/60">]</span>
+        </Link>
+        {showNav ? (
+          <nav className="flex items-center gap-6 font-mono">
+            <a href="#tests" className="text-[#33ff33]/70 hover:text-[#33ff33] transition-colors">
+              <span className="text-[#33ff33]/40">&gt;</span> tests
+            </a>
+            <a href="#about" className="text-[#33ff33]/70 hover:text-[#33ff33] transition-colors">
+              <span className="text-[#33ff33]/40">&gt;</span> about
+            </a>
             <GitHubIcon />
           </nav>
-        </div>
-      </header>
+        ) : (
+          <GitHubIcon />
+        )}
+      </div>
+    </header>
+  );
+}
+
+function HomePage() {
+  return (
+    <div className="min-h-screen bg-[#0a0a0a] font-mono scanlines crt-flicker">
+      <TerminalHeader />
 
       <main>
+        {/* Hero Section */}
         <section className="mx-auto max-w-6xl px-4 py-24 text-center">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">
-            Understand Yourself Better
+          <div className="mb-8 text-[#33ff33]/40 text-sm">
+            ╔══════════════════════════════════════════════════════════╗
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-[#33ff33] mb-6 terminal-glow">
+            <span className="text-[#33ff33]/60">&gt;</span> Understand_Yourself_Better<span className="cursor-blink"></span>
           </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-[#33ff33]/70 mb-8 max-w-2xl mx-auto leading-relaxed">
             Take scientifically-backed personality assessments, track your results over time,
             and discover insights across multiple frameworks.
           </p>
+          <div className="mb-8 text-[#33ff33]/40 text-sm">
+            ╚══════════════════════════════════════════════════════════╝
+          </div>
           <a
             href="#tests"
-            className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-indigo-700 transition-colors"
+            className="terminal-btn inline-block px-8 py-3 text-lg font-medium"
           >
-            Explore Tests
+            [ EXPLORE TESTS ]
           </a>
         </section>
 
+        {/* Tests Section */}
         <section id="tests" className="mx-auto max-w-6xl px-4 py-16">
-          <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">Featured Tests</h3>
+          <div className="text-center mb-12">
+            <div className="text-[#33ff33]/50 text-sm mb-2">════════════════════</div>
+            <h3 className="text-3xl font-bold text-[#33ff33] terminal-glow-subtle">
+              AVAILABLE_TESTS
+            </h3>
+            <div className="text-[#33ff33]/50 text-sm mt-2">════════════════════</div>
+          </div>
           <div className="grid md:grid-cols-3 gap-6">
             <TestCard
               title="Big Five (IPIP-NEO)"
@@ -80,30 +110,45 @@ function HomePage() {
           </div>
         </section>
 
-        <section id="about" className="bg-indigo-600 text-white py-16">
+        {/* About Section */}
+        <section id="about" className="border-y border-[#1a8c1a] py-16 bg-[#0f0f0f]">
           <div className="mx-auto max-w-6xl px-4 text-center">
-            <h3 className="text-3xl font-bold mb-4">The Science Behind It</h3>
-            <p className="text-indigo-100 text-lg max-w-2xl mx-auto mb-6">
+            <div className="text-[#33ff33]/50 text-sm mb-4">
+              +------------------------------------------+
+            </div>
+            <h3 className="text-3xl font-bold text-[#33ff33] mb-4 terminal-glow-subtle">
+              SYSTEM://METHODOLOGY
+            </h3>
+            <div className="text-[#33ff33]/50 text-sm mb-6">
+              +------------------------------------------+
+            </div>
+            <p className="text-[#33ff33]/70 text-lg max-w-2xl mx-auto mb-8">
               We prioritize scientifically validated assessments. Each test is labeled with its research backing
-              so you know exactly what you're getting.
+              so you know exactly what you are getting.
             </p>
-            <div className="flex justify-center gap-8 text-sm">
-              <div>
-                <span className="bg-green-500 text-white px-2 py-1 rounded text-xs font-medium">Research-Backed</span>
-                <p className="mt-2 text-indigo-200">Strong empirical support</p>
+            <div className="flex justify-center gap-12 text-sm">
+              <div className="text-left">
+                <span className="inline-block border border-[#33ff33] text-[#33ff33] px-3 py-1 mb-2">
+                  [RESEARCH-BACKED]
+                </span>
+                <p className="text-[#33ff33]/60">Strong empirical support</p>
               </div>
-              <div>
-                <span className="bg-purple-400 text-white px-2 py-1 rounded text-xs font-medium">Self-Discovery</span>
-                <p className="mt-2 text-indigo-200">Popular for reflection</p>
+              <div className="text-left">
+                <span className="inline-block border border-[#33ff33]/60 text-[#33ff33]/80 px-3 py-1 mb-2">
+                  [SELF-DISCOVERY]
+                </span>
+                <p className="text-[#33ff33]/60">Popular for reflection</p>
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-gray-100 py-8">
-        <div className="mx-auto max-w-6xl px-4 text-center text-gray-500">
-          <p>&copy; 2025 MeSearch. Built with science, designed for insight.</p>
+      <footer className="border-t border-[#1a8c1a] py-8">
+        <div className="mx-auto max-w-6xl px-4 text-center text-[#33ff33]/50 text-sm">
+          <p>
+            <span className="text-[#33ff33]/30">/*</span> (C) 2025 MeSearch <span className="text-[#33ff33]/30">|</span> Built with science, designed for insight. <span className="text-[#33ff33]/30">*/</span>
+          </p>
         </div>
       </footer>
     </div>
@@ -125,29 +170,37 @@ function TestCard({
   time: string;
   badge: BadgeType;
 }) {
-  const badgeStyles: Record<BadgeType, { bg: string; text: string; label: string }> = {
-    research: { bg: 'bg-green-100', text: 'text-green-700', label: 'Research-Backed' },
-    popular: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Popular Assessment' },
-    discovery: { bg: 'bg-purple-100', text: 'text-purple-700', label: 'Self-Discovery' },
+  const badgeLabels: Record<BadgeType, string> = {
+    research: '[RESEARCH-BACKED]',
+    popular: '[POPULAR]',
+    discovery: '[SELF-DISCOVERY]',
   };
 
-  const { bg, text, label } = badgeStyles[badge];
+  const badgeStyles: Record<BadgeType, string> = {
+    research: 'border-[#33ff33] text-[#33ff33]',
+    popular: 'border-[#33ff33]/70 text-[#33ff33]/80',
+    discovery: 'border-[#33ff33]/60 text-[#33ff33]/70',
+  };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-2 mb-3">
-        <span className={`${bg} ${text} text-xs font-medium px-2 py-1 rounded`}>
-          {label}
+    <div className="terminal-card p-6 hover:border-[#33ff33] transition-colors">
+      <div className="flex items-center justify-between mb-4 text-xs">
+        <span className={`border ${badgeStyles[badge]} px-2 py-1`}>
+          {badgeLabels[badge]}
         </span>
-        <span className="text-gray-400 text-sm">{time}</span>
+        <span className="text-[#33ff33]/50">
+          <span className="text-[#33ff33]/30">TIME:</span> {time}
+        </span>
       </div>
-      <h4 className="text-xl font-semibold text-gray-900 mb-2">{title}</h4>
-      <p className="text-gray-600 text-sm mb-4">{description}</p>
+      <h4 className="text-lg font-bold text-[#33ff33] mb-2 terminal-glow-subtle">
+        <span className="text-[#33ff33]/40">&gt;</span> {title}
+      </h4>
+      <p className="text-[#33ff33]/60 text-sm mb-6 leading-relaxed">{description}</p>
       <Link
         to={`/test/${slug}`}
-        className="block w-full bg-gray-100 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors text-center"
+        className="terminal-btn block w-full py-2 text-center text-sm"
       >
-        Start Test
+        [ INITIALIZE TEST ]
       </Link>
     </div>
   );
@@ -155,26 +208,41 @@ function TestCard({
 
 function TestPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="text-2xl font-bold text-indigo-600">MeSearch</Link>
-          <GitHubIcon />
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#0a0a0a] font-mono scanlines">
+      <TerminalHeader showNav={false} />
       <main className="mx-auto max-w-2xl px-4 py-16 text-center">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
-          <div className="text-6xl mb-4">🚧</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Coming Soon</h2>
-          <p className="text-gray-600 mb-6">
-            We're working on bringing you this assessment. Check back soon!
+        <div className="terminal-card p-8">
+          <div className="text-[#33ff33]/40 text-sm mb-6">
+            +--------------------------------+<br />
+            |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SYSTEM MESSAGE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br />
+            +--------------------------------+
+          </div>
+          <div className="text-6xl mb-6 text-[#33ff33]/30">
+            <pre className="inline-block text-left text-xs leading-tight">
+{`   _____
+  /     \\
+ | () () |
+  \\  ^  /
+   |||||
+   |||||  `}
+            </pre>
+          </div>
+          <h2 className="text-2xl font-bold text-[#33ff33] mb-4 terminal-glow-subtle">
+            <span className="text-[#33ff33]/40">&gt;</span> STATUS: UNDER_CONSTRUCTION
+          </h2>
+          <p className="text-[#33ff33]/60 mb-8">
+            This assessment module is currently being developed.<br />
+            <span className="text-[#33ff33]/40">Please check back later for updates.</span>
           </p>
           <Link
             to="/"
-            className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+            className="terminal-btn inline-block px-6 py-2"
           >
-            Back to Home
+            [ RETURN TO MAIN ]
           </Link>
+          <div className="mt-8 text-[#33ff33]/30 text-xs">
+            <span className="cursor-blink">awaiting input</span>
+          </div>
         </div>
       </main>
     </div>
