@@ -146,7 +146,7 @@ function HomePage() {
             <span className="block text-gold-gradient italic mt-2">With Clarity</span>
           </h2>
           <p className="text-lg text-[var(--color-text-secondary)] mb-12 max-w-2xl mx-auto leading-relaxed font-light transition-colors duration-300">
-            Scientifically-backed personality assessments designed to reveal insights
+            Scientifically-backed and/or bullshit personality assessments designed to reveal insights
             across multiple psychological frameworks. Track your evolution over time.
           </p>
           <a
