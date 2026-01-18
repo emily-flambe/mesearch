@@ -6,7 +6,7 @@ function GitHubIcon() {
       href="https://github.com/emily-flambe/mesearch"
       target="_blank"
       rel="noopener noreferrer"
-      className="text-gray-400 hover:text-gray-600 transition-colors"
+      className="text-white/70 hover:text-white transition-colors"
       aria-label="View on GitHub"
     >
       <svg
@@ -24,38 +24,61 @@ function GitHubIcon() {
 
 function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-indigo-600">MeSearch</h1>
-          <nav className="flex items-center gap-6">
-            <a href="#tests" className="text-gray-600 hover:text-indigo-600 transition-colors">Tests</a>
-            <a href="#about" className="text-gray-600 hover:text-indigo-600 transition-colors">About</a>
+    <div className="min-h-screen gradient-animated relative overflow-hidden">
+      {/* Decorative floating shapes */}
+      <div className="blur-shape w-96 h-96 bg-pink-400 top-20 -left-48" />
+      <div className="blur-shape w-80 h-80 bg-purple-500 top-1/3 right-0" />
+      <div className="blur-shape w-64 h-64 bg-blue-400 bottom-20 left-1/4" />
+      <div className="blur-shape w-72 h-72 bg-indigo-500 bottom-0 right-1/3" />
+
+      {/* Header */}
+      <header className="glass sticky top-0 z-50">
+        <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-white tracking-tight">MeSearch</h1>
+          <nav className="flex items-center gap-8">
+            <a
+              href="#tests"
+              className="text-white/80 hover:text-white transition-colors font-medium"
+            >
+              Tests
+            </a>
+            <a
+              href="#about"
+              className="text-white/80 hover:text-white transition-colors font-medium"
+            >
+              About
+            </a>
             <GitHubIcon />
           </nav>
         </div>
       </header>
 
-      <main>
-        <section className="mx-auto max-w-6xl px-4 py-24 text-center">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">
-            Understand Yourself Better
-          </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Take scientifically-backed personality assessments, track your results over time,
-            and discover insights across multiple frameworks.
-          </p>
-          <a
-            href="#tests"
-            className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-indigo-700 transition-colors"
-          >
-            Explore Tests
-          </a>
+      <main className="relative z-10">
+        {/* Hero Section */}
+        <section className="mx-auto max-w-6xl px-6 py-32 text-center">
+          <div className="glass-strong rounded-3xl p-12 max-w-3xl mx-auto inner-glow relative">
+            <h2 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+              Understand Yourself Better
+            </h2>
+            <p className="text-xl text-white/80 mb-10 max-w-xl mx-auto leading-relaxed">
+              Take scientifically-backed personality assessments, track your results over time,
+              and discover insights across multiple frameworks.
+            </p>
+            <a
+              href="#tests"
+              className="btn-accent inline-block text-white px-10 py-4 rounded-xl text-lg font-semibold"
+            >
+              Explore Tests
+            </a>
+          </div>
         </section>
 
-        <section id="tests" className="mx-auto max-w-6xl px-4 py-16">
-          <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">Featured Tests</h3>
-          <div className="grid md:grid-cols-3 gap-6">
+        {/* Tests Section */}
+        <section id="tests" className="mx-auto max-w-6xl px-6 py-20">
+          <h3 className="text-3xl font-bold text-white text-center mb-12">
+            Featured Tests
+          </h3>
+          <div className="grid md:grid-cols-3 gap-8">
             <TestCard
               title="Big Five (IPIP-NEO)"
               slug="big-five"
@@ -80,30 +103,42 @@ function HomePage() {
           </div>
         </section>
 
-        <section id="about" className="bg-indigo-600 text-white py-16">
-          <div className="mx-auto max-w-6xl px-4 text-center">
-            <h3 className="text-3xl font-bold mb-4">The Science Behind It</h3>
-            <p className="text-indigo-100 text-lg max-w-2xl mx-auto mb-6">
-              We prioritize scientifically validated assessments. Each test is labeled with its research backing
-              so you know exactly what you're getting.
-            </p>
-            <div className="flex justify-center gap-8 text-sm">
-              <div>
-                <span className="bg-green-500 text-white px-2 py-1 rounded text-xs font-medium">Research-Backed</span>
-                <p className="mt-2 text-indigo-200">Strong empirical support</p>
-              </div>
-              <div>
-                <span className="bg-purple-400 text-white px-2 py-1 rounded text-xs font-medium">Self-Discovery</span>
-                <p className="mt-2 text-indigo-200">Popular for reflection</p>
+        {/* About Section */}
+        <section id="about" className="py-20">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="glass-strong rounded-3xl p-12 text-center inner-glow relative">
+              <h3 className="text-3xl font-bold text-white mb-6">
+                The Science Behind It
+              </h3>
+              <p className="text-white/80 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+                We prioritize scientifically validated assessments. Each test is labeled with its
+                research backing so you know exactly what you're getting.
+              </p>
+              <div className="flex justify-center gap-12">
+                <div className="text-center">
+                  <span className="inline-block bg-emerald-500/80 backdrop-blur text-white px-4 py-2 rounded-lg text-sm font-semibold mb-3">
+                    Research-Backed
+                  </span>
+                  <p className="text-white/70 text-sm">Strong empirical support</p>
+                </div>
+                <div className="text-center">
+                  <span className="inline-block bg-violet-500/80 backdrop-blur text-white px-4 py-2 rounded-lg text-sm font-semibold mb-3">
+                    Self-Discovery
+                  </span>
+                  <p className="text-white/70 text-sm">Popular for reflection</p>
+                </div>
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-gray-100 py-8">
-        <div className="mx-auto max-w-6xl px-4 text-center text-gray-500">
-          <p>&copy; 2025 MeSearch. Built with science, designed for insight.</p>
+      {/* Footer */}
+      <footer className="glass relative z-10 mt-12">
+        <div className="mx-auto max-w-6xl px-6 py-8 text-center">
+          <p className="text-white/60">
+            2025 MeSearch. Built with science, designed for insight.
+          </p>
         </div>
       </footer>
     </div>
@@ -117,7 +152,7 @@ function TestCard({
   slug,
   description,
   time,
-  badge
+  badge,
 }: {
   title: string;
   slug: string;
@@ -125,27 +160,29 @@ function TestCard({
   time: string;
   badge: BadgeType;
 }) {
-  const badgeStyles: Record<BadgeType, { bg: string; text: string; label: string }> = {
-    research: { bg: 'bg-green-100', text: 'text-green-700', label: 'Research-Backed' },
-    popular: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Popular Assessment' },
-    discovery: { bg: 'bg-purple-100', text: 'text-purple-700', label: 'Self-Discovery' },
+  const badgeStyles: Record<BadgeType, { bg: string; label: string }> = {
+    research: { bg: 'bg-emerald-500/80', label: 'Research-Backed' },
+    popular: { bg: 'bg-blue-500/80', label: 'Popular Assessment' },
+    discovery: { bg: 'bg-violet-500/80', label: 'Self-Discovery' },
   };
 
-  const { bg, text, label } = badgeStyles[badge];
+  const { bg, label } = badgeStyles[badge];
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-2 mb-3">
-        <span className={`${bg} ${text} text-xs font-medium px-2 py-1 rounded`}>
+    <div className="glass-strong rounded-2xl p-8 glass-hover inner-glow relative">
+      <div className="flex items-center gap-3 mb-4">
+        <span
+          className={`${bg} backdrop-blur text-white text-xs font-semibold px-3 py-1.5 rounded-lg`}
+        >
           {label}
         </span>
-        <span className="text-gray-400 text-sm">{time}</span>
+        <span className="text-white/50 text-sm font-medium">{time}</span>
       </div>
-      <h4 className="text-xl font-semibold text-gray-900 mb-2">{title}</h4>
-      <p className="text-gray-600 text-sm mb-4">{description}</p>
+      <h4 className="text-xl font-bold text-white mb-3">{title}</h4>
+      <p className="text-white/70 text-sm mb-6 leading-relaxed">{description}</p>
       <Link
         to={`/test/${slug}`}
-        className="block w-full bg-gray-100 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors text-center"
+        className="btn-glass block w-full text-white py-3 rounded-xl font-semibold text-center"
       >
         Start Test
       </Link>
@@ -155,23 +192,46 @@ function TestCard({
 
 function TestPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="text-2xl font-bold text-indigo-600">MeSearch</Link>
+    <div className="min-h-screen gradient-animated relative overflow-hidden">
+      {/* Decorative floating shapes */}
+      <div className="blur-shape w-80 h-80 bg-purple-500 top-20 -right-20" />
+      <div className="blur-shape w-64 h-64 bg-pink-400 bottom-40 -left-20" />
+
+      {/* Header */}
+      <header className="glass sticky top-0 z-50">
+        <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
+          <Link to="/" className="text-2xl font-bold text-white tracking-tight">
+            MeSearch
+          </Link>
           <GitHubIcon />
         </div>
       </header>
-      <main className="mx-auto max-w-2xl px-4 py-16 text-center">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
-          <div className="text-6xl mb-4">🚧</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Coming Soon</h2>
-          <p className="text-gray-600 mb-6">
+
+      <main className="relative z-10 mx-auto max-w-2xl px-6 py-24">
+        <div className="glass-strong rounded-3xl p-12 text-center inner-glow relative">
+          {/* Icon replacement for emoji */}
+          <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-amber-500/80 backdrop-blur flex items-center justify-center">
+            <svg
+              className="w-10 h-10 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+          <h2 className="text-3xl font-bold text-white mb-4">Coming Soon</h2>
+          <p className="text-white/70 mb-8 text-lg leading-relaxed">
             We're working on bringing you this assessment. Check back soon!
           </p>
           <Link
             to="/"
-            className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+            className="btn-accent inline-block text-white px-8 py-3 rounded-xl font-semibold"
           >
             Back to Home
           </Link>
