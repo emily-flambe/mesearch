@@ -6,13 +6,13 @@ function GitHubIcon() {
       href="https://github.com/emily-flambe/mesearch"
       target="_blank"
       rel="noopener noreferrer"
-      className="text-gray-400 hover:text-gray-600 transition-colors"
+      className="text-gray-400 hover:text-[#c41e3a] transition-colors"
       aria-label="View on GitHub"
     >
       <svg
         viewBox="0 0 24 24"
-        width="24"
-        height="24"
+        width="20"
+        height="20"
         fill="currentColor"
         aria-hidden="true"
       >
@@ -24,86 +24,220 @@ function GitHubIcon() {
 
 function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-indigo-600">MeSearch</h1>
-          <nav className="flex items-center gap-6">
-            <a href="#tests" className="text-gray-600 hover:text-indigo-600 transition-colors">Tests</a>
-            <a href="#about" className="text-gray-600 hover:text-indigo-600 transition-colors">About</a>
+    <div className="min-h-screen bg-[#fafafa]">
+      {/* Masthead */}
+      <header className="border-b border-black">
+        <div className="mx-auto max-w-7xl px-6">
+          {/* Top bar */}
+          <div className="flex items-center justify-between py-3 border-b border-gray-200">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-gray-500">
+              Vol. I / January 2025
+            </span>
             <GitHubIcon />
+          </div>
+          {/* Logo */}
+          <div className="py-8 text-center">
+            <h1 className="font-editorial text-6xl md:text-7xl font-medium tracking-tight-editorial text-[#0a0a0a]">
+              MeSearch
+            </h1>
+            <p className="mt-2 text-xs uppercase tracking-[0.25em] text-gray-500">
+              The Journal of Self-Discovery
+            </p>
+          </div>
+          {/* Nav */}
+          <nav className="flex justify-center gap-8 py-4 border-t border-gray-200">
+            <a href="#tests" className="text-xs uppercase tracking-[0.15em] text-gray-700 hover-accent-underline relative">
+              Assessments
+            </a>
+            <a href="#about" className="text-xs uppercase tracking-[0.15em] text-gray-700 hover-accent-underline relative">
+              Methodology
+            </a>
+            <a href="#research" className="text-xs uppercase tracking-[0.15em] text-gray-700 hover-accent-underline relative">
+              Research
+            </a>
           </nav>
         </div>
       </header>
 
       <main>
-        <section className="mx-auto max-w-6xl px-4 py-24 text-center">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">
-            Understand Yourself Better
-          </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Take scientifically-backed personality assessments, track your results over time,
-            and discover insights across multiple frameworks.
-          </p>
-          <a
-            href="#tests"
-            className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-indigo-700 transition-colors"
-          >
-            Explore Tests
-          </a>
-        </section>
+        {/* Hero - Editorial asymmetric layout */}
+        <section className="mx-auto max-w-7xl px-6 py-20">
+          <div className="grid md:grid-cols-12 gap-8 items-start">
+            {/* Main headline area */}
+            <div className="md:col-span-7">
+              <div className="rule-accent w-16 mb-6"></div>
+              <h2 className="font-editorial text-5xl md:text-7xl lg:text-8xl font-medium leading-[0.95] tracking-tight-editorial text-[#0a0a0a] mb-8">
+                Know<br />
+                <span className="italic">Thyself</span>
+              </h2>
+              <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-xl font-light">
+                Scientifically validated personality assessments.
+                Track your psychological profile over time.
+                Discover patterns across multiple frameworks.
+              </p>
+              <div className="mt-10">
+                <a href="#tests" className="btn-editorial">
+                  Begin Assessment
+                </a>
+              </div>
+            </div>
 
-        <section id="tests" className="mx-auto max-w-6xl px-4 py-16">
-          <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">Featured Tests</h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            <TestCard
-              title="Big Five (IPIP-NEO)"
-              slug="big-five"
-              description="The gold standard in personality psychology. Measures Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism."
-              time="15 min"
-              badge="research"
-            />
-            <TestCard
-              title="HEXACO"
-              slug="hexaco"
-              description="Six-factor model including Honesty-Humility. Predicts ethical behavior and workplace conduct."
-              time="12 min"
-              badge="research"
-            />
-            <TestCard
-              title="Enneagram"
-              slug="enneagram"
-              description="Explore your core motivations through 9 personality types. Popular for personal growth and self-discovery."
-              time="10 min"
-              badge="discovery"
-            />
+            {/* Sidebar pull quote */}
+            <div className="md:col-span-5 md:border-l md:border-gray-200 md:pl-8">
+              <div className="pull-quote py-4">
+                <p className="font-editorial text-2xl md:text-3xl italic leading-snug text-gray-800">
+                  "The unexamined life is not worth living."
+                </p>
+                <cite className="block mt-4 text-xs uppercase tracking-[0.15em] text-gray-500 not-italic">
+                  Socrates
+                </cite>
+              </div>
+
+              <div className="mt-12 pt-8 border-t border-gray-200">
+                <div className="flex items-baseline gap-4">
+                  <span className="display-number">3</span>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">Featured Tests</p>
+                    <p className="text-xs text-gray-500 mt-1">Research-backed & self-discovery</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
-        <section id="about" className="bg-indigo-600 text-white py-16">
-          <div className="mx-auto max-w-6xl px-4 text-center">
-            <h3 className="text-3xl font-bold mb-4">The Science Behind It</h3>
-            <p className="text-indigo-100 text-lg max-w-2xl mx-auto mb-6">
-              We prioritize scientifically validated assessments. Each test is labeled with its research backing
-              so you know exactly what you're getting.
-            </p>
-            <div className="flex justify-center gap-8 text-sm">
-              <div>
-                <span className="bg-green-500 text-white px-2 py-1 rounded text-xs font-medium">Research-Backed</span>
-                <p className="mt-2 text-indigo-200">Strong empirical support</p>
+        {/* Tests section - Editorial grid */}
+        <section id="tests" className="border-t border-black">
+          <div className="mx-auto max-w-7xl px-6">
+            {/* Section header */}
+            <div className="py-8 border-b border-gray-200">
+              <div className="flex items-baseline justify-between">
+                <h3 className="text-xs uppercase tracking-[0.2em] text-gray-500">Featured Assessments</h3>
+                <span className="text-xs text-gray-400">Scroll for more</span>
               </div>
-              <div>
-                <span className="bg-purple-400 text-white px-2 py-1 rounded text-xs font-medium">Self-Discovery</span>
-                <p className="mt-2 text-indigo-200">Popular for reflection</p>
+            </div>
+
+            {/* Test cards in editorial layout */}
+            <div className="grid md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200">
+              <TestCard
+                title="Big Five"
+                subtitle="IPIP-NEO"
+                slug="big-five"
+                description="The gold standard in personality psychology. Measures five fundamental dimensions: Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism."
+                time="15"
+                number="01"
+                badge="research"
+              />
+              <TestCard
+                title="HEXACO"
+                subtitle="Six-Factor Model"
+                slug="hexaco"
+                description="An evolution of the Big Five, adding Honesty-Humility. Particularly effective at predicting ethical behavior and workplace conduct."
+                time="12"
+                number="02"
+                badge="research"
+              />
+              <TestCard
+                title="Enneagram"
+                subtitle="Nine Types"
+                slug="enneagram"
+                description="Explore core motivations and fears through nine interconnected personality types. Widely used for personal growth and understanding relationships."
+                time="10"
+                number="03"
+                badge="discovery"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* About section - Black background */}
+        <section id="about" className="bg-[#0a0a0a] text-white py-20">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="grid md:grid-cols-12 gap-12">
+              {/* Left column */}
+              <div className="md:col-span-5">
+                <div className="rule-accent w-16 mb-6"></div>
+                <h3 className="font-editorial text-4xl md:text-5xl font-medium italic mb-6">
+                  On Methodology
+                </h3>
+                <p className="text-gray-400 leading-relaxed">
+                  We prioritize assessments with strong empirical foundations.
+                  Each test is transparently labeled with its research backing,
+                  so you understand exactly what science supports your results.
+                </p>
+              </div>
+
+              {/* Right column - badge explanations */}
+              <div className="md:col-span-7 md:border-l md:border-gray-800 md:pl-12">
+                <div className="space-y-8">
+                  <div className="flex items-start gap-6">
+                    <span className="inline-flex items-center justify-center w-10 h-10 border border-[#c41e3a] text-[#c41e3a] text-xs font-medium">
+                      R
+                    </span>
+                    <div>
+                      <h4 className="text-sm uppercase tracking-[0.15em] text-white mb-2">
+                        Research-Backed
+                      </h4>
+                      <p className="text-gray-500 text-sm leading-relaxed">
+                        Peer-reviewed studies support validity and reliability.
+                        Used in academic and clinical settings worldwide.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-6">
+                    <span className="inline-flex items-center justify-center w-10 h-10 border border-gray-600 text-gray-400 text-xs font-medium">
+                      D
+                    </span>
+                    <div>
+                      <h4 className="text-sm uppercase tracking-[0.15em] text-white mb-2">
+                        Self-Discovery
+                      </h4>
+                      <p className="text-gray-500 text-sm leading-relaxed">
+                        Popular frameworks for reflection and personal growth.
+                        Valued for insight, not clinical diagnosis.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Research note section */}
+        <section id="research" className="border-t border-black py-16">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="max-w-3xl mx-auto text-center">
+              <p className="font-editorial text-2xl md:text-3xl italic leading-relaxed text-gray-700">
+                Every assessment we offer links to peer-reviewed literature.
+                We believe in transparency about what science knows
+                and what remains open for interpretation.
+              </p>
+              <div className="mt-8 pt-8 border-t border-gray-200">
+                <span className="text-xs uppercase tracking-[0.2em] text-gray-400">
+                  A Note From the Editors
+                </span>
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-gray-100 py-8">
-        <div className="mx-auto max-w-6xl px-4 text-center text-gray-500">
-          <p>&copy; 2025 MeSearch. Built with science, designed for insight.</p>
+      {/* Footer */}
+      <footer className="border-t border-black py-12">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="text-center md:text-left">
+              <p className="font-editorial text-2xl font-medium text-[#0a0a0a]">MeSearch</p>
+              <p className="text-xs uppercase tracking-[0.15em] text-gray-500 mt-1">
+                Built with science. Designed for insight.
+              </p>
+            </div>
+            <p className="text-xs text-gray-400">
+              Copyright 2025. All rights reserved.
+            </p>
+          </div>
         </div>
       </footer>
     </div>
@@ -114,69 +248,127 @@ type BadgeType = 'research' | 'popular' | 'discovery';
 
 function TestCard({
   title,
+  subtitle,
   slug,
   description,
   time,
+  number,
   badge
 }: {
   title: string;
+  subtitle: string;
   slug: string;
   description: string;
   time: string;
+  number: string;
   badge: BadgeType;
 }) {
-  const badgeStyles: Record<BadgeType, { bg: string; text: string; label: string }> = {
-    research: { bg: 'bg-green-100', text: 'text-green-700', label: 'Research-Backed' },
-    popular: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Popular Assessment' },
-    discovery: { bg: 'bg-purple-100', text: 'text-purple-700', label: 'Self-Discovery' },
+  const badgeConfig: Record<BadgeType, { letter: string; accent: boolean }> = {
+    research: { letter: 'R', accent: true },
+    popular: { letter: 'P', accent: false },
+    discovery: { letter: 'D', accent: false },
   };
 
-  const { bg, text, label } = badgeStyles[badge];
+  const { letter, accent } = badgeConfig[badge];
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-2 mb-3">
-        <span className={`${bg} ${text} text-xs font-medium px-2 py-1 rounded`}>
-          {label}
+    <article className="py-10 px-6 md:px-8 group">
+      {/* Number and badge */}
+      <div className="flex items-center justify-between mb-6">
+        <span className="font-editorial text-4xl text-gray-300 font-light">{number}</span>
+        <span
+          className={`inline-flex items-center justify-center w-8 h-8 text-xs font-medium border ${
+            accent
+              ? 'border-[#c41e3a] text-[#c41e3a]'
+              : 'border-gray-300 text-gray-400'
+          }`}
+        >
+          {letter}
         </span>
-        <span className="text-gray-400 text-sm">{time}</span>
       </div>
-      <h4 className="text-xl font-semibold text-gray-900 mb-2">{title}</h4>
-      <p className="text-gray-600 text-sm mb-4">{description}</p>
-      <Link
-        to={`/test/${slug}`}
-        className="block w-full bg-gray-100 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors text-center"
-      >
-        Start Test
-      </Link>
-    </div>
+
+      {/* Title area */}
+      <h4 className="font-editorial text-3xl font-medium text-[#0a0a0a] mb-1">
+        {title}
+      </h4>
+      <p className="text-xs uppercase tracking-[0.15em] text-gray-500 mb-4">
+        {subtitle}
+      </p>
+
+      {/* Description */}
+      <p className="text-sm text-gray-600 leading-relaxed mb-6">
+        {description}
+      </p>
+
+      {/* Meta and CTA */}
+      <div className="flex items-center justify-between pt-6 border-t border-gray-200">
+        <span className="text-xs text-gray-400">{time} min read</span>
+        <Link
+          to={`/test/${slug}`}
+          className="text-xs uppercase tracking-[0.15em] text-[#0a0a0a] group-hover:text-[#c41e3a] transition-colors"
+        >
+          Take Test
+          <span className="ml-2 inline-block transform group-hover:translate-x-1 transition-transform">
+            &rarr;
+          </span>
+        </Link>
+      </div>
+    </article>
   );
 }
 
 function TestPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="text-2xl font-bold text-indigo-600">MeSearch</Link>
+    <div className="min-h-screen bg-[#fafafa]">
+      {/* Minimal header */}
+      <header className="border-b border-black">
+        <div className="mx-auto max-w-7xl px-6 py-6 flex items-center justify-between">
+          <Link to="/" className="font-editorial text-3xl font-medium text-[#0a0a0a] hover:text-[#c41e3a] transition-colors">
+            MeSearch
+          </Link>
           <GitHubIcon />
         </div>
       </header>
-      <main className="mx-auto max-w-2xl px-4 py-16 text-center">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
-          <div className="text-6xl mb-4">🚧</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Coming Soon</h2>
-          <p className="text-gray-600 mb-6">
-            We're working on bringing you this assessment. Check back soon!
+
+      <main className="mx-auto max-w-3xl px-6 py-20">
+        <article className="text-center">
+          {/* Decorative element instead of emoji */}
+          <div className="mb-8">
+            <span className="inline-block w-16 h-16 border-2 border-[#c41e3a] relative">
+              <span className="absolute inset-0 flex items-center justify-center font-editorial text-2xl text-[#c41e3a] italic">
+                ?
+              </span>
+            </span>
+          </div>
+
+          <div className="rule-accent w-16 mx-auto mb-6"></div>
+
+          <h2 className="font-editorial text-4xl md:text-5xl font-medium italic text-[#0a0a0a] mb-6">
+            Coming Soon
+          </h2>
+
+          <p className="text-lg text-gray-600 leading-relaxed max-w-md mx-auto mb-10">
+            This assessment is currently in development.
+            We are working to bring you a rigorously validated experience.
           </p>
+
           <Link
             to="/"
-            className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+            className="btn-editorial-outline"
           >
-            Back to Home
+            Return to Journal
           </Link>
-        </div>
+        </article>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t border-gray-200 py-8 mt-auto">
+        <div className="mx-auto max-w-7xl px-6 text-center">
+          <p className="text-xs text-gray-400">
+            Copyright 2025 MeSearch. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
