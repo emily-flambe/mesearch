@@ -146,12 +146,14 @@ function HomePage() {
             Scientifically-backed and/or bullshit personality assessments designed to reveal insights
             across multiple psychological frameworks and/or waste your time.
           </p>
-          <ul className="text-left text-[var(--color-text-secondary)] mb-12 max-w-md mx-auto space-y-2 font-light transition-colors duration-300">
-            <li>Track your evolution over time.</li>
-            <li>Argue with your friends and lovers about whether Myers-Briggs is bullshit.</li>
-            <li>Generate filler for your Tinder profile.</li>
-            <li>Question the nature of your reality.</li>
-          </ul>
+          <div className="flex justify-center mb-12">
+            <ul className="list-disc text-[var(--color-text-secondary)] space-y-2 font-light transition-colors duration-300 text-left pl-5">
+              <li>Track your evolution over time.</li>
+              <li>Argue with your friends and lovers about whether Myers-Briggs is bullshit.</li>
+              <li>Generate filler for your Tinder profile.</li>
+              <li>Question the nature of your reality.</li>
+            </ul>
+          </div>
           <a
             href="#tests"
             className="btn-gold inline-block px-10 py-4 rounded text-sm tracking-widest uppercase"
