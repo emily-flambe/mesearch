@@ -6,13 +6,13 @@ function GitHubIcon() {
       href="https://github.com/emily-flambe/mesearch"
       target="_blank"
       rel="noopener noreferrer"
-      className="text-gray-400 hover:text-gray-600 transition-colors"
+      className="text-[#8a8a8f] hover:text-[#d4af37] transition-colors duration-300"
       aria-label="View on GitHub"
     >
       <svg
         viewBox="0 0 24 24"
-        width="24"
-        height="24"
+        width="22"
+        height="22"
         fill="currentColor"
         aria-hidden="true"
       >
@@ -24,40 +24,70 @@ function GitHubIcon() {
 
 function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-indigo-600">MeSearch</h1>
-          <nav className="flex items-center gap-6">
-            <a href="#tests" className="text-gray-600 hover:text-indigo-600 transition-colors">Tests</a>
-            <a href="#about" className="text-gray-600 hover:text-indigo-600 transition-colors">About</a>
+    <div className="min-h-screen bg-[#0a0a0b]">
+      {/* Header */}
+      <header className="border-b border-[#2a2a2e]/50 bg-[#0a0a0b]/95 backdrop-blur-md sticky top-0 z-50">
+        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
+          <h1 className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
+            MeSearch
+          </h1>
+          <nav className="flex items-center gap-8">
+            <a
+              href="#tests"
+              className="text-[#9a9a9f] hover:text-[#d4af37] transition-colors duration-300 text-sm tracking-wide uppercase"
+            >
+              Tests
+            </a>
+            <a
+              href="#about"
+              className="text-[#9a9a9f] hover:text-[#d4af37] transition-colors duration-300 text-sm tracking-wide uppercase"
+            >
+              About
+            </a>
+            <div className="w-px h-5 bg-[#2a2a2e]" />
             <GitHubIcon />
           </nav>
         </div>
       </header>
 
       <main>
-        <section className="mx-auto max-w-6xl px-4 py-24 text-center">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">
-            Understand Yourself Better
+        {/* Hero Section */}
+        <section className="relative mx-auto max-w-6xl px-6 py-32 text-center overflow-hidden">
+          {/* Subtle gradient orb */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-[#1a1225] via-transparent to-transparent opacity-60 pointer-events-none" />
+
+          <p className="text-[#d4af37] text-sm tracking-[0.3em] uppercase mb-6 font-medium">
+            Personality Assessment
+          </p>
+          <h2 className="font-display text-5xl md:text-6xl lg:text-7xl font-medium text-[#f5f0e6] mb-8 leading-tight tracking-tight">
+            Understand Yourself
+            <span className="block text-gold-gradient italic mt-2">With Clarity</span>
           </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Take scientifically-backed personality assessments, track your results over time,
-            and discover insights across multiple frameworks.
+          <p className="text-lg text-[#8a8a8f] mb-12 max-w-2xl mx-auto leading-relaxed font-light">
+            Scientifically-backed personality assessments designed to reveal insights
+            across multiple psychological frameworks. Track your evolution over time.
           </p>
           <a
             href="#tests"
-            className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-indigo-700 transition-colors"
+            className="btn-gold inline-block px-10 py-4 rounded text-sm tracking-widest uppercase"
           >
             Explore Tests
           </a>
         </section>
 
-        <section id="tests" className="mx-auto max-w-6xl px-4 py-16">
-          <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">Featured Tests</h3>
-          <div className="grid md:grid-cols-3 gap-6">
+        {/* Divider */}
+        <div className="divider-elegant mx-auto max-w-md" />
+
+        {/* Tests Section */}
+        <section id="tests" className="mx-auto max-w-6xl px-6 py-24">
+          <div className="text-center mb-16">
+            <p className="text-[#d4af37] text-xs tracking-[0.3em] uppercase mb-4">Assessments</p>
+            <h3 className="font-display text-4xl font-medium text-[#f5f0e6]">Featured Tests</h3>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
             <TestCard
-              title="Big Five (IPIP-NEO)"
+              title="Big Five"
+              subtitle="IPIP-NEO"
               slug="big-five"
               description="The gold standard in personality psychology. Measures Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism."
               time="15 min"
@@ -65,45 +95,64 @@ function HomePage() {
             />
             <TestCard
               title="HEXACO"
+              subtitle="Six Dimensions"
               slug="hexaco"
-              description="Six-factor model including Honesty-Humility. Predicts ethical behavior and workplace conduct."
+              description="Six-factor model including Honesty-Humility. Predicts ethical behavior and workplace conduct with precision."
               time="12 min"
               badge="research"
             />
             <TestCard
               title="Enneagram"
+              subtitle="Nine Types"
               slug="enneagram"
-              description="Explore your core motivations through 9 personality types. Popular for personal growth and self-discovery."
+              description="Explore your core motivations through nine distinct personality archetypes. Renowned for personal growth insights."
               time="10 min"
               badge="discovery"
             />
           </div>
         </section>
 
-        <section id="about" className="bg-indigo-600 text-white py-16">
-          <div className="mx-auto max-w-6xl px-4 text-center">
-            <h3 className="text-3xl font-bold mb-4">The Science Behind It</h3>
-            <p className="text-indigo-100 text-lg max-w-2xl mx-auto mb-6">
-              We prioritize scientifically validated assessments. Each test is labeled with its research backing
-              so you know exactly what you're getting.
+        {/* Divider */}
+        <div className="divider-elegant mx-auto max-w-md" />
+
+        {/* About Section */}
+        <section id="about" className="relative py-24 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0b] via-[#1a1225] to-[#0a0a0b] opacity-50" />
+          <div className="relative mx-auto max-w-6xl px-6 text-center">
+            <p className="text-[#d4af37] text-xs tracking-[0.3em] uppercase mb-4">Methodology</p>
+            <h3 className="font-display text-4xl font-medium text-[#f5f0e6] mb-6">
+              The Science Behind It
+            </h3>
+            <p className="text-[#8a8a8f] text-lg max-w-2xl mx-auto mb-12 leading-relaxed font-light">
+              We prioritize scientifically validated assessments. Each test is labeled with its
+              research backing so you know exactly what you're engaging with.
             </p>
-            <div className="flex justify-center gap-8 text-sm">
-              <div>
-                <span className="bg-green-500 text-white px-2 py-1 rounded text-xs font-medium">Research-Backed</span>
-                <p className="mt-2 text-indigo-200">Strong empirical support</p>
+            <div className="flex justify-center gap-16">
+              <div className="text-center">
+                <span className="inline-block border border-[#d4af37]/40 text-[#d4af37] px-4 py-2 rounded text-xs tracking-widest uppercase">
+                  Research-Backed
+                </span>
+                <p className="mt-4 text-[#6a6a6f] text-sm">Strong empirical support</p>
               </div>
-              <div>
-                <span className="bg-purple-400 text-white px-2 py-1 rounded text-xs font-medium">Self-Discovery</span>
-                <p className="mt-2 text-indigo-200">Popular for reflection</p>
+              <div className="text-center">
+                <span className="inline-block border border-[#8a6a8f]/40 text-[#a888a8] px-4 py-2 rounded text-xs tracking-widest uppercase">
+                  Self-Discovery
+                </span>
+                <p className="mt-4 text-[#6a6a6f] text-sm">Popular for reflection</p>
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-gray-100 py-8">
-        <div className="mx-auto max-w-6xl px-4 text-center text-gray-500">
-          <p>&copy; 2025 MeSearch. Built with science, designed for insight.</p>
+      {/* Footer */}
+      <footer className="border-t border-[#1c1c1f] py-12">
+        <div className="mx-auto max-w-6xl px-6 text-center">
+          <p className="font-display text-xl text-gold-gradient mb-4">MeSearch</p>
+          <p className="text-[#5a5a5f] text-sm tracking-wide">
+            Built with science. Designed for insight.
+          </p>
+          <p className="text-[#3a3a3f] text-xs mt-4">&copy; 2025</p>
         </div>
       </footer>
     </div>
@@ -114,40 +163,43 @@ type BadgeType = 'research' | 'popular' | 'discovery';
 
 function TestCard({
   title,
+  subtitle,
   slug,
   description,
   time,
   badge
 }: {
   title: string;
+  subtitle: string;
   slug: string;
   description: string;
   time: string;
   badge: BadgeType;
 }) {
-  const badgeStyles: Record<BadgeType, { bg: string; text: string; label: string }> = {
-    research: { bg: 'bg-green-100', text: 'text-green-700', label: 'Research-Backed' },
-    popular: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Popular Assessment' },
-    discovery: { bg: 'bg-purple-100', text: 'text-purple-700', label: 'Self-Discovery' },
+  const badgeStyles: Record<BadgeType, { border: string; text: string; label: string }> = {
+    research: { border: 'border-[#d4af37]/30', text: 'text-[#d4af37]', label: 'Research-Backed' },
+    popular: { border: 'border-[#4a7fa8]/30', text: 'text-[#6aa8d8]', label: 'Popular' },
+    discovery: { border: 'border-[#8a6a8f]/30', text: 'text-[#a888a8]', label: 'Self-Discovery' },
   };
 
-  const { bg, text, label } = badgeStyles[badge];
+  const { border, text, label } = badgeStyles[badge];
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-2 mb-3">
-        <span className={`${bg} ${text} text-xs font-medium px-2 py-1 rounded`}>
+    <div className="card-premium rounded-lg p-8 group">
+      <div className="flex items-center justify-between mb-6">
+        <span className={`${border} ${text} text-[10px] tracking-widest uppercase border px-3 py-1.5 rounded`}>
           {label}
         </span>
-        <span className="text-gray-400 text-sm">{time}</span>
+        <span className="text-[#5a5a5f] text-xs tracking-wide">{time}</span>
       </div>
-      <h4 className="text-xl font-semibold text-gray-900 mb-2">{title}</h4>
-      <p className="text-gray-600 text-sm mb-4">{description}</p>
+      <h4 className="font-display text-2xl font-medium text-[#f5f0e6] mb-1">{title}</h4>
+      <p className="text-[#d4af37]/70 text-sm mb-4 tracking-wide">{subtitle}</p>
+      <p className="text-[#7a7a7f] text-sm mb-8 leading-relaxed">{description}</p>
       <Link
         to={`/test/${slug}`}
-        className="block w-full bg-gray-100 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors text-center"
+        className="btn-ghost block w-full py-3 rounded text-center text-xs tracking-widest uppercase"
       >
-        Start Test
+        Begin Assessment
       </Link>
     </div>
   );
@@ -155,25 +207,46 @@ function TestCard({
 
 function TestPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="text-2xl font-bold text-indigo-600">MeSearch</Link>
+    <div className="min-h-screen bg-[#0a0a0b]">
+      {/* Header */}
+      <header className="border-b border-[#2a2a2e]/50 bg-[#0a0a0b]/95 backdrop-blur-md">
+        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
+          <Link to="/" className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
+            MeSearch
+          </Link>
           <GitHubIcon />
         </div>
       </header>
-      <main className="mx-auto max-w-2xl px-4 py-16 text-center">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
-          <div className="text-6xl mb-4">🚧</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Coming Soon</h2>
-          <p className="text-gray-600 mb-6">
-            We're working on bringing you this assessment. Check back soon!
+
+      {/* Content */}
+      <main className="mx-auto max-w-2xl px-6 py-24 text-center">
+        <div className="card-premium rounded-lg p-12">
+          <div className="w-16 h-16 mx-auto mb-8 rounded-full border border-[#d4af37]/30 flex items-center justify-center">
+            <svg
+              className="w-8 h-8 text-[#d4af37]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+          </div>
+          <p className="text-[#d4af37] text-xs tracking-[0.3em] uppercase mb-4">In Development</p>
+          <h2 className="font-display text-3xl font-medium text-[#f5f0e6] mb-4">Coming Soon</h2>
+          <p className="text-[#7a7a7f] mb-10 leading-relaxed">
+            We are meticulously crafting this assessment to ensure
+            the highest standards of accuracy and insight.
           </p>
           <Link
             to="/"
-            className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+            className="btn-gold inline-block px-8 py-3 rounded text-xs tracking-widest uppercase"
           >
-            Back to Home
+            Return Home
           </Link>
         </div>
       </main>
