@@ -2,25 +2,61 @@
 @import "tailwindcss";
 
 :root {
-  --color-obsidian: #0a0a0b;
-  --color-charcoal: #141416;
-  --color-onyx: #1c1c1f;
-  --color-graphite: #2a2a2e;
-  --color-slate: #3d3d42;
+  /* Dark mode (default) */
+  --color-bg-primary: #0a0a0b;
+  --color-bg-secondary: #141416;
+  --color-bg-tertiary: #1c1c1f;
+  --color-bg-elevated: #2a2a2e;
+  --color-border: #2a2a2e;
+  --color-border-subtle: rgba(42, 42, 46, 0.5);
+  --color-text-primary: #f5f0e6;
+  --color-text-secondary: #9a9a9f;
+  --color-text-muted: #6a6a6f;
   --color-champagne: #d4af37;
   --color-gold: #c9a227;
   --color-pale-gold: #e8d48a;
-  --color-cream: #f5f0e6;
-  --color-burgundy: #4a1c2c;
-  --color-deep-purple: #1a1225;
+  --color-accent-purple: #1a1225;
+  --color-accent-burgundy: #4a1c2c;
+  --color-discovery: #a888a8;
+  --color-discovery-border: rgba(138, 106, 143, 0.3);
+
+  /* Card gradients */
+  --card-bg: linear-gradient(180deg, #1c1c1f 0%, #141416 100%);
+  --card-border: rgba(212, 175, 55, 0.15);
+  --card-border-hover: rgba(212, 175, 55, 0.4);
+  --card-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 40px rgba(212, 175, 55, 0.08);
+}
+
+/* Light mode overrides */
+:root.light {
+  --color-bg-primary: #faf8f5;
+  --color-bg-secondary: #f5f0e6;
+  --color-bg-tertiary: #ebe5d9;
+  --color-bg-elevated: #e0d9cc;
+  --color-border: #d4cfc2;
+  --color-border-subtle: rgba(180, 170, 155, 0.4);
+  --color-text-primary: #1a1918;
+  --color-text-secondary: #4a4845;
+  --color-text-muted: #7a7875;
+  --color-accent-purple: #f0ebe8;
+  --color-accent-burgundy: #f5e8ec;
+  --color-discovery: #7a5a7f;
+  --color-discovery-border: rgba(122, 90, 127, 0.4);
+
+  /* Card gradients - light */
+  --card-bg: linear-gradient(180deg, #ffffff 0%, #faf8f5 100%);
+  --card-border: rgba(212, 175, 55, 0.25);
+  --card-border-hover: rgba(212, 175, 55, 0.6);
+  --card-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.08), 0 0 40px rgba(212, 175, 55, 0.12);
 }
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background-color: var(--color-obsidian);
-  color: var(--color-cream);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .font-display {
@@ -43,15 +79,45 @@ body {
 
 /* Premium card hover effect */
 .card-premium {
-  background: linear-gradient(180deg, var(--color-onyx) 0%, var(--color-charcoal) 100%);
-  border: 1px solid rgba(212, 175, 55, 0.15);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card-premium:hover {
-  border-color: rgba(212, 175, 55, 0.4);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 40px rgba(212, 175, 55, 0.08);
+  border-color: var(--card-border-hover);
+  box-shadow: var(--card-shadow-hover);
   transform: translateY(-2px);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--color-champagne);
+  color: var(--color-champagne);
+}
+
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover svg {
+  transform: rotate(15deg);
 }
 
 /* Gold button with shimmer */

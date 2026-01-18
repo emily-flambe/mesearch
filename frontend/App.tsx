@@ -1,4 +1,85 @@
 import { Routes, Route, Link } from 'react-router-dom';
+import { createContext, useContext, useEffect, useState } from 'react';
+
+// Theme Context
+type Theme = 'dark' | 'light';
+
+const ThemeContext = createContext<{
+  theme: Theme;
+  toggleTheme: () => void;
+}>({
+  theme: 'dark',
+  toggleTheme: () => {},
+});
+
+function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('mesearch-theme');
+      return (saved as Theme) || 'dark';
+    }
+    return 'dark';
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'light') {
+      root.classList.add('light');
+    } else {
+      root.classList.remove('light');
+    }
+    localStorage.setItem('mesearch-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+function useTheme() {
+  return useContext(ThemeContext);
+}
+
+// Theme Toggle Button
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+
+  return (
+    <button
+      onClick={toggleTheme}
+      className="theme-toggle"
+      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+    >
+      {theme === 'dark' ? (
+        // Sun icon for switching to light
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+          />
+        </svg>
+      ) : (
+        // Moon icon for switching to dark
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+          />
+        </svg>
+      )}
+    </button>
+  );
+}
 
 function GitHubIcon() {
   return (
@@ -6,7 +87,7 @@ function GitHubIcon() {
       href="https://github.com/emily-flambe/mesearch"
       target="_blank"
       rel="noopener noreferrer"
-      className="text-[#8a8a8f] hover:text-[#d4af37] transition-colors duration-300"
+      className="text-[var(--color-text-muted)] hover:text-[var(--color-champagne)] transition-colors duration-300"
       aria-label="View on GitHub"
     >
       <svg
@@ -24,27 +105,28 @@ function GitHubIcon() {
 
 function HomePage() {
   return (
-    <div className="min-h-screen bg-[#0a0a0b]">
+    <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
       {/* Header */}
-      <header className="border-b border-[#2a2a2e]/50 bg-[#0a0a0b]/95 backdrop-blur-md sticky top-0 z-50">
+      <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
         <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
           <h1 className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
             MeSearch
           </h1>
-          <nav className="flex items-center gap-8">
+          <nav className="flex items-center gap-6">
             <a
               href="#tests"
-              className="text-[#9a9a9f] hover:text-[#d4af37] transition-colors duration-300 text-sm tracking-wide uppercase"
+              className="text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)] transition-colors duration-300 text-sm tracking-wide uppercase"
             >
               Tests
             </a>
             <a
               href="#about"
-              className="text-[#9a9a9f] hover:text-[#d4af37] transition-colors duration-300 text-sm tracking-wide uppercase"
+              className="text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)] transition-colors duration-300 text-sm tracking-wide uppercase"
             >
               About
             </a>
-            <div className="w-px h-5 bg-[#2a2a2e]" />
+            <div className="w-px h-5 bg-[var(--color-border)]" />
+            <ThemeToggle />
             <GitHubIcon />
           </nav>
         </div>
@@ -54,16 +136,16 @@ function HomePage() {
         {/* Hero Section */}
         <section className="relative mx-auto max-w-6xl px-6 py-32 text-center overflow-hidden">
           {/* Subtle gradient orb */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-[#1a1225] via-transparent to-transparent opacity-60 pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-[var(--color-accent-purple)] via-transparent to-transparent opacity-60 pointer-events-none" />
 
-          <p className="text-[#d4af37] text-sm tracking-[0.3em] uppercase mb-6 font-medium">
+          <p className="text-[var(--color-champagne)] text-sm tracking-[0.3em] uppercase mb-6 font-medium">
             Personality Assessment
           </p>
-          <h2 className="font-display text-5xl md:text-6xl lg:text-7xl font-medium text-[#f5f0e6] mb-8 leading-tight tracking-tight">
+          <h2 className="font-display text-5xl md:text-6xl lg:text-7xl font-medium text-[var(--color-text-primary)] mb-8 leading-tight tracking-tight transition-colors duration-300">
             Understand Yourself
             <span className="block text-gold-gradient italic mt-2">With Clarity</span>
           </h2>
-          <p className="text-lg text-[#8a8a8f] mb-12 max-w-2xl mx-auto leading-relaxed font-light">
+          <p className="text-lg text-[var(--color-text-secondary)] mb-12 max-w-2xl mx-auto leading-relaxed font-light transition-colors duration-300">
             Scientifically-backed personality assessments designed to reveal insights
             across multiple psychological frameworks. Track your evolution over time.
           </p>
@@ -81,8 +163,8 @@ function HomePage() {
         {/* Tests Section */}
         <section id="tests" className="mx-auto max-w-6xl px-6 py-24">
           <div className="text-center mb-16">
-            <p className="text-[#d4af37] text-xs tracking-[0.3em] uppercase mb-4">Assessments</p>
-            <h3 className="font-display text-4xl font-medium text-[#f5f0e6]">Featured Tests</h3>
+            <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">Assessments</p>
+            <h3 className="font-display text-4xl font-medium text-[var(--color-text-primary)] transition-colors duration-300">Featured Tests</h3>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             <TestCard
@@ -117,28 +199,28 @@ function HomePage() {
 
         {/* About Section */}
         <section id="about" className="relative py-24 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0b] via-[#1a1225] to-[#0a0a0b] opacity-50" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-bg-primary)] via-[var(--color-accent-purple)] to-[var(--color-bg-primary)] opacity-50 transition-colors duration-300" />
           <div className="relative mx-auto max-w-6xl px-6 text-center">
-            <p className="text-[#d4af37] text-xs tracking-[0.3em] uppercase mb-4">Methodology</p>
-            <h3 className="font-display text-4xl font-medium text-[#f5f0e6] mb-6">
+            <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">Methodology</p>
+            <h3 className="font-display text-4xl font-medium text-[var(--color-text-primary)] mb-6 transition-colors duration-300">
               The Science Behind It
             </h3>
-            <p className="text-[#8a8a8f] text-lg max-w-2xl mx-auto mb-12 leading-relaxed font-light">
+            <p className="text-[var(--color-text-secondary)] text-lg max-w-2xl mx-auto mb-12 leading-relaxed font-light transition-colors duration-300">
               We prioritize scientifically validated assessments. Each test is labeled with its
               research backing so you know exactly what you're engaging with.
             </p>
             <div className="flex justify-center gap-16">
               <div className="text-center">
-                <span className="inline-block border border-[#d4af37]/40 text-[#d4af37] px-4 py-2 rounded text-xs tracking-widest uppercase">
+                <span className="inline-block border border-[var(--color-champagne)]/40 text-[var(--color-champagne)] px-4 py-2 rounded text-xs tracking-widest uppercase">
                   Research-Backed
                 </span>
-                <p className="mt-4 text-[#6a6a6f] text-sm">Strong empirical support</p>
+                <p className="mt-4 text-[var(--color-text-muted)] text-sm transition-colors duration-300">Strong empirical support</p>
               </div>
               <div className="text-center">
-                <span className="inline-block border border-[#8a6a8f]/40 text-[#a888a8] px-4 py-2 rounded text-xs tracking-widest uppercase">
+                <span className="inline-block border border-[var(--color-discovery-border)] text-[var(--color-discovery)] px-4 py-2 rounded text-xs tracking-widest uppercase">
                   Self-Discovery
                 </span>
-                <p className="mt-4 text-[#6a6a6f] text-sm">Popular for reflection</p>
+                <p className="mt-4 text-[var(--color-text-muted)] text-sm transition-colors duration-300">Popular for reflection</p>
               </div>
             </div>
           </div>
@@ -146,13 +228,13 @@ function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#1c1c1f] py-12">
+      <footer className="border-t border-[var(--color-border)] py-12 transition-colors duration-300">
         <div className="mx-auto max-w-6xl px-6 text-center">
           <p className="font-display text-xl text-gold-gradient mb-4">MeSearch</p>
-          <p className="text-[#5a5a5f] text-sm tracking-wide">
+          <p className="text-[var(--color-text-muted)] text-sm tracking-wide transition-colors duration-300">
             Built with science. Designed for insight.
           </p>
-          <p className="text-[#3a3a3f] text-xs mt-4">&copy; 2025</p>
+          <p className="text-[var(--color-text-muted)]/50 text-xs mt-4">&copy; 2025</p>
         </div>
       </footer>
     </div>
@@ -177,9 +259,9 @@ function TestCard({
   badge: BadgeType;
 }) {
   const badgeStyles: Record<BadgeType, { border: string; text: string; label: string }> = {
-    research: { border: 'border-[#d4af37]/30', text: 'text-[#d4af37]', label: 'Research-Backed' },
+    research: { border: 'border-[var(--color-champagne)]/30', text: 'text-[var(--color-champagne)]', label: 'Research-Backed' },
     popular: { border: 'border-[#4a7fa8]/30', text: 'text-[#6aa8d8]', label: 'Popular' },
-    discovery: { border: 'border-[#8a6a8f]/30', text: 'text-[#a888a8]', label: 'Self-Discovery' },
+    discovery: { border: 'border-[var(--color-discovery-border)]', text: 'text-[var(--color-discovery)]', label: 'Self-Discovery' },
   };
 
   const { border, text, label } = badgeStyles[badge];
@@ -190,11 +272,11 @@ function TestCard({
         <span className={`${border} ${text} text-[10px] tracking-widest uppercase border px-3 py-1.5 rounded`}>
           {label}
         </span>
-        <span className="text-[#5a5a5f] text-xs tracking-wide">{time}</span>
+        <span className="text-[var(--color-text-muted)] text-xs tracking-wide">{time}</span>
       </div>
-      <h4 className="font-display text-2xl font-medium text-[#f5f0e6] mb-1">{title}</h4>
-      <p className="text-[#d4af37]/70 text-sm mb-4 tracking-wide">{subtitle}</p>
-      <p className="text-[#7a7a7f] text-sm mb-8 leading-relaxed">{description}</p>
+      <h4 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-1 transition-colors duration-300">{title}</h4>
+      <p className="text-[var(--color-champagne)]/70 text-sm mb-4 tracking-wide">{subtitle}</p>
+      <p className="text-[var(--color-text-secondary)] text-sm mb-8 leading-relaxed transition-colors duration-300">{description}</p>
       <Link
         to={`/test/${slug}`}
         className="btn-ghost block w-full py-3 rounded text-center text-xs tracking-widest uppercase"
@@ -207,23 +289,26 @@ function TestCard({
 
 function TestPage() {
   return (
-    <div className="min-h-screen bg-[#0a0a0b]">
+    <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
       {/* Header */}
-      <header className="border-b border-[#2a2a2e]/50 bg-[#0a0a0b]/95 backdrop-blur-md">
+      <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
         <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
           <Link to="/" className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
             MeSearch
           </Link>
-          <GitHubIcon />
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <GitHubIcon />
+          </div>
         </div>
       </header>
 
       {/* Content */}
       <main className="mx-auto max-w-2xl px-6 py-24 text-center">
         <div className="card-premium rounded-lg p-12">
-          <div className="w-16 h-16 mx-auto mb-8 rounded-full border border-[#d4af37]/30 flex items-center justify-center">
+          <div className="w-16 h-16 mx-auto mb-8 rounded-full border border-[var(--color-champagne)]/30 flex items-center justify-center">
             <svg
-              className="w-8 h-8 text-[#d4af37]"
+              className="w-8 h-8 text-[var(--color-champagne)]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -236,9 +321,9 @@ function TestPage() {
               />
             </svg>
           </div>
-          <p className="text-[#d4af37] text-xs tracking-[0.3em] uppercase mb-4">In Development</p>
-          <h2 className="font-display text-3xl font-medium text-[#f5f0e6] mb-4">Coming Soon</h2>
-          <p className="text-[#7a7a7f] mb-10 leading-relaxed">
+          <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">In Development</p>
+          <h2 className="font-display text-3xl font-medium text-[var(--color-text-primary)] mb-4 transition-colors duration-300">Coming Soon</h2>
+          <p className="text-[var(--color-text-secondary)] mb-10 leading-relaxed transition-colors duration-300">
             We are meticulously crafting this assessment to ensure
             the highest standards of accuracy and insight.
           </p>
@@ -256,9 +341,11 @@ function TestPage() {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/test/:slug" element={<TestPage />} />
-    </Routes>
+    <ThemeProvider>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/test/:slug" element={<TestPage />} />
+      </Routes>
+    </ThemeProvider>
   );
 }
