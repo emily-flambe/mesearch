@@ -138,9 +138,6 @@ function HomePage() {
           {/* Subtle gradient orb */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-[var(--color-accent-purple)] via-transparent to-transparent opacity-60 pointer-events-none" />
 
-          <p className="text-[var(--color-champagne)] text-sm tracking-[0.3em] uppercase mb-6 font-medium">
-            Personality Assessment
-          </p>
           <h2 className="font-display text-5xl md:text-6xl lg:text-7xl font-medium text-[var(--color-text-primary)] mb-8 leading-tight tracking-tight transition-colors duration-300">
             Do Research
             <span className="block text-gold-gradient italic mt-2">On Yourself</span>
