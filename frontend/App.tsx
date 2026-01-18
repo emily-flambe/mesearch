@@ -245,10 +245,7 @@ function HomePage() {
       <footer className="border-t border-[var(--color-border)] py-12 transition-colors duration-300">
         <div className="mx-auto max-w-6xl px-6 text-center">
           <p className="font-display text-xl text-gold-gradient mb-4">Mēsearch</p>
-          <p className="text-[var(--color-text-muted)] text-sm tracking-wide transition-colors duration-300">
-            Built with science. Designed for insight.
-          </p>
-          <p className="text-[var(--color-text-muted)]/50 text-xs mt-4">&copy; 2025</p>
+          <p className="text-[var(--color-text-muted)]/50 text-xs">&copy; 2026</p>
         </div>
       </footer>
     </div>
