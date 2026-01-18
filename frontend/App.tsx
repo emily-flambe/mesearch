@@ -142,8 +142,8 @@ function HomePage() {
             Personality Assessment
           </p>
           <h2 className="font-display text-5xl md:text-6xl lg:text-7xl font-medium text-[var(--color-text-primary)] mb-8 leading-tight tracking-tight transition-colors duration-300">
-            Understand Yourself
-            <span className="block text-gold-gradient italic mt-2">With Clarity</span>
+            Do Research
+            <span className="block text-gold-gradient italic mt-2">On Yourself</span>
           </h2>
           <p className="text-lg text-[var(--color-text-secondary)] mb-12 max-w-2xl mx-auto leading-relaxed font-light transition-colors duration-300">
             Scientifically-backed and/or bullshit personality assessments designed to reveal insights
