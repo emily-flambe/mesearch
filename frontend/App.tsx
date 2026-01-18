@@ -138,9 +138,9 @@ function HomePage() {
           {/* Subtle gradient orb */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-[var(--color-accent-purple)] via-transparent to-transparent opacity-60 pointer-events-none" />
 
-          <h2 className="font-display text-5xl md:text-6xl lg:text-7xl font-medium text-[var(--color-text-primary)] mb-8 leading-tight tracking-tight transition-colors duration-300">
+          <h2 className="font-display text-6xl md:text-7xl lg:text-8xl font-medium text-[var(--color-text-primary)] mb-8 leading-tight tracking-tight transition-colors duration-300">
             Do Research
-            <span className="block text-gold-gradient italic mt-2">On Yourself</span>
+            <span className="block text-gold-gradient italic mt-2 text-4xl md:text-5xl lg:text-6xl">On Yourself</span>
           </h2>
           <p className="text-lg text-[var(--color-text-secondary)] mb-12 max-w-2xl mx-auto leading-relaxed font-light transition-colors duration-300">
             Scientifically-backed and/or bullshit personality assessments designed to reveal insights
