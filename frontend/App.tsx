@@ -161,7 +161,7 @@ function HomePage() {
         <div className="divider-elegant mx-auto max-w-md" />
 
         {/* Tests Section */}
-        <section id="tests" className="mx-auto max-w-6xl px-6 py-24">
+        <section id="tests" className="mx-auto max-w-6xl px-6 py-24 scroll-mt-24">
           <div className="text-center mb-16">
             <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">Assessments</p>
             <h3 className="font-display text-4xl font-medium text-[var(--color-text-primary)] transition-colors duration-300">Featured Tests</h3>
@@ -204,7 +204,7 @@ function HomePage() {
         <div className="divider-elegant mx-auto max-w-md" />
 
         {/* About Section */}
-        <section id="about" className="relative py-24 overflow-hidden">
+        <section id="about" className="relative py-24 overflow-hidden scroll-mt-24">
           <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-bg-primary)] via-[var(--color-accent-purple)] to-[var(--color-bg-primary)] opacity-50 transition-colors duration-300" />
           <div className="relative mx-auto max-w-6xl px-6 text-center">
             <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">Methodology</p>
