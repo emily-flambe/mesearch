@@ -1,1 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@900&display=swap');
 @import "tailwindcss";
+
+:root {
+  --brutal-red: #ff0000;
+  --brutal-black: #000000;
+  --brutal-white: #ffffff;
+}
+
+body {
+  font-family: 'JetBrains Mono', monospace;
+  background-color: var(--brutal-white);
+  color: var(--brutal-black);
+}
+
+/* Brutal link underline effect */
+.brutal-link {
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  transition: border-color 0.1s;
+}
+
+.brutal-link:hover {
+  border-bottom-color: var(--brutal-red);
+}
+
+/* Brutal button */
+.brutal-btn {
+  background-color: var(--brutal-black);
+  color: var(--brutal-white);
+  border: 4px solid var(--brutal-black);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.1s;
+}
+
+.brutal-btn:hover {
+  background-color: var(--brutal-white);
+  color: var(--brutal-black);
+}
+
+.brutal-btn-outline {
+  background-color: var(--brutal-white);
+  color: var(--brutal-black);
+  border: 4px solid var(--brutal-black);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.1s;
+}
+
+.brutal-btn-outline:hover {
+  background-color: var(--brutal-black);
+  color: var(--brutal-white);
+}
+
+/* Brutal card with offset shadow */
+.brutal-card {
+  background-color: var(--brutal-white);
+  border: 4px solid var(--brutal-black);
+  box-shadow: 8px 8px 0 var(--brutal-black);
+  transition: all 0.1s;
+}
+
+.brutal-card:hover {
+  box-shadow: 12px 12px 0 var(--brutal-black);
+  transform: translate(-2px, -2px);
+}
+
+/* Red accent card */
+.brutal-card-red {
+  background-color: var(--brutal-white);
+  border: 4px solid var(--brutal-red);
+  box-shadow: 8px 8px 0 var(--brutal-red);
+}
+
+/* Striped background pattern */
+.brutal-stripes {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--brutal-white),
+    var(--brutal-white) 10px,
+    var(--brutal-black) 10px,
+    var(--brutal-black) 11px
+  );
+}
+
+/* Grid overlay effect */
+.brutal-grid {
+  background-image:
+    linear-gradient(var(--brutal-black) 1px, transparent 1px),
+    linear-gradient(90deg, var(--brutal-black) 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-position: -1px -1px;
+}
+
+/* Heading styles */
+.brutal-heading {
+  font-family: 'Inter', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+}
+
+/* Badge styles */
+.brutal-badge {
+  border: 2px solid var(--brutal-black);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.625rem;
+}
+
+.brutal-badge-research {
+  background-color: var(--brutal-black);
+  color: var(--brutal-white);
+}
+
+.brutal-badge-discovery {
+  background-color: var(--brutal-white);
+  color: var(--brutal-black);
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--brutal-red);
+  color: var(--brutal-white);
+}

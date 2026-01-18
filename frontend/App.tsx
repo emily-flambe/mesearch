@@ -6,13 +6,13 @@ function GitHubIcon() {
       href="https://github.com/emily-flambe/mesearch"
       target="_blank"
       rel="noopener noreferrer"
-      className="text-gray-400 hover:text-gray-600 transition-colors"
+      className="text-black hover:text-[#ff0000] transition-colors"
       aria-label="View on GitHub"
     >
       <svg
         viewBox="0 0 24 24"
-        width="24"
-        height="24"
+        width="28"
+        height="28"
         fill="currentColor"
         aria-hidden="true"
       >
@@ -24,86 +24,121 @@ function GitHubIcon() {
 
 function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-indigo-600">MeSearch</h1>
-          <nav className="flex items-center gap-6">
-            <a href="#tests" className="text-gray-600 hover:text-indigo-600 transition-colors">Tests</a>
-            <a href="#about" className="text-gray-600 hover:text-indigo-600 transition-colors">About</a>
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <header className="border-b-4 border-black">
+        <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+          <h1 className="brutal-heading text-3xl tracking-tight">MESEARCH</h1>
+          <nav className="flex items-center gap-8">
+            <a href="#tests" className="brutal-link text-sm font-bold uppercase tracking-widest">Tests</a>
+            <a href="#about" className="brutal-link text-sm font-bold uppercase tracking-widest">About</a>
             <GitHubIcon />
           </nav>
         </div>
       </header>
 
       <main>
-        <section className="mx-auto max-w-6xl px-4 py-24 text-center">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">
-            Understand Yourself Better
-          </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Take scientifically-backed personality assessments, track your results over time,
-            and discover insights across multiple frameworks.
-          </p>
-          <a
-            href="#tests"
-            className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-indigo-700 transition-colors"
-          >
-            Explore Tests
-          </a>
-        </section>
-
-        <section id="tests" className="mx-auto max-w-6xl px-4 py-16">
-          <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">Featured Tests</h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            <TestCard
-              title="Big Five (IPIP-NEO)"
-              slug="big-five"
-              description="The gold standard in personality psychology. Measures Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism."
-              time="15 min"
-              badge="research"
-            />
-            <TestCard
-              title="HEXACO"
-              slug="hexaco"
-              description="Six-factor model including Honesty-Humility. Predicts ethical behavior and workplace conduct."
-              time="12 min"
-              badge="research"
-            />
-            <TestCard
-              title="Enneagram"
-              slug="enneagram"
-              description="Explore your core motivations through 9 personality types. Popular for personal growth and self-discovery."
-              time="10 min"
-              badge="discovery"
-            />
+        {/* Hero Section */}
+        <section className="border-b-4 border-black">
+          <div className="mx-auto max-w-7xl px-6 py-24 md:py-32">
+            <div className="max-w-4xl">
+              <h2 className="brutal-heading text-6xl md:text-8xl lg:text-9xl mb-8">
+                KNOW<br />
+                <span className="text-[#ff0000]">YOUR</span><br />
+                SELF
+              </h2>
+              <p className="text-lg md:text-xl font-mono max-w-xl mb-10 leading-relaxed">
+                Personality tests that don't lie to you. No flattery. No fortune-telling.
+                Just data about who you actually are.
+              </p>
+              <a
+                href="#tests"
+                className="brutal-btn inline-block px-10 py-4 text-lg"
+              >
+                Take a Test
+              </a>
+            </div>
           </div>
         </section>
 
-        <section id="about" className="bg-indigo-600 text-white py-16">
-          <div className="mx-auto max-w-6xl px-4 text-center">
-            <h3 className="text-3xl font-bold mb-4">The Science Behind It</h3>
-            <p className="text-indigo-100 text-lg max-w-2xl mx-auto mb-6">
-              We prioritize scientifically validated assessments. Each test is labeled with its research backing
-              so you know exactly what you're getting.
-            </p>
-            <div className="flex justify-center gap-8 text-sm">
+        {/* Tests Grid */}
+        <section id="tests" className="border-b-4 border-black">
+          <div className="mx-auto max-w-7xl px-6 py-16">
+            <div className="mb-12">
+              <h3 className="brutal-heading text-4xl md:text-5xl">AVAILABLE TESTS</h3>
+              <div className="h-1 w-24 bg-[#ff0000] mt-4"></div>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              <TestCard
+                title="Big Five"
+                subtitle="IPIP-NEO"
+                slug="big-five"
+                description="The only personality model that matters. Five dimensions. Decades of research. No mystical nonsense."
+                time="15 MIN"
+                badge="research"
+              />
+              <TestCard
+                title="HEXACO"
+                subtitle="Six Factors"
+                slug="hexaco"
+                description="Big Five plus Honesty-Humility. Predicts who will cheat, steal, and manipulate. Are you honest about yourself?"
+                time="12 MIN"
+                badge="research"
+              />
+              <TestCard
+                title="Enneagram"
+                subtitle="9 Types"
+                slug="enneagram"
+                description="Less science, more soul-searching. Find your core fear and motivation. Popular for a reason."
+                time="10 MIN"
+                badge="discovery"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* About Section */}
+        <section id="about" className="bg-black text-white">
+          <div className="mx-auto max-w-7xl px-6 py-16">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <span className="bg-green-500 text-white px-2 py-1 rounded text-xs font-medium">Research-Backed</span>
-                <p className="mt-2 text-indigo-200">Strong empirical support</p>
+                <h3 className="brutal-heading text-4xl md:text-5xl mb-6">
+                  WE LABEL<br />
+                  <span className="text-[#ff0000]">EVERYTHING</span>
+                </h3>
+                <p className="font-mono text-lg leading-relaxed text-gray-300">
+                  Not all tests are created equal. Some have decades of peer-reviewed research.
+                  Others are just fun. We tell you which is which. No pretending.
+                </p>
               </div>
-              <div>
-                <span className="bg-purple-400 text-white px-2 py-1 rounded text-xs font-medium">Self-Discovery</span>
-                <p className="mt-2 text-indigo-200">Popular for reflection</p>
+              <div className="space-y-6">
+                <div className="border-4 border-white p-6">
+                  <div className="brutal-badge brutal-badge-research inline-block px-3 py-1 mb-3">
+                    RESEARCH-BACKED
+                  </div>
+                  <p className="font-mono text-sm text-gray-300">
+                    Validated by scientists. Published in journals. Actually predicts behavior.
+                  </p>
+                </div>
+                <div className="border-4 border-white p-6">
+                  <div className="brutal-badge brutal-badge-discovery inline-block px-3 py-1 mb-3 bg-white text-black">
+                    SELF-DISCOVERY
+                  </div>
+                  <p className="font-mono text-sm text-gray-300">
+                    Popular for reflection. Good for conversation. Take with a grain of salt.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-gray-100 py-8">
-        <div className="mx-auto max-w-6xl px-4 text-center text-gray-500">
-          <p>&copy; 2025 MeSearch. Built with science, designed for insight.</p>
+      {/* Footer */}
+      <footer className="border-t-4 border-black py-8">
+        <div className="mx-auto max-w-7xl px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="font-mono text-sm">&copy; 2025 MESEARCH</p>
+          <p className="font-mono text-sm text-gray-500">BUILT WITH DATA. DESIGNED WITHOUT MERCY.</p>
         </div>
       </footer>
     </div>
@@ -114,38 +149,36 @@ type BadgeType = 'research' | 'popular' | 'discovery';
 
 function TestCard({
   title,
+  subtitle,
   slug,
   description,
   time,
   badge
 }: {
   title: string;
+  subtitle: string;
   slug: string;
   description: string;
   time: string;
   badge: BadgeType;
 }) {
-  const badgeStyles: Record<BadgeType, { bg: string; text: string; label: string }> = {
-    research: { bg: 'bg-green-100', text: 'text-green-700', label: 'Research-Backed' },
-    popular: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Popular Assessment' },
-    discovery: { bg: 'bg-purple-100', text: 'text-purple-700', label: 'Self-Discovery' },
-  };
-
-  const { bg, text, label } = badgeStyles[badge];
+  const badgeClass = badge === 'research' ? 'brutal-badge-research' : 'brutal-badge-discovery bg-white';
+  const badgeLabel = badge === 'research' ? 'RESEARCH-BACKED' : 'SELF-DISCOVERY';
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-2 mb-3">
-        <span className={`${bg} ${text} text-xs font-medium px-2 py-1 rounded`}>
-          {label}
+    <div className="brutal-card p-6 flex flex-col h-full">
+      <div className="flex items-center justify-between mb-4">
+        <span className={`brutal-badge ${badgeClass} px-2 py-1`}>
+          {badgeLabel}
         </span>
-        <span className="text-gray-400 text-sm">{time}</span>
+        <span className="font-mono text-xs font-bold">{time}</span>
       </div>
-      <h4 className="text-xl font-semibold text-gray-900 mb-2">{title}</h4>
-      <p className="text-gray-600 text-sm mb-4">{description}</p>
+      <h4 className="brutal-heading text-2xl mb-1">{title}</h4>
+      <p className="font-mono text-xs text-gray-500 uppercase tracking-wider mb-4">{subtitle}</p>
+      <p className="font-mono text-sm mb-6 flex-grow leading-relaxed">{description}</p>
       <Link
         to={`/test/${slug}`}
-        className="block w-full bg-gray-100 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors text-center"
+        className="brutal-btn-outline block w-full py-3 text-center text-sm"
       >
         Start Test
       </Link>
@@ -155,25 +188,32 @@ function TestCard({
 
 function TestPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="text-2xl font-bold text-indigo-600">MeSearch</Link>
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <header className="border-b-4 border-black">
+        <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+          <Link to="/" className="brutal-heading text-3xl tracking-tight hover:text-[#ff0000] transition-colors">
+            MESEARCH
+          </Link>
           <GitHubIcon />
         </div>
       </header>
-      <main className="mx-auto max-w-2xl px-4 py-16 text-center">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
-          <div className="text-6xl mb-4">🚧</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Coming Soon</h2>
-          <p className="text-gray-600 mb-6">
-            We're working on bringing you this assessment. Check back soon!
+
+      <main className="mx-auto max-w-2xl px-6 py-20">
+        <div className="brutal-card-red p-10 text-center">
+          <div className="border-4 border-[#ff0000] inline-block px-6 py-3 mb-6">
+            <span className="brutal-heading text-2xl text-[#ff0000]">UNDER CONSTRUCTION</span>
+          </div>
+          <h2 className="brutal-heading text-4xl mb-6">NOT READY YET</h2>
+          <p className="font-mono text-lg mb-8 leading-relaxed">
+            This test is being built. We could have shipped something half-baked, but we didn't.
+            Check back when it's actually done.
           </p>
           <Link
             to="/"
-            className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+            className="brutal-btn inline-block px-8 py-4"
           >
-            Back to Home
+            Go Back
           </Link>
         </div>
       </main>
