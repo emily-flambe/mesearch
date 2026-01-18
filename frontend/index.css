@@ -1,1 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
+
+:root {
+  /* Dark mode (default) */
+  --color-bg-primary: #0a0a0b;
+  --color-bg-secondary: #141416;
+  --color-bg-tertiary: #1c1c1f;
+  --color-bg-elevated: #2a2a2e;
+  --color-border: #2a2a2e;
+  --color-border-subtle: rgba(42, 42, 46, 0.5);
+  --color-text-primary: #f5f0e6;
+  --color-text-secondary: #9a9a9f;
+  --color-text-muted: #6a6a6f;
+  --color-champagne: #d4af37;
+  --color-gold: #c9a227;
+  --color-pale-gold: #e8d48a;
+  --color-accent-purple: #1a1225;
+  --color-accent-burgundy: #4a1c2c;
+  --color-discovery: #a888a8;
+  --color-discovery-border: rgba(138, 106, 143, 0.3);
+
+  /* Card gradients */
+  --card-bg: linear-gradient(180deg, #1c1c1f 0%, #141416 100%);
+  --card-border: rgba(212, 175, 55, 0.15);
+  --card-border-hover: rgba(212, 175, 55, 0.4);
+  --card-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 40px rgba(212, 175, 55, 0.08);
+}
+
+/* Light mode overrides */
+:root.light {
+  --color-bg-primary: #faf8f5;
+  --color-bg-secondary: #f5f0e6;
+  --color-bg-tertiary: #ebe5d9;
+  --color-bg-elevated: #e0d9cc;
+  --color-border: #d4cfc2;
+  --color-border-subtle: rgba(180, 170, 155, 0.4);
+  --color-text-primary: #1a1918;
+  --color-text-secondary: #4a4845;
+  --color-text-muted: #7a7875;
+  --color-champagne: #a67c00;
+  --color-gold: #8b6914;
+  --color-pale-gold: #b8860b;
+  --color-accent-purple: #f0ebe8;
+  --color-accent-burgundy: #f5e8ec;
+  --color-discovery: #7a5a7f;
+  --color-discovery-border: rgba(122, 90, 127, 0.4);
+
+  /* Card gradients - light */
+  --card-bg: linear-gradient(180deg, #ffffff 0%, #faf8f5 100%);
+  --card-border: rgba(166, 124, 0, 0.35);
+  --card-border-hover: rgba(166, 124, 0, 0.7);
+  --card-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.08), 0 0 40px rgba(166, 124, 0, 0.15);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.font-display {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* Elegant gold gradient text */
+.text-gold-gradient {
+  background: linear-gradient(135deg, var(--color-pale-gold) 0%, var(--color-champagne) 50%, var(--color-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Subtle gold border glow */
+.border-gold-glow {
+  border-color: rgba(212, 175, 55, 0.3);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.05);
+}
+
+/* Premium card hover effect */
+.card-premium {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-premium:hover {
+  border-color: var(--card-border-hover);
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--color-champagne);
+  color: var(--color-champagne);
+}
+
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover svg {
+  transform: rotate(15deg);
+}
+
+/* Gold button with shimmer */
+.btn-gold {
+  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-champagne) 50%, var(--color-gold) 100%);
+  background-size: 200% 200%;
+  color: var(--color-obsidian);
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  transition: all 0.3s ease;
+}
+
+.btn-gold:hover {
+  background-position: 100% 100%;
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+}
+
+/* Ghost button */
+.btn-ghost {
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  color: var(--color-champagne);
+  transition: all 0.3s ease;
+}
+
+.btn-ghost:hover {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: var(--color-champagne);
+}
+
+/* Refined divider */
+.divider-elegant {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+}

@@ -1,4 +1,85 @@
 import { Routes, Route, Link } from 'react-router-dom';
+import { createContext, useContext, useEffect, useState } from 'react';
+
+// Theme Context
+type Theme = 'dark' | 'light';
+
+const ThemeContext = createContext<{
+  theme: Theme;
+  toggleTheme: () => void;
+}>({
+  theme: 'dark',
+  toggleTheme: () => {},
+});
+
+function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('mesearch-theme');
+      return (saved as Theme) || 'dark';
+    }
+    return 'dark';
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'light') {
+      root.classList.add('light');
+    } else {
+      root.classList.remove('light');
+    }
+    localStorage.setItem('mesearch-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+function useTheme() {
+  return useContext(ThemeContext);
+}
+
+// Theme Toggle Button
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+
+  return (
+    <button
+      onClick={toggleTheme}
+      className="theme-toggle"
+      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+    >
+      {theme === 'dark' ? (
+        // Sun icon for switching to light
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+          />
+        </svg>
+      ) : (
+        // Moon icon for switching to dark
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+          />
+        </svg>
+      )}
+    </button>
+  );
+}
 
 function GitHubIcon() {
   return (
@@ -6,13 +87,13 @@ function GitHubIcon() {
       href="https://github.com/emily-flambe/mesearch"
       target="_blank"
       rel="noopener noreferrer"
-      className="text-gray-400 hover:text-gray-600 transition-colors"
+      className="text-[var(--color-text-muted)] hover:text-[var(--color-champagne)] transition-colors duration-300"
       aria-label="View on GitHub"
     >
       <svg
         viewBox="0 0 24 24"
-        width="24"
-        height="24"
+        width="22"
+        height="22"
         fill="currentColor"
         aria-hidden="true"
       >
@@ -24,130 +105,218 @@ function GitHubIcon() {
 
 function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-indigo-600">MeSearch</h1>
+    <div id="top" className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
+      {/* Header */}
+      <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
+        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
+          <a href="#top" className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
+            Mēsearch
+          </a>
           <nav className="flex items-center gap-6">
-            <a href="#tests" className="text-gray-600 hover:text-indigo-600 transition-colors">Tests</a>
-            <a href="#about" className="text-gray-600 hover:text-indigo-600 transition-colors">About</a>
+            <a
+              href="#tests"
+              className="text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)] transition-colors duration-300 text-sm tracking-wide uppercase"
+            >
+              Tests
+            </a>
+            <a
+              href="#about"
+              className="text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)] transition-colors duration-300 text-sm tracking-wide uppercase"
+            >
+              About
+            </a>
+            <div className="w-px h-5 bg-[var(--color-border)]" />
+            <ThemeToggle />
             <GitHubIcon />
           </nav>
         </div>
       </header>
 
       <main>
-        <section className="mx-auto max-w-6xl px-4 py-24 text-center">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">
-            Understand Yourself Better
+        {/* Hero Section */}
+        <section className="relative mx-auto max-w-6xl px-6 py-32 text-center overflow-hidden">
+          {/* Subtle gradient orb */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-[var(--color-accent-purple)] via-transparent to-transparent opacity-60 pointer-events-none" />
+
+          <h2 className="font-display text-6xl md:text-7xl lg:text-8xl font-medium text-[var(--color-text-primary)] mb-8 leading-tight tracking-tight transition-colors duration-300">
+            Do Research
+            <span className="block text-gold-gradient italic mt-2 text-4xl md:text-5xl lg:text-6xl">On Yourself</span>
           </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Take scientifically-backed personality assessments, track your results over time,
-            and discover insights across multiple frameworks.
+          <p className="text-lg text-[var(--color-text-secondary)] mb-8 max-w-2xl mx-auto leading-relaxed font-light transition-colors duration-300">
+            Scientifically-backed and/or bullshit personality assessments designed to reveal insights
+            across multiple psychological frameworks and/or waste your time.
           </p>
+          <div className="flex justify-center mb-12">
+            <ul className="list-disc list-inside text-[var(--color-text-secondary)] space-y-2 font-light transition-colors duration-300 text-left">
+              <li>Track your evolution over time.</li>
+              <li>Argue with your friends and lovers about whether Myers-Briggs is bullshit.</li>
+              <li>Generate filler for your Tinder profile.</li>
+              <li>Question the nature of your reality.</li>
+            </ul>
+          </div>
           <a
             href="#tests"
-            className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-indigo-700 transition-colors"
+            className="btn-gold inline-block px-10 py-4 rounded text-sm tracking-widest uppercase"
           >
             Explore Tests
           </a>
         </section>
 
-        <section id="tests" className="mx-auto max-w-6xl px-4 py-16">
-          <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">Featured Tests</h3>
-          <div className="grid md:grid-cols-3 gap-6">
+        {/* Divider */}
+        <div className="divider-elegant mx-auto max-w-md" />
+
+        {/* Tests Section */}
+        <section id="tests" className="mx-auto max-w-6xl px-6 py-24 scroll-mt-24">
+          <div className="text-center mb-16">
+            <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">Assessments</p>
+            <h3 className="font-display text-4xl font-medium text-[var(--color-text-primary)] transition-colors duration-300">Featured Tests</h3>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
             <TestCard
-              title="Big Five (IPIP-NEO)"
+              title="Big Five"
+              subtitle="IPIP-NEO"
               slug="big-five"
+              keywords={['Traits', 'Behavior', 'Stability']}
               description="The gold standard in personality psychology. Measures Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism."
               time="15 min"
-              badge="research"
+              seriousness={5}
+              fun={3}
             />
             <TestCard
               title="HEXACO"
+              subtitle="Six Dimensions"
               slug="hexaco"
-              description="Six-factor model including Honesty-Humility. Predicts ethical behavior and workplace conduct."
+              keywords={['Ethics', 'Honesty', 'Integrity']}
+              description="Six-factor model including Honesty-Humility. Predicts ethical behavior and workplace conduct with precision."
               time="12 min"
-              badge="research"
+              seriousness={5}
+              fun={2}
             />
             <TestCard
               title="Enneagram"
+              subtitle="Nine Types"
               slug="enneagram"
-              description="Explore your core motivations through 9 personality types. Popular for personal growth and self-discovery."
+              keywords={['Motivations', 'Growth', 'Archetypes']}
+              description="Explore your core motivations through nine distinct personality archetypes. Renowned for personal growth insights."
               time="10 min"
-              badge="discovery"
+              seriousness={2}
+              fun={5}
             />
           </div>
         </section>
 
-        <section id="about" className="bg-indigo-600 text-white py-16">
-          <div className="mx-auto max-w-6xl px-4 text-center">
-            <h3 className="text-3xl font-bold mb-4">The Science Behind It</h3>
-            <p className="text-indigo-100 text-lg max-w-2xl mx-auto mb-6">
-              We prioritize scientifically validated assessments. Each test is labeled with its research backing
-              so you know exactly what you're getting.
+        {/* Divider */}
+        <div className="divider-elegant mx-auto max-w-md" />
+
+        {/* About Section */}
+        <section id="about" className="relative py-24 overflow-hidden scroll-mt-24">
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-bg-primary)] via-[var(--color-accent-purple)] to-[var(--color-bg-primary)] opacity-50 transition-colors duration-300" />
+          <div className="relative mx-auto max-w-6xl px-6 text-center">
+            <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">Methodology</p>
+            <h3 className="font-display text-4xl font-medium text-[var(--color-text-primary)] mb-6 transition-colors duration-300">
+              The Science Behind It
+            </h3>
+            <p className="text-[var(--color-text-secondary)] text-lg max-w-2xl mx-auto mb-12 leading-relaxed font-light transition-colors duration-300">
+              Each test is rated on two dimensions: Seriousness reflects the depth of research
+              supporting its validity, while Fun captures how engaging the experience is.
+              Some tests excel at both. Some tests are dogshit 👍 We decide, you report!
             </p>
-            <div className="flex justify-center gap-8 text-sm">
-              <div>
-                <span className="bg-green-500 text-white px-2 py-1 rounded text-xs font-medium">Research-Backed</span>
-                <p className="mt-2 text-indigo-200">Strong empirical support</p>
+            <div className="flex justify-center gap-16">
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-2 mb-3">
+                  <span className="text-[var(--color-text-secondary)] text-sm">Seriousness</span>
+                  <RatingDots value={5} />
+                </div>
+                <p className="text-[var(--color-text-muted)] text-sm transition-colors duration-300">Strong empirical support</p>
               </div>
-              <div>
-                <span className="bg-purple-400 text-white px-2 py-1 rounded text-xs font-medium">Self-Discovery</span>
-                <p className="mt-2 text-indigo-200">Popular for reflection</p>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-2 mb-3">
+                  <span className="text-[var(--color-text-secondary)] text-sm">Fun</span>
+                  <RatingDots value={5} />
+                </div>
+                <p className="text-[var(--color-text-muted)] text-sm transition-colors duration-300">Engaging and enjoyable</p>
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-gray-100 py-8">
-        <div className="mx-auto max-w-6xl px-4 text-center text-gray-500">
-          <p>&copy; 2025 MeSearch. Built with science, designed for insight.</p>
+      {/* Footer */}
+      <footer className="border-t border-[var(--color-border)] py-12 transition-colors duration-300">
+        <div className="mx-auto max-w-6xl px-6 text-center">
+          <p className="font-display text-xl text-gold-gradient mb-4">Mēsearch</p>
+          <p className="text-[var(--color-text-muted)] text-sm tracking-wide transition-colors duration-300">
+            Built with science. Designed for insight.
+          </p>
+          <p className="text-[var(--color-text-muted)]/50 text-xs mt-4">&copy; 2025</p>
         </div>
       </footer>
     </div>
   );
 }
 
-type BadgeType = 'research' | 'popular' | 'discovery';
+function RatingDots({ value, max = 5 }: { value: number; max?: number }) {
+  return (
+    <div className="flex gap-1">
+      {Array.from({ length: max }).map((_, i) => (
+        <div
+          key={i}
+          className={`w-1.5 h-1.5 rounded-full ${
+            i < value
+              ? 'bg-[var(--color-champagne)]'
+              : 'bg-[var(--color-border)]'
+          }`}
+        />
+      ))}
+    </div>
+  );
+}
 
 function TestCard({
   title,
+  subtitle,
   slug,
+  keywords,
   description,
   time,
-  badge
+  seriousness,
+  fun,
 }: {
   title: string;
+  subtitle: string;
   slug: string;
+  keywords: string[];
   description: string;
   time: string;
-  badge: BadgeType;
+  seriousness: number;
+  fun: number;
 }) {
-  const badgeStyles: Record<BadgeType, { bg: string; text: string; label: string }> = {
-    research: { bg: 'bg-green-100', text: 'text-green-700', label: 'Research-Backed' },
-    popular: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Popular Assessment' },
-    discovery: { bg: 'bg-purple-100', text: 'text-purple-700', label: 'Self-Discovery' },
-  };
-
-  const { bg, text, label } = badgeStyles[badge];
-
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-2 mb-3">
-        <span className={`${bg} ${text} text-xs font-medium px-2 py-1 rounded`}>
-          {label}
-        </span>
-        <span className="text-gray-400 text-sm">{time}</span>
+    <div className="card-premium rounded-lg p-8 group">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex gap-6">
+          <div className="flex items-center gap-2">
+            <span className="text-[var(--color-text-muted)] text-[10px] tracking-wide uppercase">Seriousness</span>
+            <RatingDots value={seriousness} />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-[var(--color-text-muted)] text-[10px] tracking-wide uppercase">Fun</span>
+            <RatingDots value={fun} />
+          </div>
+        </div>
+        <span className="text-[var(--color-text-muted)] text-xs tracking-wide">{time}</span>
       </div>
-      <h4 className="text-xl font-semibold text-gray-900 mb-2">{title}</h4>
-      <p className="text-gray-600 text-sm mb-4">{description}</p>
+      <h4 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-1 transition-colors duration-300">{title}</h4>
+      <p className="text-[var(--color-champagne)]/70 text-sm mb-4 tracking-wide">{subtitle}</p>
+      <p className="text-[var(--color-text-muted)] text-xs mb-3 tracking-wide">
+        {keywords.join(' · ')}
+      </p>
+      <p className="text-[var(--color-text-secondary)] text-sm mb-8 leading-relaxed transition-colors duration-300">{description}</p>
       <Link
         to={`/test/${slug}`}
-        className="block w-full bg-gray-100 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors text-center"
+        className="btn-ghost block w-full py-3 rounded text-center text-xs tracking-widest uppercase"
       >
-        Start Test
+        Begin Assessment
       </Link>
     </div>
   );
@@ -155,25 +324,49 @@ function TestCard({
 
 function TestPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="text-2xl font-bold text-indigo-600">MeSearch</Link>
-          <GitHubIcon />
+    <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
+      {/* Header */}
+      <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
+        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
+          <Link to="/" className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
+            Mēsearch
+          </Link>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <GitHubIcon />
+          </div>
         </div>
       </header>
-      <main className="mx-auto max-w-2xl px-4 py-16 text-center">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
-          <div className="text-6xl mb-4">🚧</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Coming Soon</h2>
-          <p className="text-gray-600 mb-6">
-            We're working on bringing you this assessment. Check back soon!
+
+      {/* Content */}
+      <main className="mx-auto max-w-2xl px-6 py-24 text-center">
+        <div className="card-premium rounded-lg p-12">
+          <div className="w-16 h-16 mx-auto mb-8 rounded-full border border-[var(--color-champagne)]/30 flex items-center justify-center">
+            <svg
+              className="w-8 h-8 text-[var(--color-champagne)]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+          </div>
+          <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">In Development</p>
+          <h2 className="font-display text-3xl font-medium text-[var(--color-text-primary)] mb-4 transition-colors duration-300">Coming Soon</h2>
+          <p className="text-[var(--color-text-secondary)] mb-10 leading-relaxed transition-colors duration-300">
+            We are meticulously crafting this assessment to ensure
+            the highest standards of accuracy and insight.
           </p>
           <Link
             to="/"
-            className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+            className="btn-gold inline-block px-8 py-3 rounded text-xs tracking-widest uppercase"
           >
-            Back to Home
+            Return Home
           </Link>
         </div>
       </main>
@@ -183,9 +376,11 @@ function TestPage() {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/test/:slug" element={<TestPage />} />
-    </Routes>
+    <ThemeProvider>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/test/:slug" element={<TestPage />} />
+      </Routes>
+    </ThemeProvider>
   );
 }
