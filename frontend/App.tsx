@@ -147,7 +147,7 @@ function HomePage() {
             across multiple psychological frameworks and/or waste your time.
           </p>
           <div className="flex justify-center mb-12">
-            <ul className="list-disc text-[var(--color-text-secondary)] space-y-2 font-light transition-colors duration-300 text-left pl-5">
+            <ul className="list-disc list-inside text-[var(--color-text-secondary)] space-y-2 font-light transition-colors duration-300 text-left">
               <li>Track your evolution over time.</li>
               <li>Argue with your friends and lovers about whether Myers-Briggs is bullshit.</li>
               <li>Generate filler for your Tinder profile.</li>
