@@ -1,1 +1,195 @@
 @import "tailwindcss";
+
+/* Bold Geometric Design System - Bauhaus/Swiss Influenced */
+
+:root {
+  --geo-black: #0a0a0a;
+  --geo-white: #fafafa;
+  --geo-red: #e53935;
+  --geo-blue: #1565c0;
+  --geo-yellow: #fdd835;
+  --geo-gray: #424242;
+}
+
+/* Heavy sans-serif typography */
+body {
+  font-family: 'Helvetica Neue', 'Arial Black', Helvetica, Arial, sans-serif;
+  letter-spacing: -0.02em;
+  background-color: var(--geo-white);
+}
+
+/* Geometric decorative elements */
+.geo-circle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.geo-square {
+  position: absolute;
+  pointer-events: none;
+}
+
+.geo-triangle {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Grid pattern background */
+.geo-grid {
+  background-image:
+    linear-gradient(var(--geo-black) 1px, transparent 1px),
+    linear-gradient(90deg, var(--geo-black) 1px, transparent 1px);
+  background-size: 60px 60px;
+  background-position: -1px -1px;
+}
+
+.geo-grid-subtle {
+  background-image:
+    linear-gradient(rgba(10, 10, 10, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 10, 10, 0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Bold geometric button */
+.geo-btn {
+  position: relative;
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: var(--geo-black);
+  color: var(--geo-white);
+  border: 4px solid var(--geo-black);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.geo-btn:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 4px 4px 0 var(--geo-red);
+}
+
+.geo-btn-red {
+  background: var(--geo-red);
+  border-color: var(--geo-red);
+}
+
+.geo-btn-red:hover {
+  box-shadow: 4px 4px 0 var(--geo-black);
+}
+
+.geo-btn-blue {
+  background: var(--geo-blue);
+  border-color: var(--geo-blue);
+}
+
+.geo-btn-blue:hover {
+  box-shadow: 4px 4px 0 var(--geo-black);
+}
+
+/* Card with geometric accent */
+.geo-card {
+  position: relative;
+  background: var(--geo-white);
+  border: 3px solid var(--geo-black);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.geo-card:hover {
+  transform: translate(-6px, -6px);
+  box-shadow: 6px 6px 0 var(--geo-black);
+}
+
+.geo-card-red:hover {
+  box-shadow: 6px 6px 0 var(--geo-red);
+}
+
+.geo-card-blue:hover {
+  box-shadow: 6px 6px 0 var(--geo-blue);
+}
+
+.geo-card-yellow:hover {
+  box-shadow: 6px 6px 0 var(--geo-yellow);
+}
+
+/* Heavy border accents */
+.geo-border-left {
+  border-left: 8px solid var(--geo-black);
+}
+
+.geo-border-left-red {
+  border-left: 8px solid var(--geo-red);
+}
+
+.geo-border-left-blue {
+  border-left: 8px solid var(--geo-blue);
+}
+
+.geo-border-left-yellow {
+  border-left: 8px solid var(--geo-yellow);
+}
+
+/* Badge styles */
+.geo-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 2px solid currentColor;
+}
+
+/* Asymmetric section divider */
+.geo-divider {
+  height: 4px;
+  background: linear-gradient(90deg,
+    var(--geo-red) 0%,
+    var(--geo-red) 33.33%,
+    var(--geo-blue) 33.33%,
+    var(--geo-blue) 66.66%,
+    var(--geo-yellow) 66.66%,
+    var(--geo-yellow) 100%
+  );
+}
+
+/* Header stripe accent */
+.geo-header-stripe {
+  height: 6px;
+  background: var(--geo-black);
+  position: relative;
+}
+
+.geo-header-stripe::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 120px;
+  background: var(--geo-red);
+}
+
+/* Typography utilities */
+.geo-heading {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+}
+
+.geo-subhead {
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+/* Selection colors */
+::selection {
+  background: var(--geo-yellow);
+  color: var(--geo-black);
+}

@@ -6,13 +6,13 @@ function GitHubIcon() {
       href="https://github.com/emily-flambe/mesearch"
       target="_blank"
       rel="noopener noreferrer"
-      className="text-gray-400 hover:text-gray-600 transition-colors"
+      className="block p-2 border-2 border-[#0a0a0a] bg-white hover:bg-[#0a0a0a] hover:text-white transition-colors"
       aria-label="View on GitHub"
     >
       <svg
         viewBox="0 0 24 24"
-        width="24"
-        height="24"
+        width="20"
+        height="20"
         fill="currentColor"
         aria-hidden="true"
       >
@@ -22,88 +22,237 @@ function GitHubIcon() {
   );
 }
 
+function GeometricShapes() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      {/* Large red circle - top right */}
+      <div
+        className="absolute -top-20 -right-20 w-80 h-80 rounded-full border-8 border-[#e53935]"
+        style={{ opacity: 0.15 }}
+      />
+      {/* Blue square - bottom left */}
+      <div
+        className="absolute -bottom-10 -left-10 w-48 h-48 bg-[#1565c0]"
+        style={{ opacity: 0.08, transform: 'rotate(15deg)' }}
+      />
+      {/* Yellow triangle - right side */}
+      <div
+        className="absolute top-1/2 right-20 w-0 h-0"
+        style={{
+          borderLeft: '60px solid transparent',
+          borderRight: '60px solid transparent',
+          borderBottom: '100px solid #fdd835',
+          opacity: 0.12,
+          transform: 'rotate(-20deg)'
+        }}
+      />
+      {/* Small black circle */}
+      <div
+        className="absolute top-40 left-1/4 w-12 h-12 rounded-full bg-[#0a0a0a]"
+        style={{ opacity: 0.06 }}
+      />
+    </div>
+  );
+}
+
 function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-indigo-600">MeSearch</h1>
-          <nav className="flex items-center gap-6">
-            <a href="#tests" className="text-gray-600 hover:text-indigo-600 transition-colors">Tests</a>
-            <a href="#about" className="text-gray-600 hover:text-indigo-600 transition-colors">About</a>
-            <GitHubIcon />
+    <div className="min-h-screen bg-[#fafafa] geo-grid-subtle">
+      {/* Header stripe */}
+      <div className="geo-header-stripe" />
+
+      <header className="border-b-4 border-[#0a0a0a] bg-white">
+        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-[#e53935] flex items-center justify-center">
+              <span className="text-white font-black text-xl">M</span>
+            </div>
+            <span className="text-2xl font-black tracking-tight text-[#0a0a0a] uppercase">
+              MeSearch
+            </span>
+          </Link>
+          <nav className="flex items-center gap-1">
+            <a
+              href="#tests"
+              className="px-4 py-2 font-bold text-sm uppercase tracking-widest text-[#0a0a0a] hover:bg-[#fdd835] transition-colors"
+            >
+              Tests
+            </a>
+            <a
+              href="#about"
+              className="px-4 py-2 font-bold text-sm uppercase tracking-widest text-[#0a0a0a] hover:bg-[#fdd835] transition-colors"
+            >
+              About
+            </a>
+            <div className="ml-2">
+              <GitHubIcon />
+            </div>
           </nav>
         </div>
       </header>
 
       <main>
-        <section className="mx-auto max-w-6xl px-4 py-24 text-center">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">
-            Understand Yourself Better
-          </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Take scientifically-backed personality assessments, track your results over time,
-            and discover insights across multiple frameworks.
-          </p>
-          <a
-            href="#tests"
-            className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-indigo-700 transition-colors"
-          >
-            Explore Tests
-          </a>
-        </section>
+        {/* Hero Section */}
+        <section className="relative overflow-hidden">
+          <GeometricShapes />
+          <div className="mx-auto max-w-6xl px-6 py-24 relative z-10">
+            <div className="grid lg:grid-cols-12 gap-8 items-center">
+              {/* Left content - asymmetric layout */}
+              <div className="lg:col-span-7">
+                <p className="geo-subhead text-[#e53935] mb-4">
+                  Personality Assessment Platform
+                </p>
+                <h1 className="geo-heading text-6xl md:text-7xl lg:text-8xl text-[#0a0a0a] mb-8">
+                  Know
+                  <br />
+                  <span className="text-[#1565c0]">Your</span>
+                  <br />
+                  Self
+                </h1>
+                <p className="text-lg text-[#424242] max-w-md mb-10 leading-relaxed">
+                  Scientifically-backed personality assessments. Track results over time.
+                  Discover insights across multiple frameworks.
+                </p>
+                <a href="#tests" className="geo-btn geo-btn-red">
+                  Explore Tests
+                </a>
+              </div>
 
-        <section id="tests" className="mx-auto max-w-6xl px-4 py-16">
-          <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">Featured Tests</h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            <TestCard
-              title="Big Five (IPIP-NEO)"
-              slug="big-five"
-              description="The gold standard in personality psychology. Measures Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism."
-              time="15 min"
-              badge="research"
-            />
-            <TestCard
-              title="HEXACO"
-              slug="hexaco"
-              description="Six-factor model including Honesty-Humility. Predicts ethical behavior and workplace conduct."
-              time="12 min"
-              badge="research"
-            />
-            <TestCard
-              title="Enneagram"
-              slug="enneagram"
-              description="Explore your core motivations through 9 personality types. Popular for personal growth and self-discovery."
-              time="10 min"
-              badge="discovery"
-            />
+              {/* Right decorative element */}
+              <div className="lg:col-span-5 hidden lg:block">
+                <div className="relative h-80">
+                  {/* Overlapping geometric shapes */}
+                  <div className="absolute top-0 right-0 w-48 h-48 bg-[#e53935]" />
+                  <div className="absolute top-16 right-16 w-48 h-48 bg-[#1565c0]" />
+                  <div className="absolute top-32 right-32 w-48 h-48 bg-[#fdd835]" />
+                  <div className="absolute top-8 right-8 w-48 h-48 border-4 border-[#0a0a0a]" />
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
-        <section id="about" className="bg-indigo-600 text-white py-16">
-          <div className="mx-auto max-w-6xl px-4 text-center">
-            <h3 className="text-3xl font-bold mb-4">The Science Behind It</h3>
-            <p className="text-indigo-100 text-lg max-w-2xl mx-auto mb-6">
-              We prioritize scientifically validated assessments. Each test is labeled with its research backing
-              so you know exactly what you're getting.
-            </p>
-            <div className="flex justify-center gap-8 text-sm">
+        {/* Divider */}
+        <div className="geo-divider" />
+
+        {/* Tests Section */}
+        <section id="tests" className="bg-white py-20">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="flex items-end justify-between mb-12">
               <div>
-                <span className="bg-green-500 text-white px-2 py-1 rounded text-xs font-medium">Research-Backed</span>
-                <p className="mt-2 text-indigo-200">Strong empirical support</p>
+                <p className="geo-subhead text-[#424242] mb-2">Available Now</p>
+                <h2 className="geo-heading text-4xl md:text-5xl text-[#0a0a0a]">
+                  Featured Tests
+                </h2>
               </div>
+              <div className="hidden md:flex gap-2">
+                <div className="w-4 h-4 bg-[#e53935]" />
+                <div className="w-4 h-4 bg-[#1565c0]" />
+                <div className="w-4 h-4 bg-[#fdd835]" />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              <TestCard
+                title="Big Five"
+                subtitle="IPIP-NEO"
+                slug="big-five"
+                description="The gold standard in personality psychology. Measures Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism."
+                time="15 min"
+                badge="research"
+                accentColor="red"
+              />
+              <TestCard
+                title="HEXACO"
+                subtitle="Six-Factor Model"
+                slug="hexaco"
+                description="Includes Honesty-Humility dimension. Predicts ethical behavior and workplace conduct with strong empirical backing."
+                time="12 min"
+                badge="research"
+                accentColor="blue"
+              />
+              <TestCard
+                title="Enneagram"
+                subtitle="Nine Types"
+                slug="enneagram"
+                description="Explore your core motivations through 9 personality types. Popular for personal growth and self-discovery."
+                time="10 min"
+                badge="discovery"
+                accentColor="yellow"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* About Section */}
+        <section id="about" className="bg-[#0a0a0a] text-white py-20 relative overflow-hidden">
+          {/* Geometric background */}
+          <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+            <div className="absolute top-0 left-0 w-1/3 h-2 bg-[#e53935]" />
+            <div className="absolute top-0 left-1/3 w-1/3 h-2 bg-[#1565c0]" />
+            <div className="absolute top-0 left-2/3 w-1/3 h-2 bg-[#fdd835]" />
+            <div
+              className="absolute -bottom-32 -right-32 w-96 h-96 border-8 border-[#424242] rounded-full"
+              style={{ opacity: 0.3 }}
+            />
+          </div>
+
+          <div className="mx-auto max-w-6xl px-6 relative z-10">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div>
-                <span className="bg-purple-400 text-white px-2 py-1 rounded text-xs font-medium">Self-Discovery</span>
-                <p className="mt-2 text-indigo-200">Popular for reflection</p>
+                <p className="geo-subhead text-[#fdd835] mb-4">Methodology</p>
+                <h2 className="geo-heading text-4xl md:text-5xl text-white mb-6">
+                  The Science
+                  <br />
+                  Behind It
+                </h2>
+                <p className="text-gray-400 text-lg leading-relaxed mb-8">
+                  We prioritize scientifically validated assessments. Each test is labeled
+                  with its research backing so you know exactly what you're getting.
+                </p>
+              </div>
+
+              <div className="space-y-6">
+                <div className="flex items-start gap-4 p-6 border-l-4 border-[#e53935] bg-[#1a1a1a]">
+                  <div className="w-3 h-3 bg-[#e53935] mt-1.5 flex-shrink-0" />
+                  <div>
+                    <span className="geo-badge text-[#e53935] mb-2">Research-Backed</span>
+                    <p className="text-gray-400 mt-3">
+                      Strong empirical support from peer-reviewed studies
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 p-6 border-l-4 border-[#1565c0] bg-[#1a1a1a]">
+                  <div className="w-3 h-3 bg-[#1565c0] mt-1.5 flex-shrink-0" />
+                  <div>
+                    <span className="geo-badge text-[#1565c0] mb-2">Self-Discovery</span>
+                    <p className="text-gray-400 mt-3">
+                      Popular frameworks for personal reflection and growth
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-gray-100 py-8">
-        <div className="mx-auto max-w-6xl px-4 text-center text-gray-500">
-          <p>&copy; 2025 MeSearch. Built with science, designed for insight.</p>
+      <footer className="bg-white border-t-4 border-[#0a0a0a]">
+        <div className="mx-auto max-w-6xl px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-6 h-6 bg-[#0a0a0a]" />
+            <span className="font-bold text-sm uppercase tracking-widest text-[#0a0a0a]">
+              MeSearch
+            </span>
+          </div>
+          <p className="text-[#424242] text-sm">
+            2025 MeSearch. Built with science, designed for insight.
+          </p>
+          <div className="flex gap-2">
+            <div className="w-3 h-3 bg-[#e53935]" />
+            <div className="w-3 h-3 bg-[#1565c0]" />
+            <div className="w-3 h-3 bg-[#fdd835]" />
+          </div>
         </div>
       </footer>
     </div>
@@ -111,70 +260,133 @@ function HomePage() {
 }
 
 type BadgeType = 'research' | 'popular' | 'discovery';
+type AccentColor = 'red' | 'blue' | 'yellow';
 
 function TestCard({
   title,
+  subtitle,
   slug,
   description,
   time,
-  badge
+  badge,
+  accentColor
 }: {
   title: string;
+  subtitle: string;
   slug: string;
   description: string;
   time: string;
   badge: BadgeType;
+  accentColor: AccentColor;
 }) {
-  const badgeStyles: Record<BadgeType, { bg: string; text: string; label: string }> = {
-    research: { bg: 'bg-green-100', text: 'text-green-700', label: 'Research-Backed' },
-    popular: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Popular Assessment' },
-    discovery: { bg: 'bg-purple-100', text: 'text-purple-700', label: 'Self-Discovery' },
+  const badgeConfig: Record<BadgeType, { color: string; label: string }> = {
+    research: { color: '#e53935', label: 'Research-Backed' },
+    popular: { color: '#1565c0', label: 'Popular' },
+    discovery: { color: '#1565c0', label: 'Self-Discovery' },
   };
 
-  const { bg, text, label } = badgeStyles[badge];
+  const accentColors: Record<AccentColor, string> = {
+    red: 'geo-card-red',
+    blue: 'geo-card-blue',
+    yellow: 'geo-card-yellow',
+  };
+
+  const borderColors: Record<AccentColor, string> = {
+    red: 'border-l-[#e53935]',
+    blue: 'border-l-[#1565c0]',
+    yellow: 'border-l-[#fdd835]',
+  };
+
+  const { color, label } = badgeConfig[badge];
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-2 mb-3">
-        <span className={`${bg} ${text} text-xs font-medium px-2 py-1 rounded`}>
-          {label}
-        </span>
-        <span className="text-gray-400 text-sm">{time}</span>
+    <div className={`geo-card ${accentColors[accentColor]} p-0`}>
+      {/* Top accent bar */}
+      <div
+        className="h-2"
+        style={{ backgroundColor: accentColor === 'red' ? '#e53935' : accentColor === 'blue' ? '#1565c0' : '#fdd835' }}
+      />
+
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <span
+            className="geo-badge"
+            style={{ color, borderColor: color }}
+          >
+            {label}
+          </span>
+          <span className="text-[#424242] text-sm font-bold uppercase tracking-wider">
+            {time}
+          </span>
+        </div>
+
+        <h3 className="geo-heading text-2xl text-[#0a0a0a] mb-1">{title}</h3>
+        <p className="text-[#424242] text-sm font-medium uppercase tracking-wider mb-4">
+          {subtitle}
+        </p>
+
+        <p className="text-[#424242] text-sm leading-relaxed mb-6">
+          {description}
+        </p>
+
+        <Link
+          to={`/test/${slug}`}
+          className="block w-full py-3 bg-[#0a0a0a] text-white text-center font-bold uppercase tracking-widest text-sm hover:bg-[#e53935] transition-colors"
+        >
+          Start Test
+        </Link>
       </div>
-      <h4 className="text-xl font-semibold text-gray-900 mb-2">{title}</h4>
-      <p className="text-gray-600 text-sm mb-4">{description}</p>
-      <Link
-        to={`/test/${slug}`}
-        className="block w-full bg-gray-100 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors text-center"
-      >
-        Start Test
-      </Link>
     </div>
   );
 }
 
 function TestPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="text-2xl font-bold text-indigo-600">MeSearch</Link>
+    <div className="min-h-screen bg-[#fafafa] geo-grid-subtle">
+      {/* Header stripe */}
+      <div className="geo-header-stripe" />
+
+      <header className="border-b-4 border-[#0a0a0a] bg-white">
+        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-[#e53935] flex items-center justify-center">
+              <span className="text-white font-black text-xl">M</span>
+            </div>
+            <span className="text-2xl font-black tracking-tight text-[#0a0a0a] uppercase">
+              MeSearch
+            </span>
+          </Link>
           <GitHubIcon />
         </div>
       </header>
-      <main className="mx-auto max-w-2xl px-4 py-16 text-center">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
-          <div className="text-6xl mb-4">🚧</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Coming Soon</h2>
-          <p className="text-gray-600 mb-6">
-            We're working on bringing you this assessment. Check back soon!
-          </p>
-          <Link
-            to="/"
-            className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
-          >
-            Back to Home
-          </Link>
+
+      <main className="mx-auto max-w-2xl px-6 py-20">
+        <div className="geo-card p-0">
+          {/* Accent bar */}
+          <div className="h-2 bg-[#1565c0]" />
+
+          <div className="p-10 text-center">
+            {/* Geometric "under construction" indicator */}
+            <div className="flex justify-center gap-3 mb-8">
+              <div className="w-8 h-8 bg-[#e53935]" />
+              <div className="w-8 h-8 bg-[#1565c0] rotate-45" />
+              <div className="w-8 h-8 bg-[#fdd835]" />
+            </div>
+
+            <p className="geo-subhead text-[#424242] mb-3">Status</p>
+            <h1 className="geo-heading text-4xl md:text-5xl text-[#0a0a0a] mb-6">
+              Coming
+              <br />
+              Soon
+            </h1>
+            <p className="text-[#424242] text-lg mb-10 max-w-md mx-auto">
+              We're working on bringing you this assessment.
+              Check back soon for updates.
+            </p>
+            <Link to="/" className="geo-btn geo-btn-blue">
+              Back to Home
+            </Link>
+          </div>
         </div>
       </main>
     </div>
