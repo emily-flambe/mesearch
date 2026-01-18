@@ -1,1 +1,93 @@
 @import "tailwindcss";
+
+/* Soft Pastel Design System */
+
+/* Custom pastel color palette */
+@theme {
+  /* Lavender - Primary */
+  --color-lavender-50: #faf8ff;
+  --color-lavender-100: #f3edff;
+  --color-lavender-200: #e9deff;
+  --color-lavender-300: #d4c4fc;
+  --color-lavender-400: #b69df7;
+  --color-lavender-500: #9d7cf0;
+  --color-lavender-600: #8b5ce5;
+  --color-lavender-700: #7645d1;
+
+  /* Peach - Warm accent */
+  --color-peach-50: #fff8f5;
+  --color-peach-100: #ffede6;
+  --color-peach-200: #ffdacc;
+  --color-peach-300: #ffbfa6;
+  --color-peach-400: #ffa07a;
+  --color-peach-500: #f58356;
+  --color-peach-600: #e06a3f;
+  --color-peach-700: #bc5431;
+
+  /* Mint - Fresh accent */
+  --color-mint-50: #f2fdf9;
+  --color-mint-100: #d9f9ed;
+  --color-mint-200: #b5f2dc;
+  --color-mint-300: #7fe6c4;
+  --color-mint-400: #4dd4a8;
+  --color-mint-500: #26bd8e;
+  --color-mint-600: #199973;
+  --color-mint-700: #167a5e;
+
+  /* Soft shadow */
+  --shadow-soft: 0 4px 20px -2px rgba(157, 124, 240, 0.12), 0 2px 8px -1px rgba(157, 124, 240, 0.08);
+
+  /* Custom font family for rounded aesthetic */
+  --font-rounded: "Nunito", "Quicksand", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Base body styling */
+body {
+  font-family: var(--font-rounded);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Selection styling */
+::selection {
+  background-color: var(--color-lavender-200);
+  color: var(--color-lavender-700);
+}
+
+/* Focus states - soft and accessible */
+:focus-visible {
+  outline: 2px solid var(--color-lavender-400);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Smooth transitions for interactive elements */
+a, button {
+  transition: all 0.2s ease-out;
+}
+
+/* Scrollbar styling for webkit browsers */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-lavender-50);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-lavender-200), var(--color-rose-200));
+  border-radius: 10px;
+  border: 2px solid var(--color-lavender-50);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--color-lavender-300), var(--color-rose-300));
+}
