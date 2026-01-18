@@ -1,1 +1,197 @@
+/* Custom fonts - warm serif for headings, clean sans for body */
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+
 @import "tailwindcss";
+
+/* Organic Nature Design System */
+
+:root {
+  /* Earth tones palette */
+  --sage: #8B9A7C;
+  --sage-light: #B5C4A8;
+  --sage-dark: #6B7A5C;
+  --terracotta: #C17C60;
+  --terracotta-light: #D9A08C;
+  --terracotta-dark: #A35E44;
+  --cream: #FAF6F1;
+  --cream-warm: #F5EDE3;
+  --brown-soft: #8B7355;
+  --brown-dark: #5C4A3A;
+  --moss: #7A8B6E;
+  --clay: #B8A090;
+}
+
+/* Organic blob shapes for decorative elements */
+.organic-blob-1 {
+  border-radius: 60% 40% 70% 30% / 40% 50% 50% 60%;
+}
+
+.organic-blob-2 {
+  border-radius: 40% 60% 30% 70% / 50% 40% 60% 50%;
+}
+
+.organic-blob-3 {
+  border-radius: 50% 50% 40% 60% / 60% 30% 70% 40%;
+}
+
+/* Leaf motif - CSS-only botanical accent */
+.leaf-accent::before {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%);
+  border-radius: 50% 0 50% 50%;
+  transform: rotate(-45deg);
+  opacity: 0.3;
+}
+
+.leaf-accent::after {
+  content: '';
+  position: absolute;
+  width: 1px;
+  height: 20px;
+  background: var(--sage-dark);
+  transform: rotate(-45deg) translateY(8px) translateX(12px);
+  opacity: 0.4;
+}
+
+/* Subtle organic texture overlay */
+.organic-texture {
+  background-image:
+    radial-gradient(ellipse at 20% 30%, rgba(139, 154, 124, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(193, 124, 96, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(181, 196, 168, 0.04) 0%, transparent 70%);
+}
+
+/* Flowing underline decoration */
+.flowing-underline {
+  position: relative;
+}
+
+.flowing-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--terracotta) 0%, var(--sage) 50%, var(--terracotta) 100%);
+  border-radius: 50% 50% 50% 50% / 100% 100% 0% 0%;
+  opacity: 0.6;
+}
+
+/* Organic card style with soft shadows */
+.organic-card {
+  background: linear-gradient(145deg, #FFFFFF 0%, var(--cream) 100%);
+  border: 1px solid rgba(139, 154, 124, 0.2);
+  box-shadow:
+    0 4px 20px rgba(92, 74, 58, 0.08),
+    0 1px 3px rgba(92, 74, 58, 0.04);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.organic-card:hover {
+  box-shadow:
+    0 8px 30px rgba(92, 74, 58, 0.12),
+    0 2px 6px rgba(92, 74, 58, 0.06);
+  transform: translateY(-2px);
+}
+
+/* Button styles with organic feel */
+.btn-primary-organic {
+  background: linear-gradient(135deg, var(--terracotta) 0%, var(--terracotta-dark) 100%);
+  color: white;
+  border-radius: 9999px;
+  padding: 0.75rem 2rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(193, 124, 96, 0.3);
+}
+
+.btn-primary-organic:hover {
+  background: linear-gradient(135deg, var(--terracotta-dark) 0%, #8B4830 100%);
+  box-shadow: 0 4px 12px rgba(193, 124, 96, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-secondary-organic {
+  background: linear-gradient(135deg, var(--cream-warm) 0%, var(--clay) 100%);
+  color: var(--brown-dark);
+  border-radius: 9999px;
+  padding: 0.625rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary-organic:hover {
+  background: linear-gradient(135deg, var(--clay) 0%, var(--brown-soft) 100%);
+  color: white;
+}
+
+/* Organic divider */
+.organic-divider {
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--sage-light) 20%,
+    var(--terracotta-light) 50%,
+    var(--sage-light) 80%,
+    transparent 100%
+  );
+  border: none;
+  margin: 2rem 0;
+}
+
+/* Typography utilities */
+.font-serif-organic {
+  font-family: 'Libre Baskerville', Georgia, serif;
+}
+
+.font-sans-organic {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+}
+
+/* Animated floating leaves background */
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(3deg);
+  }
+}
+
+.float-gentle {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+.float-gentle-delayed {
+  animation: float-gentle 7s ease-in-out infinite;
+  animation-delay: -2s;
+}
+
+/* Badge styles */
+.badge-research {
+  background: linear-gradient(135deg, var(--sage-light) 0%, var(--sage) 100%);
+  color: var(--brown-dark);
+}
+
+.badge-discovery {
+  background: linear-gradient(135deg, var(--terracotta-light) 0%, var(--terracotta) 100%);
+  color: white;
+}
+
+/* Decorative corner flourish */
+.corner-flourish::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(ellipse at center, var(--sage-light) 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0.3;
+  pointer-events: none;
+}
