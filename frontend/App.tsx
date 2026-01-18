@@ -1,5 +1,7 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import { createContext, useContext, useEffect, useState } from 'react';
+import BigFiveAssessment from './components/BigFiveAssessment';
+import BigFiveResults from './components/BigFiveResults';
 
 // Theme Context
 type Theme = 'dark' | 'light';
@@ -376,6 +378,8 @@ export default function App() {
     <ThemeProvider>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/test/big-five" element={<BigFiveAssessment />} />
+        <Route path="/test/big-five/results" element={<BigFiveResults />} />
         <Route path="/test/:slug" element={<TestPage />} />
       </Routes>
     </ThemeProvider>
