@@ -214,7 +214,7 @@ function HomePage() {
             <p className="text-[var(--color-text-secondary)] text-lg max-w-2xl mx-auto mb-12 leading-relaxed font-light transition-colors duration-300">
               Each test is rated on two dimensions: Seriousness reflects the depth of research
               supporting its validity, while Fun captures how engaging the experience is.
-              Some tests excel at both.
+              Some tests excel at both. Some tests are dogshit 👍 We decide, you report!
             </p>
             <div className="flex justify-center gap-16">
               <div className="text-center">
