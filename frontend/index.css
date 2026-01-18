@@ -1,1 +1,202 @@
 @import "tailwindcss";
+
+/* Neo-Memphis Color Palette */
+:root {
+  --memphis-pink: #FF1493;
+  --memphis-blue: #00D4FF;
+  --memphis-yellow: #FFE600;
+  --memphis-mint: #7FFFD4;
+  --memphis-orange: #FF6B35;
+  --memphis-purple: #9B59B6;
+  --memphis-black: #1A1A2E;
+  --memphis-cream: #FFF8E7;
+}
+
+/* Dotted pattern background */
+.memphis-dots {
+  background-image: radial-gradient(circle, var(--memphis-black) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.memphis-dots-light {
+  background-image: radial-gradient(circle, rgba(0,0,0,0.1) 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+/* Zigzag pattern */
+.memphis-zigzag {
+  background:
+    linear-gradient(135deg, var(--memphis-pink) 25%, transparent 25%) -20px 0,
+    linear-gradient(225deg, var(--memphis-pink) 25%, transparent 25%) -20px 0,
+    linear-gradient(315deg, var(--memphis-pink) 25%, transparent 25%),
+    linear-gradient(45deg, var(--memphis-pink) 25%, transparent 25%);
+  background-size: 40px 40px;
+  background-color: var(--memphis-yellow);
+}
+
+/* Squiggle animation */
+@keyframes squiggle {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(3px) rotate(2deg); }
+  50% { transform: translateX(0) rotate(-1deg); }
+  75% { transform: translateX(-3px) rotate(1deg); }
+}
+
+.squiggle-hover:hover {
+  animation: squiggle 0.3s ease-in-out;
+}
+
+/* Bold border style */
+.memphis-border {
+  border: 4px solid var(--memphis-black);
+  box-shadow: 6px 6px 0px var(--memphis-black);
+}
+
+.memphis-border-sm {
+  border: 3px solid var(--memphis-black);
+  box-shadow: 4px 4px 0px var(--memphis-black);
+}
+
+/* Geometric shapes as pseudo-elements */
+.memphis-triangle::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
+  border-bottom: 52px solid var(--memphis-pink);
+}
+
+.memphis-circle::before {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--memphis-blue);
+  border: 3px solid var(--memphis-black);
+}
+
+/* Card hover effect */
+.memphis-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.memphis-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0px var(--memphis-black);
+}
+
+/* Funky button style */
+.memphis-btn {
+  background: var(--memphis-yellow);
+  color: var(--memphis-black);
+  border: 3px solid var(--memphis-black);
+  box-shadow: 4px 4px 0px var(--memphis-black);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.15s ease;
+}
+
+.memphis-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--memphis-black);
+}
+
+.memphis-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--memphis-black);
+}
+
+.memphis-btn-pink {
+  background: var(--memphis-pink);
+  color: white;
+}
+
+.memphis-btn-blue {
+  background: var(--memphis-blue);
+}
+
+.memphis-btn-mint {
+  background: var(--memphis-mint);
+}
+
+/* Decorative squiggle SVG pattern */
+.squiggle-line {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='20' viewBox='0 0 100 20'%3E%3Cpath d='M0 10 Q 12.5 0, 25 10 T 50 10 T 75 10 T 100 10' stroke='%23FF1493' stroke-width='3' fill='none'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  height: 20px;
+}
+
+/* Striped pattern */
+.memphis-stripes {
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    var(--memphis-black) 10px,
+    var(--memphis-black) 12px
+  );
+}
+
+/* Cross-hatch pattern */
+.memphis-crosshatch {
+  background-image:
+    linear-gradient(45deg, var(--memphis-black) 2px, transparent 2px),
+    linear-gradient(-45deg, var(--memphis-black) 2px, transparent 2px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+}
+
+/* Typography - Chunky display font feel */
+.memphis-title {
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+}
+
+/* Offset shadow text effect */
+.text-shadow-memphis {
+  text-shadow: 4px 4px 0px var(--memphis-blue);
+}
+
+/* Badge styles */
+.memphis-badge {
+  border: 2px solid var(--memphis-black);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+
+/* Floating geometric decorations */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+@keyframes float-reverse {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(10px) rotate(-5deg); }
+}
+
+.float-anim {
+  animation: float 4s ease-in-out infinite;
+}
+
+.float-anim-reverse {
+  animation: float-reverse 5s ease-in-out infinite;
+}
+
+.float-anim-slow {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Wavy divider */
+.wavy-divider {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z' fill='%231A1A2E'/%3E%3C/svg%3E");
+  background-size: cover;
+  height: 80px;
+}
