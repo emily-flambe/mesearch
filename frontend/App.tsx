@@ -105,13 +105,13 @@ function GitHubIcon() {
 
 function HomePage() {
   return (
-    <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
+    <div id="top" className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
       {/* Header */}
       <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
         <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-          <h1 className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
+          <a href="#top" className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
             Mēsearch
-          </h1>
+          </a>
           <nav className="flex items-center gap-6">
             <a
               href="#tests"
