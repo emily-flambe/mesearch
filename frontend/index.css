@@ -38,6 +38,9 @@
   --color-text-primary: #1a1918;
   --color-text-secondary: #4a4845;
   --color-text-muted: #7a7875;
+  --color-champagne: #a67c00;
+  --color-gold: #8b6914;
+  --color-pale-gold: #b8860b;
   --color-accent-purple: #f0ebe8;
   --color-accent-burgundy: #f5e8ec;
   --color-discovery: #7a5a7f;
@@ -45,9 +48,9 @@
 
   /* Card gradients - light */
   --card-bg: linear-gradient(180deg, #ffffff 0%, #faf8f5 100%);
-  --card-border: rgba(212, 175, 55, 0.25);
-  --card-border-hover: rgba(212, 175, 55, 0.6);
-  --card-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.08), 0 0 40px rgba(212, 175, 55, 0.12);
+  --card-border: rgba(166, 124, 0, 0.35);
+  --card-border-hover: rgba(166, 124, 0, 0.7);
+  --card-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.08), 0 0 40px rgba(166, 124, 0, 0.15);
 }
 
 body {

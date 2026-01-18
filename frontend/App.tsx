@@ -110,7 +110,7 @@ function HomePage() {
       <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
         <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
           <h1 className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
-            MeSearch
+            Mēsearch
           </h1>
           <nav className="flex items-center gap-6">
             <a
@@ -230,7 +230,7 @@ function HomePage() {
       {/* Footer */}
       <footer className="border-t border-[var(--color-border)] py-12 transition-colors duration-300">
         <div className="mx-auto max-w-6xl px-6 text-center">
-          <p className="font-display text-xl text-gold-gradient mb-4">MeSearch</p>
+          <p className="font-display text-xl text-gold-gradient mb-4">Mēsearch</p>
           <p className="text-[var(--color-text-muted)] text-sm tracking-wide transition-colors duration-300">
             Built with science. Designed for insight.
           </p>
@@ -294,7 +294,7 @@ function TestPage() {
       <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
         <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
           <Link to="/" className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
-            MeSearch
+            Mēsearch
           </Link>
           <div className="flex items-center gap-4">
             <ThemeToggle />
