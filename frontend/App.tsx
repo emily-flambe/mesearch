@@ -171,25 +171,31 @@ function HomePage() {
               title="Big Five"
               subtitle="IPIP-NEO"
               slug="big-five"
+              keywords={['Traits', 'Behavior', 'Stability']}
               description="The gold standard in personality psychology. Measures Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism."
               time="15 min"
-              badge="research"
+              seriousness={5}
+              fun={3}
             />
             <TestCard
               title="HEXACO"
               subtitle="Six Dimensions"
               slug="hexaco"
+              keywords={['Ethics', 'Honesty', 'Integrity']}
               description="Six-factor model including Honesty-Humility. Predicts ethical behavior and workplace conduct with precision."
               time="12 min"
-              badge="research"
+              seriousness={5}
+              fun={2}
             />
             <TestCard
               title="Enneagram"
               subtitle="Nine Types"
               slug="enneagram"
+              keywords={['Motivations', 'Growth', 'Archetypes']}
               description="Explore your core motivations through nine distinct personality archetypes. Renowned for personal growth insights."
               time="10 min"
-              badge="discovery"
+              seriousness={2}
+              fun={5}
             />
           </div>
         </section>
@@ -206,21 +212,24 @@ function HomePage() {
               The Science Behind It
             </h3>
             <p className="text-[var(--color-text-secondary)] text-lg max-w-2xl mx-auto mb-12 leading-relaxed font-light transition-colors duration-300">
-              We prioritize scientifically validated assessments. Each test is labeled with its
-              research backing so you know exactly what you're engaging with.
+              Each test is rated on two dimensions: Seriousness reflects the depth of research
+              supporting its validity, while Fun captures how engaging the experience is.
+              Some tests excel at both.
             </p>
             <div className="flex justify-center gap-16">
               <div className="text-center">
-                <span className="inline-block border border-[var(--color-champagne)]/40 text-[var(--color-champagne)] px-4 py-2 rounded text-xs tracking-widest uppercase">
-                  Research-Backed
-                </span>
-                <p className="mt-4 text-[var(--color-text-muted)] text-sm transition-colors duration-300">Strong empirical support</p>
+                <div className="flex items-center justify-center gap-2 mb-3">
+                  <span className="text-[var(--color-text-secondary)] text-sm">Seriousness</span>
+                  <RatingDots value={5} />
+                </div>
+                <p className="text-[var(--color-text-muted)] text-sm transition-colors duration-300">Strong empirical support</p>
               </div>
               <div className="text-center">
-                <span className="inline-block border border-[var(--color-discovery-border)] text-[var(--color-discovery)] px-4 py-2 rounded text-xs tracking-widest uppercase">
-                  Self-Discovery
-                </span>
-                <p className="mt-4 text-[var(--color-text-muted)] text-sm transition-colors duration-300">Popular for reflection</p>
+                <div className="flex items-center justify-center gap-2 mb-3">
+                  <span className="text-[var(--color-text-secondary)] text-sm">Fun</span>
+                  <RatingDots value={5} />
+                </div>
+                <p className="text-[var(--color-text-muted)] text-sm transition-colors duration-300">Engaging and enjoyable</p>
               </div>
             </div>
           </div>
@@ -241,41 +250,62 @@ function HomePage() {
   );
 }
 
-type BadgeType = 'research' | 'popular' | 'discovery';
+function RatingDots({ value, max = 5 }: { value: number; max?: number }) {
+  return (
+    <div className="flex gap-1">
+      {Array.from({ length: max }).map((_, i) => (
+        <div
+          key={i}
+          className={`w-1.5 h-1.5 rounded-full ${
+            i < value
+              ? 'bg-[var(--color-champagne)]'
+              : 'bg-[var(--color-border)]'
+          }`}
+        />
+      ))}
+    </div>
+  );
+}
 
 function TestCard({
   title,
   subtitle,
   slug,
+  keywords,
   description,
   time,
-  badge
+  seriousness,
+  fun,
 }: {
   title: string;
   subtitle: string;
   slug: string;
+  keywords: string[];
   description: string;
   time: string;
-  badge: BadgeType;
+  seriousness: number;
+  fun: number;
 }) {
-  const badgeStyles: Record<BadgeType, { border: string; text: string; label: string }> = {
-    research: { border: 'border-[var(--color-champagne)]/30', text: 'text-[var(--color-champagne)]', label: 'Research-Backed' },
-    popular: { border: 'border-[#4a7fa8]/30', text: 'text-[#6aa8d8]', label: 'Popular' },
-    discovery: { border: 'border-[var(--color-discovery-border)]', text: 'text-[var(--color-discovery)]', label: 'Self-Discovery' },
-  };
-
-  const { border, text, label } = badgeStyles[badge];
-
   return (
     <div className="card-premium rounded-lg p-8 group">
       <div className="flex items-center justify-between mb-6">
-        <span className={`${border} ${text} text-[10px] tracking-widest uppercase border px-3 py-1.5 rounded`}>
-          {label}
-        </span>
+        <div className="flex gap-6">
+          <div className="flex items-center gap-2">
+            <span className="text-[var(--color-text-muted)] text-[10px] tracking-wide uppercase">Seriousness</span>
+            <RatingDots value={seriousness} />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-[var(--color-text-muted)] text-[10px] tracking-wide uppercase">Fun</span>
+            <RatingDots value={fun} />
+          </div>
+        </div>
         <span className="text-[var(--color-text-muted)] text-xs tracking-wide">{time}</span>
       </div>
       <h4 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-1 transition-colors duration-300">{title}</h4>
       <p className="text-[var(--color-champagne)]/70 text-sm mb-4 tracking-wide">{subtitle}</p>
+      <p className="text-[var(--color-text-muted)] text-xs mb-3 tracking-wide">
+        {keywords.join(' · ')}
+      </p>
       <p className="text-[var(--color-text-secondary)] text-sm mb-8 leading-relaxed transition-colors duration-300">{description}</p>
       <Link
         to={`/test/${slug}`}
