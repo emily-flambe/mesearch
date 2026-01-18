@@ -1,1 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Karla:wght@300;400&display=swap');
 @import "tailwindcss";
+
+:root {
+  --ink: #2d3436;
+  --stone: #636e72;
+  --mist: #b2bec3;
+  --cloud: #dfe6e9;
+  --snow: #f8f9fa;
+  --paper: #fefefe;
+  --sage: #81a89a;
+  --sage-muted: #a8c5b8;
+}
+
+* {
+  letter-spacing: 0.02em;
+}
+
+body {
+  font-family: 'Karla', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 300;
+  background-color: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Serif headings for contrast */
+.font-serif {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* Subtle hover transitions */
+.zen-link {
+  position: relative;
+  color: var(--stone);
+  transition: color 0.4s ease;
+}
+
+.zen-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--sage);
+  transition: width 0.4s ease;
+}
+
+.zen-link:hover {
+  color: var(--ink);
+}
+
+.zen-link:hover::after {
+  width: 100%;
+}
+
+/* Delicate divider */
+.divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--cloud),
+    transparent
+  );
+}
+
+/* Card with breathing room */
+.zen-card {
+  background: var(--paper);
+  border: 1px solid var(--cloud);
+  transition: all 0.5s ease;
+}
+
+.zen-card:hover {
+  border-color: var(--sage-muted);
+  box-shadow: 0 0 40px rgba(129, 168, 154, 0.08);
+}
+
+/* Subtle button */
+.zen-button {
+  background: transparent;
+  border: 1px solid var(--mist);
+  color: var(--stone);
+  padding: 0.75rem 2rem;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  text-transform: lowercase;
+  transition: all 0.4s ease;
+}
+
+.zen-button:hover {
+  border-color: var(--sage);
+  color: var(--ink);
+  background: rgba(129, 168, 154, 0.05);
+}
+
+.zen-button-primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.zen-button-primary:hover {
+  background: var(--stone);
+  border-color: var(--stone);
+}
+
+/* Badge styling - minimal */
+.zen-badge {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--stone);
+  border: 1px solid var(--cloud);
+  padding: 0.25rem 0.75rem;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.animation-delay-100 { animation-delay: 0.1s; }
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-300 { animation-delay: 0.3s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+
+/* Asymmetric spacing */
+.space-asymmetric {
+  padding: 6rem 2rem 8rem 2rem;
+}
+
+/* Focus states - minimal */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 1px solid var(--sage);
+  outline-offset: 4px;
+}
