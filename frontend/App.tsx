@@ -13,6 +13,7 @@ import { FeatureFlagsProvider, useFeatureFlags } from './contexts/FeatureFlagsCo
 import { UserMenu } from './components/UserMenu';
 import { ResultsHistory } from './pages/ResultsHistory';
 import MiniTestAssessment from './components/MiniTestAssessment';
+import CRTAssessment from './components/CRTAssessment';
 
 // Theme Context
 type Theme = 'dark' | 'light';
@@ -217,6 +218,16 @@ function HomePage() {
               description="Explore your core motivations through nine distinct personality archetypes. Renowned for personal growth insights."
               time="10 min"
               seriousness={2}
+              fun={5}
+            />
+            <TestCard
+              title="CRT"
+              subtitle="Cognitive Reflection"
+              slug="crt"
+              keywords={['Reasoning', 'Reflection', 'Intuition']}
+              description="Test your ability to override intuitive wrong answers through deliberate reflection. The famous 'bat and ball' problem and more."
+              time="5 min"
+              seriousness={4}
               fun={5}
             />
           </div>
@@ -645,6 +656,10 @@ function TestRouter() {
       return <ComingSoonTestPage />;
     }
     return <MiniTestAssessment />;
+  }
+
+  if (slug === 'crt') {
+    return <CRTAssessment />;
   }
 
   // All other tests show coming soon
