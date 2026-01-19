@@ -25,8 +25,8 @@ database_id = "abb3d542-bc9b-4057-8618-c0044d38a2a1"
 
 [[kv_namespaces]]
 binding = "FEATURE_FLAGS"
-id = "placeholder-will-be-created"
-preview_id = "placeholder-will-be-created"
+id = "c8d2f6dffec949689846807ee3483779"
+preview_id = "30125aa0277d444cbc41419bde470ebd"
 
 [dev]
 port = 8787
