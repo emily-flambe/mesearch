@@ -84,7 +84,7 @@ export default function HexacoAssessment({ onComplete }: HexacoAssessmentProps) 
             to="/"
             className="font-display text-xl font-semibold tracking-wide text-gold-gradient"
           >
-            Mesearch
+            Mēsearch
           </Link>
           <span className="text-[var(--color-text-muted)] text-sm">
             HEXACO-60 Assessment

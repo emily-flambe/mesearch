@@ -145,7 +145,7 @@ export default function HexacoResults({ scores }: HexacoResultsProps) {
               to="/"
               className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
             >
-              Mesearch
+              Mēsearch
             </Link>
           </div>
         </header>
@@ -188,7 +188,7 @@ export default function HexacoResults({ scores }: HexacoResultsProps) {
             to="/"
             className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
           >
-            Mesearch
+            Mēsearch
           </Link>
           <Link
             to="/"
@@ -304,7 +304,7 @@ export default function HexacoResults({ scores }: HexacoResultsProps) {
       {/* Footer */}
       <footer className="border-t border-[var(--color-border)] py-12 mt-12 transition-colors duration-300">
         <div className="mx-auto max-w-6xl px-6 text-center">
-          <p className="font-display text-xl text-gold-gradient mb-4">Mesearch</p>
+          <p className="font-display text-xl text-gold-gradient mb-4">Mēsearch</p>
           <p className="text-[var(--color-text-muted)] text-xs mb-2">
             HEXACO-60 is copyrighted by K. Lee & M.C. Ashton
           </p>
