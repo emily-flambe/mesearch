@@ -240,6 +240,16 @@ export default function LoveLanguagesResults() {
           </div>
         </div>
 
+        {/* Attribution */}
+        <div className="text-center mb-8 text-xs text-[var(--color-text-muted)]">
+          <p>
+            This assessment is based on the relationship communication framework popularized by
+            Gary Chapman&apos;s &quot;The 5 Love Languages.&quot; This is an independent implementation
+            with original questions, not affiliated with or endorsed by Gary Chapman or the official
+            Love Languages brand.
+          </p>
+        </div>
+
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link

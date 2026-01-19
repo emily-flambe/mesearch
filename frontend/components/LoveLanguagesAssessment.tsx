@@ -162,6 +162,13 @@ export default function LoveLanguagesAssessment() {
                 what makes you feel most valued by others.
               </p>
 
+              <div className="bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] rounded-lg p-4 text-xs text-[var(--color-text-muted)]">
+                <strong className="text-[var(--color-text-secondary)]">About this assessment:</strong>{' '}
+                This measures the same relationship communication dimensions popularized by Gary Chapman&apos;s
+                &quot;The 5 Love Languages.&quot; This is an independent implementation with original questions,
+                not affiliated with or endorsed by Gary Chapman or the official Love Languages brand.
+              </div>
+
               <div className="bg-[var(--color-bg-secondary)] rounded-lg p-6 space-y-4">
                 <h3 className="text-[var(--color-text-primary)] font-medium">
                   The Five Communication Styles:
