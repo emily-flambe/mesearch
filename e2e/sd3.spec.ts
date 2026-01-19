@@ -94,7 +94,7 @@ test.describe('Short Dark Triad (SD3) Assessment', () => {
     // Verify the SD3 test card is displayed
     await expect(page.getByRole('heading', { name: 'Dark Triad' })).toBeVisible();
     await expect(page.getByText('SD3')).toBeVisible();
-    await expect(page.getByText('5 min')).toBeVisible();
+    await expect(page.getByText('5 min', { exact: true })).toBeVisible();
     await expect(page.getByText('Machiavellianism, Narcissism, and Psychopathy')).toBeVisible();
   });
 
