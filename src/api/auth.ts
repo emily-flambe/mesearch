@@ -48,10 +48,18 @@ auth.get('/me', async (c) => {
 
 // GET /api/auth/dev-login - Development-only login (sets a cookie)
 auth.get('/dev-login', async (c) => {
-  const url = new URL(c.req.url);
-  const isLocalDev = url.hostname === 'localhost' || url.hostname === '127.0.0.1';
+  // Check if the request is from a local IP address
+  // In wrangler dev, CF-Connecting-IP is set to ::1 or 127.0.0.1
+  // In production, it's a real public IP
+  const cfConnectingIp = c.req.header('CF-Connecting-IP') || '';
+  const isLocalIp = cfConnectingIp === '::1' ||
+                    cfConnectingIp === '127.0.0.1' ||
+                    cfConnectingIp.startsWith('192.168.') ||
+                    cfConnectingIp.startsWith('10.') ||
+                    cfConnectingIp.startsWith('172.16.') ||
+                    cfConnectingIp === '';
 
-  if (!isLocalDev) {
+  if (!isLocalIp) {
     return c.json({
       data: null,
       error: { message: 'Not available in production', code: 'NOT_FOUND' }

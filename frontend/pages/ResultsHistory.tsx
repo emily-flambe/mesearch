@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 interface TestResult {
@@ -11,20 +11,17 @@ interface TestResult {
 
 export function ResultsHistory() {
   const { user, loading: authLoading } = useAuth();
-  const navigate = useNavigate();
   const [results, setResults] = useState<TestResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate('/login');
-      return;
-    }
     if (user) {
       fetchResults();
+    } else if (!authLoading) {
+      setLoading(false);
     }
-  }, [user, authLoading, navigate]);
+  }, [user, authLoading]);
 
   async function fetchResults() {
     try {
@@ -102,7 +99,25 @@ export function ResultsHistory() {
           </div>
         )}
 
-        {results.length === 0 ? (
+        {!user ? (
+          <div className="card-premium rounded-lg p-12 text-center">
+            <div className="w-16 h-16 mx-auto mb-6 rounded-full border border-[var(--color-champagne)]/30 flex items-center justify-center">
+              <svg className="w-8 h-8 text-[var(--color-champagne)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+            <h2 className="font-display text-xl text-[var(--color-text-primary)] mb-2">Sign In Required</h2>
+            <p className="text-[var(--color-text-secondary)] mb-6">
+              Sign in to view and track your personality test results over time.
+            </p>
+            <a
+              href={window.location.hostname === 'localhost' ? '/api/auth/dev-login' : window.location.href}
+              className="btn-gold inline-block px-8 py-3 rounded text-xs tracking-widest uppercase"
+            >
+              Sign In
+            </a>
+          </div>
+        ) : results.length === 0 ? (
           <div className="card-premium rounded-lg p-12 text-center">
             <div className="w-16 h-16 mx-auto mb-6 rounded-full border border-[var(--color-champagne)]/30 flex items-center justify-center">
               <svg className="w-8 h-8 text-[var(--color-champagne)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">

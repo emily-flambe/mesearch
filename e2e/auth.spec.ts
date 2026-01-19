@@ -1,131 +1,137 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Authentication', () => {
+test.describe('Authentication - Unauthenticated', () => {
   test('homepage loads with Sign In link', async ({ page }) => {
     await page.goto('/');
 
-    // Check that the page loads - use header link specifically
+    // Check that the page loads
     await expect(page.getByRole('link', { name: 'Mesearch' })).toBeVisible();
 
     // Check for Sign In link (when not logged in)
     await expect(page.getByRole('link', { name: 'Sign In' })).toBeVisible();
   });
 
-  test('login page loads', async ({ page }) => {
-    await page.goto('/login');
+  test('Sign In link points to dev-login on localhost', async ({ page }) => {
+    await page.goto('/');
 
-    // Check form elements
-    await expect(page.getByRole('heading', { name: 'Welcome Back' })).toBeVisible();
-    await expect(page.locator('input[type="email"]')).toBeVisible();
-    await expect(page.locator('input[type="password"]')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Continue with Google' })).toBeVisible();
+    const signInLink = page.getByRole('link', { name: 'Sign In' });
+    await expect(signInLink).toBeVisible();
+    await expect(signInLink).toHaveAttribute('href', '/api/auth/dev-login');
   });
 
-  test('can switch between login and register modes', async ({ page }) => {
-    await page.goto('/login');
+  test('my-results page shows sign-in prompt when not logged in', async ({ page }) => {
+    await page.goto('/my-results');
 
-    // Initially in login mode
-    await expect(page.getByRole('heading', { name: 'Welcome Back' })).toBeVisible();
+    // Should show sign-in required message
+    await expect(page.getByRole('heading', { name: 'Sign In Required' })).toBeVisible();
+    await expect(page.getByText('Sign in to view and track your personality test results')).toBeVisible();
 
-    // Switch to register mode
-    await page.click('text=Don\'t have an account? Sign up');
-    await expect(page.getByRole('heading', { name: 'Create Account' })).toBeVisible();
-    await expect(page.locator('input#displayName')).toBeVisible();
-
-    // Switch back to login mode
-    await page.click('text=Already have an account? Sign in');
-    await expect(page.getByRole('heading', { name: 'Welcome Back' })).toBeVisible();
-  });
-
-  test('shows validation errors on empty form submission', async ({ page }) => {
-    await page.goto('/login');
-
-    // Try to submit empty form
-    await page.click('button:has-text("Sign In")');
-
-    // HTML5 validation should prevent submission
-    const emailInput = page.locator('input[type="email"]');
-    await expect(emailInput).toHaveAttribute('required', '');
-  });
-
-  test('Google OAuth button redirects correctly', async ({ page }) => {
-    await page.goto('/login');
-
-    // Click Google button and check it navigates
-    const [response] = await Promise.all([
-      page.waitForResponse(resp => resp.url().includes('/api/auth/google')),
-      page.click('text=Continue with Google'),
-    ]);
-
-    // Should get a redirect to Google
-    expect(response.status()).toBe(302);
+    // Should have a sign-in button
+    const signInButton = page.getByRole('link', { name: 'Sign In' });
+    await expect(signInButton).toBeVisible();
   });
 });
 
-test.describe('Registration Flow', () => {
-  const uniqueEmail = `test-${Date.now()}@example.com`;
+test.describe('Authentication - Dev Login Flow', () => {
+  test('dev-login sets cookie and redirects to home', async ({ page }) => {
+    // Navigate to dev-login endpoint
+    await page.goto('/api/auth/dev-login');
 
-  test('can register a new account', async ({ page }) => {
-    await page.goto('/login');
+    // Should redirect to home page
+    await expect(page).toHaveURL('/');
 
-    // Switch to register mode
-    await page.click('text=Don\'t have an account? Sign up');
-
-    // Fill in form
-    await page.fill('input#displayName', 'Test User');
-    await page.fill('input#email', uniqueEmail);
-    await page.fill('input#password', 'testpassword123');
-
-    // Submit
-    await page.click('button:has-text("Create Account")');
-
-    // Should redirect to home page and show user menu (Sign In link should be gone)
-    await page.waitForURL('/');
+    // After redirect, Sign In should no longer be visible (user is logged in)
     await expect(page.getByRole('link', { name: 'Sign In' })).not.toBeVisible();
   });
 
-  test('shows error for short password', async ({ page }) => {
-    await page.goto('/login');
+  test('dev-login with custom email', async ({ page }) => {
+    // Navigate to dev-login with custom email
+    await page.goto('/api/auth/dev-login?email=test@example.com');
 
-    // Switch to register mode
-    await page.click('text=Don\'t have an account? Sign up');
+    // Should redirect to home page
+    await expect(page).toHaveURL('/');
 
-    // Fill in form with short password
-    await page.fill('input#email', 'test@example.com');
-    await page.fill('input#password', 'short');
+    // User should be logged in - Sign In link should not be visible
+    await expect(page.getByRole('link', { name: 'Sign In' })).not.toBeVisible();
+  });
 
-    // Try to submit - HTML5 validation should block
-    const passwordInput = page.locator('input#password');
-    await expect(passwordInput).toHaveAttribute('minLength', '8');
+  test('logged in user sees user menu with initial', async ({ page }) => {
+    // Login first
+    await page.goto('/api/auth/dev-login?email=jane@example.com');
+    await expect(page).toHaveURL('/');
+
+    // Should see a user menu button with the initial 'J'
+    await expect(page.getByRole('button').filter({ hasText: 'J' })).toBeVisible();
+  });
+
+  test('user menu shows My Results link', async ({ page }) => {
+    // Login first
+    await page.goto('/api/auth/dev-login?email=test@example.com');
+    await expect(page).toHaveURL('/');
+
+    // Click user menu to open dropdown
+    await page.getByRole('button').filter({ hasText: 'T' }).click();
+
+    // Should see My Results link in dropdown
+    await expect(page.getByRole('link', { name: 'My Results' })).toBeVisible();
+  });
+
+  test('logout clears session', async ({ page }) => {
+    // Login first
+    await page.goto('/api/auth/dev-login');
+    await expect(page).toHaveURL('/');
+
+    // Click user menu to open dropdown
+    await page.getByRole('button').filter({ hasText: 'D' }).click();
+
+    // Click Sign Out
+    await page.getByRole('button', { name: 'Sign Out' }).click();
+
+    // Sign In link should reappear
+    await expect(page.getByRole('link', { name: 'Sign In' })).toBeVisible();
   });
 });
 
-test.describe('Login Flow', () => {
-  test('shows error for invalid credentials', async ({ page }) => {
-    await page.goto('/login');
+test.describe('Authenticated User - My Results', () => {
+  test('logged in user can access my-results page', async ({ page }) => {
+    // Login first
+    await page.goto('/api/auth/dev-login');
+    await expect(page).toHaveURL('/');
 
-    // Fill in form with invalid credentials
-    await page.fill('input#email', 'nonexistent@example.com');
-    await page.fill('input#password', 'wrongpassword');
+    // Navigate to my-results
+    await page.goto('/my-results');
 
-    // Submit
-    await page.click('button:has-text("Sign In")');
+    // Should see Results History heading (not sign-in prompt)
+    await expect(page.getByRole('heading', { name: 'Results History' })).toBeVisible();
 
-    // Should show error
-    await expect(page.locator('text=Invalid email or password')).toBeVisible();
+    // Should NOT see sign-in required message
+    await expect(page.getByRole('heading', { name: 'Sign In Required' })).not.toBeVisible();
+  });
+
+  test('new user sees empty results state', async ({ page }) => {
+    // Login with a new unique email
+    const uniqueEmail = `test-${Date.now()}@example.com`;
+    await page.goto(`/api/auth/dev-login?email=${encodeURIComponent(uniqueEmail)}`);
+
+    // Navigate to my-results
+    await page.goto('/my-results');
+
+    // Should see "No Results Yet" message
+    await expect(page.getByRole('heading', { name: 'No Results Yet' })).toBeVisible();
+    await expect(page.getByText('Complete a personality test to see your results here')).toBeVisible();
   });
 });
 
 test.describe('Anonymous User Flow', () => {
-  test('can take a test without logging in', async ({ page }) => {
-    // Navigate directly to the Enneagram test page
+  test('can take Enneagram test without logging in', async ({ page }) => {
+    // Navigate to the Enneagram test page
     await page.goto('/test/enneagram');
 
     // Should be on the test intro page
     await expect(page.getByRole('heading', { name: 'Enneagram Assessment' })).toBeVisible();
 
     // Can start the test
-    await page.click('button:has-text("Begin Assessment")');
+    await page.getByRole('button', { name: 'Begin Assessment' }).click();
 
     // Should see first question
     await expect(page.getByText('Question 1')).toBeVisible();
