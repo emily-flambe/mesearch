@@ -125,8 +125,8 @@ test.describe('Mini-Test Feature Flag', () => {
       // Navigate to results history
       await page.goto('/my-results');
 
-      // Should see Mini-Test in the results
-      await expect(page.getByRole('heading', { name: 'Mini-Test' })).toBeVisible();
+      // Should see Mini-Test in the results (use first() since there may be multiple)
+      await expect(page.getByRole('heading', { name: 'Mini-Test' }).first()).toBeVisible();
     });
   });
 });
