@@ -15,11 +15,11 @@ const RESULTS_STORAGE_KEY = 'mesearch-bigfive-results';
 type AssessmentPhase = 'intro' | 'assessment' | 'complete';
 
 const likertOptions = [
-  { value: 1, label: 'Strongly Disagree' },
-  { value: 2, label: 'Disagree' },
-  { value: 3, label: 'Neutral' },
-  { value: 4, label: 'Agree' },
-  { value: 5, label: 'Strongly Agree' },
+  { value: 1, label: 'Very Inaccurate' },
+  { value: 2, label: 'Moderately Inaccurate' },
+  { value: 3, label: 'Neither Accurate Nor Inaccurate' },
+  { value: 4, label: 'Moderately Accurate' },
+  { value: 5, label: 'Very Accurate' },
 ];
 
 export default function BigFiveAssessment() {
@@ -153,7 +153,7 @@ export default function BigFiveAssessment() {
 
               <p className="text-[var(--color-text-muted)] text-xs">
                 For each statement, indicate how accurately it describes you on a scale from
-                "Strongly Disagree" to "Strongly Agree."
+                "Very Inaccurate" to "Very Accurate."
               </p>
             </div>
 
