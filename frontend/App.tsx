@@ -7,7 +7,6 @@ import { calculateEnneagramResult, type EnneagramResult } from './data/enneagram
 import { EnneagramResults } from './components/EnneagramResults';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { UserMenu } from './components/UserMenu';
-import { LoginPage } from './pages/LoginPage';
 import { ResultsHistory } from './pages/ResultsHistory';
 
 // Theme Context
@@ -615,7 +614,6 @@ export default function App() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
           <Route path="/my-results" element={<ResultsHistory />} />
           <Route path="/test/big-five" element={<BigFiveAssessment />} />
           <Route path="/test/big-five/results" element={<BigFiveResults />} />

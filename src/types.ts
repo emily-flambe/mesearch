@@ -2,10 +2,8 @@
 export interface Env {
   DB: D1Database;
   ASSETS: Fetcher;
-  JWT_SECRET: string;
-  GOOGLE_CLIENT_ID: string;
-  GOOGLE_CLIENT_SECRET: string;
-  GOOGLE_REDIRECT_URI: string;
+  // Note: Authentication is handled by Cloudflare Access
+  // No secrets needed in the Worker for auth
 }
 
 // User model

@@ -124,10 +124,7 @@ jobs:
 
       - name: Create dev vars for wrangler
         run: |
-          echo 'JWT_SECRET=test-secret-for-ci-32chars-long' > .dev.vars
-          echo 'GOOGLE_CLIENT_ID=test-google-client-id' >> .dev.vars
-          echo 'GOOGLE_CLIENT_SECRET=test-google-client-secret' >> .dev.vars
-          echo 'GOOGLE_REDIRECT_URI=http://localhost:8787/api/auth/google/callback' >> .dev.vars
+          echo '# No secrets needed - auth handled by Cloudflare Access' > .dev.vars
 
       - name: Run E2E tests
         run: |

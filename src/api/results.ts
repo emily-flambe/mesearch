@@ -1,35 +1,56 @@
-// Results API routes
+// Results API routes - protected by Cloudflare Access
 import { Hono } from 'hono';
 import type { Env, TestResult } from '../types';
-import {
-  generateId,
-  getSessionFromCookie,
-  verifyToken,
-} from '../lib/auth';
 
 const results = new Hono<{ Bindings: Env }>();
 
-// Middleware to get user ID from session (optional - returns null if not authenticated)
-async function getUserId(c: { req: { header: (name: string) => string | undefined }; env: Env }): Promise<string | null> {
-  const cookieHeader = c.req.header('Cookie');
-  const token = getSessionFromCookie(cookieHeader);
-  if (!token) return null;
+// Helper to generate unique IDs
+function generateId(): string {
+  return crypto.randomUUID();
+}
 
-  const payload = await verifyToken(token, c.env.JWT_SECRET);
-  return payload?.userId || null;
+// Helper to get user email from Cloudflare Access header or dev cookie
+function getUserEmail(c: { req: { header: (name: string) => string | undefined } }): string | null {
+  // Check for Cloudflare Access header (production)
+  const accessEmail = c.req.header('Cf-Access-Authenticated-User-Email');
+  if (accessEmail) return accessEmail;
+
+  // Check for dev cookie (local development)
+  const cookies = c.req.header('Cookie') || '';
+  const devEmailMatch = cookies.match(/dev_user_email=([^;]+)/);
+  return devEmailMatch ? decodeURIComponent(devEmailMatch[1]) : null;
+}
+
+// Helper to get or create user by email
+async function getOrCreateUser(email: string, db: D1Database): Promise<string> {
+  const user = await db.prepare(
+    'SELECT id FROM users WHERE email = ?'
+  ).bind(email).first<{ id: string }>();
+
+  if (user) return user.id;
+
+  // Auto-create user
+  const userId = generateId();
+  await db.prepare(`
+    INSERT INTO users (id, email, email_verified)
+    VALUES (?, ?, 1)
+  `).bind(userId, email).run();
+
+  return userId;
 }
 
 // GET /api/results - Get user's past results
 results.get('/', async (c) => {
-  const userId = await getUserId(c);
+  const email = getUserEmail(c);
 
-  if (!userId) {
+  if (!email) {
     return c.json({
       data: null,
       error: { message: 'Unauthorized', code: 'UNAUTHORIZED' }
     }, 401);
   }
 
+  const userId = await getOrCreateUser(email, c.env.DB);
   const testType = c.req.query('test_type');
 
   let query = 'SELECT * FROM results WHERE user_id = ?';
@@ -55,15 +76,17 @@ results.get('/', async (c) => {
 
 // GET /api/results/:id - Get a specific result
 results.get('/:id', async (c) => {
-  const userId = await getUserId(c);
+  const email = getUserEmail(c);
   const resultId = c.req.param('id');
 
-  if (!userId) {
+  if (!email) {
     return c.json({
       data: null,
       error: { message: 'Unauthorized', code: 'UNAUTHORIZED' }
     }, 401);
   }
+
+  const userId = await getOrCreateUser(email, c.env.DB);
 
   const result = await c.env.DB.prepare(
     'SELECT * FROM results WHERE id = ? AND user_id = ?'
@@ -87,14 +110,16 @@ results.get('/:id', async (c) => {
 
 // POST /api/results - Save a test result
 results.post('/', async (c) => {
-  const userId = await getUserId(c);
+  const email = getUserEmail(c);
 
-  if (!userId) {
+  if (!email) {
     return c.json({
       data: null,
       error: { message: 'Unauthorized', code: 'UNAUTHORIZED' }
     }, 401);
   }
+
+  const userId = await getOrCreateUser(email, c.env.DB);
 
   const body = await c.req.json<{ test_type: string; scores: Record<string, unknown> }>();
   const { test_type, scores } = body;
@@ -128,15 +153,17 @@ results.post('/', async (c) => {
 
 // DELETE /api/results/:id - Delete a specific result
 results.delete('/:id', async (c) => {
-  const userId = await getUserId(c);
+  const email = getUserEmail(c);
   const resultId = c.req.param('id');
 
-  if (!userId) {
+  if (!email) {
     return c.json({
       data: null,
       error: { message: 'Unauthorized', code: 'UNAUTHORIZED' }
     }, 401);
   }
+
+  const userId = await getOrCreateUser(email, c.env.DB);
 
   const result = await c.env.DB.prepare(
     'SELECT id FROM results WHERE id = ? AND user_id = ?'

@@ -25,13 +25,18 @@ export function UserMenu() {
   }
 
   if (!user) {
+    // For local dev, use dev-login; for production, Access protects /api/results
+    // Clicking "Sign In" will trigger authentication when they try to save results
+    const isLocalDev = window.location.hostname === 'localhost';
+    const loginUrl = isLocalDev ? '/api/auth/dev-login' : '/my-results';
+
     return (
-      <Link
-        to="/login"
+      <a
+        href={loginUrl}
         className="text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)] transition-colors duration-300 text-sm tracking-wide uppercase"
       >
         Sign In
-      </Link>
+      </a>
     );
   }
 
