@@ -13,6 +13,8 @@ import { FeatureFlagsProvider, useFeatureFlags } from './contexts/FeatureFlagsCo
 import { UserMenu } from './components/UserMenu';
 import { ResultsHistory } from './pages/ResultsHistory';
 import MiniTestAssessment from './components/MiniTestAssessment';
+import LoveLanguagesAssessment from './components/LoveLanguagesAssessment';
+import LoveLanguagesResults from './components/LoveLanguagesResults';
 
 // Theme Context
 type Theme = 'dark' | 'light';
@@ -216,6 +218,16 @@ function HomePage() {
               keywords={['Motivations', 'Growth', 'Archetypes']}
               description="Explore your core motivations through nine distinct personality archetypes. Renowned for personal growth insights."
               time="10 min"
+              seriousness={2}
+              fun={5}
+            />
+            <TestCard
+              title="Communication Styles"
+              subtitle="Five Styles"
+              slug="communication-styles"
+              keywords={['Relationships', 'Appreciation', 'Connection']}
+              description="Discover how you prefer to give and receive appreciation. Learn your primary style for deeper connections."
+              time="5 min"
               seriousness={2}
               fun={5}
             />
@@ -639,6 +651,10 @@ function TestRouter() {
     return <EnneagramTestPage />;
   }
 
+  if (slug === 'communication-styles') {
+    return <LoveLanguagesAssessment />;
+  }
+
   if (slug === 'mini-test') {
     // Only allow access if feature flag is enabled
     if (!flags.mini_test) {
@@ -668,6 +684,8 @@ export default function App() {
             <Route path="/my-results" element={<ResultsHistory />} />
             <Route path="/test/big-five" element={<BigFiveAssessment />} />
             <Route path="/test/big-five/results" element={<BigFiveResults />} />
+            <Route path="/test/communication-styles" element={<LoveLanguagesAssessment />} />
+            <Route path="/test/communication-styles/results" element={<LoveLanguagesResults />} />
             <Route path="/test/:slug" element={<TestRouter />} />
             <Route
               path="/hexaco"
