@@ -33,8 +33,8 @@ test.describe('Mini-Test Feature Flag', () => {
 
   test.describe('Test Users (+test email)', () => {
     test('mini-test section IS visible for test users', async ({ page }) => {
-      // Login with +test in email
-      await page.goto('/api/auth/dev-login?email=user+test@example.com');
+      // Login with +test in email (URL encode the + as %2B)
+      await page.goto('/api/auth/dev-login?email=user%2Btest@example.com');
       await expect(page).toHaveURL('/');
 
       // Mini-test section should be visible
@@ -42,8 +42,8 @@ test.describe('Mini-Test Feature Flag', () => {
     });
 
     test('test user can start and complete mini-test', async ({ page }) => {
-      // Login with +test in email
-      await page.goto('/api/auth/dev-login?email=user+test@example.com');
+      // Login with +test in email (URL encode the + as %2B)
+      await page.goto('/api/auth/dev-login?email=user%2Btest@example.com');
       await expect(page).toHaveURL('/');
 
       // Navigate to mini-test
