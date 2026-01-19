@@ -99,4 +99,34 @@ test.describe('Mini-Test Feature Flag', () => {
       await expect(page.getByRole('heading', { name: 'Coming Soon' })).not.toBeVisible();
     });
   });
+
+  test.describe('Mini-Test Results History', () => {
+    test('mini-test results appear in history after completion', async ({ page }) => {
+      // Login with +test in email (URL encode the + as %2B)
+      await page.goto('/api/auth/dev-login?email=user%2Btest@example.com');
+      await expect(page).toHaveURL('/');
+
+      // Navigate to mini-test
+      await page.goto('/test/mini-test');
+
+      // Start the test
+      await page.getByTestId('mini-test-start').click();
+
+      // Answer all 5 questions with "Moderately Accurate" (value 4)
+      for (let i = 0; i < 5; i++) {
+        await page.getByTestId('mini-test-option-4').click();
+        // Wait for transition
+        await page.waitForTimeout(300);
+      }
+
+      // Should see results
+      await expect(page.getByTestId('mini-test-results')).toBeVisible();
+
+      // Navigate to results history
+      await page.goto('/my-results');
+
+      // Should see Mini-Test in the results
+      await expect(page.getByRole('heading', { name: 'Mini-Test' })).toBeVisible();
+    });
+  });
 });

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { miniTestItems, miniTestDimensionColors, type MiniTestItem } from '../data/mini-test-items';
+import { useAuth } from '../contexts/AuthContext';
 
 type LikertValue = 1 | 2 | 3 | 4 | 5;
 
@@ -20,13 +21,41 @@ interface MiniTestResult {
 type Phase = 'intro' | 'questions' | 'results';
 
 export default function MiniTestAssessment() {
+  const { user } = useAuth();
   const [phase, setPhase] = useState<Phase>('intro');
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [responses, setResponses] = useState<Record<number, LikertValue>>({});
   const [result, setResult] = useState<MiniTestResult | null>(null);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
   const totalQuestions = miniTestItems.length;
   const currentItem = miniTestItems[currentQuestion];
+
+  // Save results to backend if user is logged in
+  async function saveResults(calculatedResult: MiniTestResult) {
+    if (!user) return;
+
+    setSaveStatus('saving');
+    try {
+      const res = await fetch('/api/results', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          test_type: 'mini_test',
+          scores: calculatedResult,
+        }),
+      });
+
+      if (res.ok) {
+        setSaveStatus('saved');
+      } else {
+        setSaveStatus('error');
+      }
+    } catch {
+      setSaveStatus('error');
+    }
+  }
 
   const calculateResults = (allResponses: Record<number, LikertValue>): MiniTestResult => {
     const dimensionScores = miniTestItems.map((item: MiniTestItem) => {
@@ -54,6 +83,8 @@ export default function MiniTestAssessment() {
         const calculatedResult = calculateResults(newResponses);
         setResult(calculatedResult);
         setPhase('results');
+        // Auto-save if logged in
+        saveResults(calculatedResult);
       }
     }, 200);
   };
@@ -63,6 +94,7 @@ export default function MiniTestAssessment() {
     setCurrentQuestion(0);
     setResponses({});
     setResult(null);
+    setSaveStatus('idle');
   };
 
   return (

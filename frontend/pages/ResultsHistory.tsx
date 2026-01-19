@@ -56,6 +56,7 @@ export function ResultsHistory() {
       enneagram: 'Enneagram',
       'big-five': 'Big Five',
       hexaco: 'HEXACO',
+      mini_test: 'Mini-Test',
     };
     return names[testType] || testType;
   }
