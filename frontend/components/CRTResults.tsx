@@ -46,21 +46,21 @@ export default function CRTResultsComponent({ results, onRetake }: CRTResultsPro
         {/* Score breakdown */}
         <div className="grid grid-cols-3 gap-4 text-center">
           <div className="bg-[var(--color-bg-secondary)] rounded-lg p-4">
-            <div className="text-2xl font-bold text-green-400">{results.reflectiveScore}</div>
+            <div data-testid="crt-reflective-score" className="text-2xl font-bold text-green-400">{results.reflectiveScore}</div>
             <div className="text-xs text-[var(--color-text-muted)] uppercase tracking-wide mt-1">
               Reflective
             </div>
             <div className="text-[10px] text-[var(--color-text-muted)]">Correct answers</div>
           </div>
           <div className="bg-[var(--color-bg-secondary)] rounded-lg p-4">
-            <div className="text-2xl font-bold text-amber-400">{results.intuitiveScore}</div>
+            <div data-testid="crt-intuitive-score" className="text-2xl font-bold text-amber-400">{results.intuitiveScore}</div>
             <div className="text-xs text-[var(--color-text-muted)] uppercase tracking-wide mt-1">
               Intuitive
             </div>
             <div className="text-[10px] text-[var(--color-text-muted)]">Common wrong</div>
           </div>
           <div className="bg-[var(--color-bg-secondary)] rounded-lg p-4">
-            <div className="text-2xl font-bold text-red-400">{results.otherErrors}</div>
+            <div data-testid="crt-other-score" className="text-2xl font-bold text-red-400">{results.otherErrors}</div>
             <div className="text-xs text-[var(--color-text-muted)] uppercase tracking-wide mt-1">
               Other
             </div>

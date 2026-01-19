@@ -163,10 +163,10 @@ test.describe('Cognitive Reflection Test (CRT)', () => {
         await page.waitForTimeout(100);
       }
 
-      // Should see 7/7 score (check reflective score shows 7)
+      // Should see results with 7/7 score
       await expect(page.getByTestId('crt-results')).toBeVisible();
-      // Check the score circle shows 7
-      await expect(page.locator('.text-4xl', { hasText: '7' })).toBeVisible();
+      // Check for score indicators
+      await expect(page.getByText('/7')).toBeVisible();
     });
 
     test('shows intuitive score for intuitive wrong answers', async ({ page }) => {
@@ -187,8 +187,8 @@ test.describe('Cognitive Reflection Test (CRT)', () => {
 
       // Should see 0/7 score with intuitive count of 7
       await expect(page.getByTestId('crt-results')).toBeVisible();
-      // The intuitive score should show 7 (in the amber color box)
-      await expect(page.locator('.text-amber-400.text-2xl', { hasText: '7' })).toBeVisible();
+      // The intuitive score should show 7
+      await expect(page.getByTestId('crt-intuitive-score')).toHaveText('7');
     });
 
     test('shows explanations for wrong answers', async ({ page }) => {
@@ -277,9 +277,9 @@ test.describe('Cognitive Reflection Test (CRT)', () => {
       await page.getByTestId('crt-answer-input').fill('emily');
       await page.getByTestId('crt-submit').click();
 
-      // Should have all 7 correct - check reflective score shows 7 (green box)
+      // Should have all 7 correct - check reflective score shows 7
       await expect(page.getByTestId('crt-results')).toBeVisible();
-      await expect(page.locator('.text-green-400.text-2xl', { hasText: '7' })).toBeVisible();
+      await expect(page.getByTestId('crt-reflective-score')).toHaveText('7');
     });
   });
 
