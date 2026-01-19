@@ -4,11 +4,11 @@ test.describe('Authentication', () => {
   test('homepage loads with Sign In link', async ({ page }) => {
     await page.goto('/');
 
-    // Check that the page loads
-    await expect(page.locator('text=Mesearch')).toBeVisible();
+    // Check that the page loads - use header link specifically
+    await expect(page.getByRole('link', { name: 'Mesearch' })).toBeVisible();
 
     // Check for Sign In link (when not logged in)
-    await expect(page.locator('text=Sign In')).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Sign In' })).toBeVisible();
   });
 
   test('login page loads', async ({ page }) => {
@@ -79,9 +79,9 @@ test.describe('Registration Flow', () => {
     // Submit
     await page.click('button:has-text("Create Account")');
 
-    // Should redirect to home page and show user menu
+    // Should redirect to home page and show user menu (Sign In link should be gone)
     await page.waitForURL('/');
-    await expect(page.locator('text=Sign In')).not.toBeVisible();
+    await expect(page.getByRole('link', { name: 'Sign In' })).not.toBeVisible();
   });
 
   test('shows error for short password', async ({ page }) => {
@@ -118,18 +118,16 @@ test.describe('Login Flow', () => {
 
 test.describe('Anonymous User Flow', () => {
   test('can take a test without logging in', async ({ page }) => {
-    await page.goto('/');
-
-    // Navigate to Enneagram test
-    await page.click('text=Begin Assessment >> nth=2');  // Third test card (Enneagram)
+    // Navigate directly to the Enneagram test page
+    await page.goto('/test/enneagram');
 
     // Should be on the test intro page
-    await expect(page.locator('text=Enneagram Assessment')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Enneagram Assessment' })).toBeVisible();
 
     // Can start the test
     await page.click('button:has-text("Begin Assessment")');
 
     // Should see first question
-    await expect(page.locator('text=Question 1')).toBeVisible();
+    await expect(page.getByText('Question 1')).toBeVisible();
   });
 });
