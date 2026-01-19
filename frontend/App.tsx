@@ -1,5 +1,8 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import { createContext, useContext, useEffect, useState } from 'react';
+import HexacoAssessment from './components/HexacoAssessment';
+import HexacoResults from './components/HexacoResults';
+import { HexacoResponse, calculateScores, DimensionScore } from './data/hexaco-scoring';
 
 // Theme Context
 type Theme = 'dark' | 'light';
@@ -186,6 +189,7 @@ function HomePage() {
               title="HEXACO"
               subtitle="Six Dimensions"
               slug="hexaco"
+              link="/hexaco"
               keywords={['Ethics', 'Honesty', 'Integrity']}
               description="Six-factor model including Honesty-Humility. Predicts ethical behavior and workplace conduct with precision."
               time="12 min"
@@ -278,6 +282,7 @@ function TestCard({
   time,
   seriousness,
   fun,
+  link,
 }: {
   title: string;
   subtitle: string;
@@ -287,7 +292,9 @@ function TestCard({
   time: string;
   seriousness: number;
   fun: number;
+  link?: string;
 }) {
+  const href = link || `/test/${slug}`;
   return (
     <div className="card-premium rounded-lg p-8 group">
       <div className="flex items-center justify-between mb-6">
@@ -310,7 +317,7 @@ function TestCard({
       </p>
       <p className="text-[var(--color-text-secondary)] text-sm mb-8 leading-relaxed transition-colors duration-300">{description}</p>
       <Link
-        to={`/test/${slug}`}
+        to={href}
         className="btn-ghost block w-full py-3 rounded text-center text-xs tracking-widest uppercase"
       >
         Begin Assessment
@@ -372,11 +379,26 @@ function TestPage() {
 }
 
 export default function App() {
+  const [hexacoScores, setHexacoScores] = useState<DimensionScore[] | null>(null);
+
+  const handleHexacoComplete = (responses: HexacoResponse[]) => {
+    const scores = calculateScores(responses);
+    setHexacoScores(scores);
+  };
+
   return (
     <ThemeProvider>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/test/:slug" element={<TestPage />} />
+        <Route
+          path="/hexaco"
+          element={<HexacoAssessment onComplete={handleHexacoComplete} />}
+        />
+        <Route
+          path="/hexaco/results"
+          element={<HexacoResults scores={hexacoScores} />}
+        />
       </Routes>
     </ThemeProvider>
   );
