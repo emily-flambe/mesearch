@@ -3,6 +3,7 @@ import { cors } from 'hono/cors';
 import type { Env } from './types';
 
 import auth from './api/auth';
+import flags from './api/flags';
 import results from './api/results';
 
 const app = new Hono<{ Bindings: Env }>();
@@ -20,6 +21,7 @@ app.get('/api/health', (c) => {
 
 // Mount API routes
 app.route('/api/auth', auth);
+app.route('/api/flags', flags);
 app.route('/api/results', results);
 
 // 404 handler for API routes

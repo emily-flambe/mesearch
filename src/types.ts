@@ -2,6 +2,7 @@
 export interface Env {
   DB: D1Database;
   ASSETS: Fetcher;
+  FEATURE_FLAGS: KVNamespace;
   // Note: Authentication is handled by Cloudflare Access
   // No secrets needed in the Worker for auth
 }

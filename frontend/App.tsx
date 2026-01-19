@@ -9,8 +9,10 @@ import { enneagramItems, likertScale, type LikertValue } from './data/enneagram-
 import { calculateEnneagramResult, type EnneagramResult } from './data/enneagram-scoring';
 import { EnneagramResults } from './components/EnneagramResults';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { FeatureFlagsProvider, useFeatureFlags } from './contexts/FeatureFlagsContext';
 import { UserMenu } from './components/UserMenu';
 import { ResultsHistory } from './pages/ResultsHistory';
+import MiniTestAssessment from './components/MiniTestAssessment';
 
 // Theme Context
 type Theme = 'dark' | 'light';
@@ -115,6 +117,8 @@ function GitHubIcon() {
 }
 
 function HomePage() {
+  const { flags } = useFeatureFlags();
+
   return (
     <div id="top" className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
       {/* Header */}
@@ -216,6 +220,29 @@ function HomePage() {
               fun={5}
             />
           </div>
+
+          {/* Mini-Test - Admin/Test Users Only */}
+          {flags.mini_test && (
+            <div className="mt-8" data-testid="mini-test-section">
+              <div className="text-center mb-6">
+                <span className="inline-block px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs tracking-wide uppercase">
+                  Debug / Testing Only
+                </span>
+              </div>
+              <div className="max-w-md mx-auto">
+                <TestCard
+                  title="Mini-Test"
+                  subtitle="5 Questions"
+                  slug="mini-test"
+                  keywords={['Debug', 'Testing', 'Quick']}
+                  description="A 5-question sampler for debugging and automated testing. One question from each Big Five dimension."
+                  time="1 min"
+                  seriousness={1}
+                  fun={1}
+                />
+              </div>
+            </div>
+          )}
         </section>
 
         {/* Divider */}
@@ -606,9 +633,18 @@ function EnneagramTestPage() {
 // Route handler that decides which test to show
 function TestRouter() {
   const { slug } = useParams<{ slug: string }>();
+  const { flags } = useFeatureFlags();
 
   if (slug === 'enneagram') {
     return <EnneagramTestPage />;
+  }
+
+  if (slug === 'mini-test') {
+    // Only allow access if feature flag is enabled
+    if (!flags.mini_test) {
+      return <ComingSoonTestPage />;
+    }
+    return <MiniTestAssessment />;
   }
 
   // All other tests show coming soon
@@ -626,21 +662,23 @@ export default function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/my-results" element={<ResultsHistory />} />
-          <Route path="/test/big-five" element={<BigFiveAssessment />} />
-          <Route path="/test/big-five/results" element={<BigFiveResults />} />
-          <Route path="/test/:slug" element={<TestRouter />} />
-          <Route
-            path="/hexaco"
-            element={<HexacoAssessment onComplete={handleHexacoComplete} />}
-          />
-          <Route
-            path="/hexaco/results"
-            element={<HexacoResults scores={hexacoScores} />}
-          />
-        </Routes>
+        <FeatureFlagsProvider>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/my-results" element={<ResultsHistory />} />
+            <Route path="/test/big-five" element={<BigFiveAssessment />} />
+            <Route path="/test/big-five/results" element={<BigFiveResults />} />
+            <Route path="/test/:slug" element={<TestRouter />} />
+            <Route
+              path="/hexaco"
+              element={<HexacoAssessment onComplete={handleHexacoComplete} />}
+            />
+            <Route
+              path="/hexaco/results"
+              element={<HexacoResults scores={hexacoScores} />}
+            />
+          </Routes>
+        </FeatureFlagsProvider>
       </AuthProvider>
     </ThemeProvider>
   );
