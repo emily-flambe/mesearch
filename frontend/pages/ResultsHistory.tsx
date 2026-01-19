@@ -106,16 +106,10 @@ export function ResultsHistory() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </div>
-            <h2 className="font-display text-xl text-[var(--color-text-primary)] mb-2">Sign In Required</h2>
-            <p className="text-[var(--color-text-secondary)] mb-6">
-              Sign in to view and track your personality test results over time.
+            <h2 className="font-display text-xl text-[var(--color-text-primary)] mb-2">Authentication Required</h2>
+            <p className="text-[var(--color-text-secondary)]">
+              Use the link in the header to view and track your personality test results over time.
             </p>
-            <a
-              href={window.location.hostname === 'localhost' ? '/api/auth/dev-login' : window.location.href}
-              className="btn-gold inline-block px-8 py-3 rounded text-xs tracking-widest uppercase"
-            >
-              Sign In
-            </a>
           </div>
         ) : results.length === 0 ? (
           <div className="card-premium rounded-lg p-12 text-center">
