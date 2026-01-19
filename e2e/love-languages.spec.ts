@@ -16,8 +16,8 @@ test.describe('Communication Styles Assessment', () => {
     test('can start and complete the assessment', async ({ page }) => {
       await page.goto('/test/communication-styles');
 
-      // Should see the intro page
-      await expect(page.getByRole('heading', { name: 'Communication Styles' })).toBeVisible();
+      // Should see the intro page (use exact match to avoid matching "The Five Communication Styles:")
+      await expect(page.getByRole('heading', { name: 'Communication Styles', exact: true })).toBeVisible();
       await expect(page.getByText('Discover how you prefer to give and receive appreciation')).toBeVisible();
 
       // Start the assessment - wait for button to be ready
