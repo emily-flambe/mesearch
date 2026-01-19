@@ -13,6 +13,8 @@ import { FeatureFlagsProvider, useFeatureFlags } from './contexts/FeatureFlagsCo
 import { UserMenu } from './components/UserMenu';
 import { ResultsHistory } from './pages/ResultsHistory';
 import MiniTestAssessment from './components/MiniTestAssessment';
+import ECRAssessment from './components/ECRAssessment';
+import ECRResults from './components/ECRResults';
 
 // Theme Context
 type Theme = 'dark' | 'light';
@@ -218,6 +220,16 @@ function HomePage() {
               time="10 min"
               seriousness={2}
               fun={5}
+            />
+            <TestCard
+              title="Attachment Style"
+              subtitle="ECR-RS"
+              slug="ecr"
+              keywords={['Relationships', 'Anxiety', 'Avoidance']}
+              description="Understand your attachment patterns in close relationships. Measures anxiety and avoidance on continuous dimensions."
+              time="5 min"
+              seriousness={5}
+              fun={4}
             />
           </div>
 
@@ -639,6 +651,10 @@ function TestRouter() {
     return <EnneagramTestPage />;
   }
 
+  if (slug === 'ecr') {
+    return <ECRAssessment />;
+  }
+
   if (slug === 'mini-test') {
     // Only allow access if feature flag is enabled
     if (!flags.mini_test) {
@@ -668,6 +684,7 @@ export default function App() {
             <Route path="/my-results" element={<ResultsHistory />} />
             <Route path="/test/big-five" element={<BigFiveAssessment />} />
             <Route path="/test/big-five/results" element={<BigFiveResults />} />
+            <Route path="/test/ecr/results" element={<ECRResults />} />
             <Route path="/test/:slug" element={<TestRouter />} />
             <Route
               path="/hexaco"
