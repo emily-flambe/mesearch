@@ -8,6 +8,9 @@ import BigFiveResults from './components/BigFiveResults';
 import { enneagramItems, likertScale, type LikertValue } from './data/enneagram-items';
 import { calculateEnneagramResult, type EnneagramResult } from './data/enneagram-scoring';
 import { EnneagramResults } from './components/EnneagramResults';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { UserMenu } from './components/UserMenu';
+import { ResultsHistory } from './pages/ResultsHistory';
 
 // Theme Context
 type Theme = 'dark' | 'light';
@@ -134,6 +137,7 @@ function HomePage() {
               About
             </a>
             <div className="w-px h-5 bg-[var(--color-border)]" />
+            <UserMenu />
             <ThemeToggle />
             <GitHubIcon />
           </nav>
@@ -388,13 +392,41 @@ function ComingSoonTestPage() {
 type EnneagramPhase = 'intro' | 'questions' | 'results';
 
 function EnneagramTestPage() {
+  const { user } = useAuth();
   const [phase, setPhase] = useState<EnneagramPhase>('intro');
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [responses, setResponses] = useState<Record<number, LikertValue>>({});
   const [result, setResult] = useState<EnneagramResult | null>(null);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
   const totalQuestions = enneagramItems.length;
   const currentItem = enneagramItems[currentQuestion];
+
+  // Save results to backend if user is logged in
+  async function saveResults(calculatedResult: EnneagramResult) {
+    if (!user) return;
+
+    setSaveStatus('saving');
+    try {
+      const res = await fetch('/api/results', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          test_type: 'enneagram',
+          scores: calculatedResult,
+        }),
+      });
+
+      if (res.ok) {
+        setSaveStatus('saved');
+      } else {
+        setSaveStatus('error');
+      }
+    } catch {
+      setSaveStatus('error');
+    }
+  }
 
   const handleAnswer = (value: LikertValue) => {
     setResponses((prev) => ({ ...prev, [currentItem.id]: value }));
@@ -411,6 +443,8 @@ function EnneagramTestPage() {
         });
         setResult(calculatedResult);
         setPhase('results');
+        // Auto-save if logged in
+        saveResults(calculatedResult);
       }
     }, 200);
   };
@@ -420,6 +454,7 @@ function EnneagramTestPage() {
     setCurrentQuestion(0);
     setResponses({});
     setResult(null);
+    setSaveStatus('idle');
   };
 
   return (
@@ -590,20 +625,23 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/test/big-five" element={<BigFiveAssessment />} />
-        <Route path="/test/big-five/results" element={<BigFiveResults />} />
-        <Route path="/test/:slug" element={<TestRouter />} />
-        <Route
-          path="/hexaco"
-          element={<HexacoAssessment onComplete={handleHexacoComplete} />}
-        />
-        <Route
-          path="/hexaco/results"
-          element={<HexacoResults scores={hexacoScores} />}
-        />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/my-results" element={<ResultsHistory />} />
+          <Route path="/test/big-five" element={<BigFiveAssessment />} />
+          <Route path="/test/big-five/results" element={<BigFiveResults />} />
+          <Route path="/test/:slug" element={<TestRouter />} />
+          <Route
+            path="/hexaco"
+            element={<HexacoAssessment onComplete={handleHexacoComplete} />}
+          />
+          <Route
+            path="/hexaco/results"
+            element={<HexacoResults scores={hexacoScores} />}
+          />
+        </Routes>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

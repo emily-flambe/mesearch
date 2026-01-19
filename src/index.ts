@@ -1,23 +1,47 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import type { Env } from './types';
 
-type Env = {
-  ASSETS: Fetcher;
-};
+import auth from './api/auth';
+import results from './api/results';
 
 const app = new Hono<{ Bindings: Env }>();
 
-// CORS
-app.use('*', cors());
+// CORS middleware
+app.use('*', cors({
+  origin: '*',
+  credentials: true,
+}));
 
 // Health check endpoint
 app.get('/api/health', (c) => {
   return c.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// SPA fallback - serve frontend for all other routes
-app.all('*', async (c) => {
-  return c.env.ASSETS.fetch(c.req.raw);
+// Mount API routes
+app.route('/api/auth', auth);
+app.route('/api/results', results);
+
+// 404 handler for API routes
+app.notFound(async (c) => {
+  if (c.req.path.startsWith('/api')) {
+    return c.json({ data: null, error: { message: 'Not found', code: 'NOT_FOUND' } }, 404);
+  }
+  // Serve static assets for non-API routes
+  const assets = c.env.ASSETS;
+  if (assets) {
+    return assets.fetch(c.req.raw);
+  }
+  return c.notFound();
+});
+
+// Error handler
+app.onError((err, c) => {
+  console.error('Error:', err);
+  return c.json({
+    data: null,
+    error: { message: 'Internal server error', code: 'INTERNAL_ERROR' }
+  }, 500);
 });
 
 export default app;
