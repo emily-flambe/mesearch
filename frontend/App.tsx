@@ -12,6 +12,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { FeatureFlagsProvider, useFeatureFlags } from './contexts/FeatureFlagsContext';
 import { UserMenu } from './components/UserMenu';
 import { ResultsHistory } from './pages/ResultsHistory';
+import { ResultDetail } from './pages/ResultDetail';
 import MiniTestAssessment from './components/MiniTestAssessment';
 
 // Theme Context
@@ -666,6 +667,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/my-results" element={<ResultsHistory />} />
+            <Route path="/results/:id" element={<ResultDetail />} />
             <Route path="/test/big-five" element={<BigFiveAssessment />} />
             <Route path="/test/big-five/results" element={<BigFiveResults />} />
             <Route path="/test/:slug" element={<TestRouter />} />
