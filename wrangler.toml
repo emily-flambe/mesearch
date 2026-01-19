@@ -12,6 +12,10 @@ command = "npm run build:frontend"
 pattern = "mesearch.emilycogsdill.com"
 custom_domain = true
 
+[[routes]]
+pattern = "mesearcher.com"
+custom_domain = true
+
 [assets]
 directory = "./dist"
 binding = "ASSETS"
