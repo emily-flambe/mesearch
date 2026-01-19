@@ -1,8 +1,13 @@
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useParams } from 'react-router-dom';
 import { createContext, useContext, useEffect, useState } from 'react';
 import HexacoAssessment from './components/HexacoAssessment';
 import HexacoResults from './components/HexacoResults';
 import { HexacoResponse, calculateScores, DimensionScore } from './data/hexaco-scoring';
+import BigFiveAssessment from './components/BigFiveAssessment';
+import BigFiveResults from './components/BigFiveResults';
+import { enneagramItems, likertScale, type LikertValue } from './data/enneagram-items';
+import { calculateEnneagramResult, type EnneagramResult } from './data/enneagram-scoring';
+import { EnneagramResults } from './components/EnneagramResults';
 
 // Theme Context
 type Theme = 'dark' | 'light';
@@ -113,7 +118,7 @@ function HomePage() {
       <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
         <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
           <a href="#top" className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
-            Mēsearch
+            Mesearch
           </a>
           <nav className="flex items-center gap-6">
             <a
@@ -223,7 +228,7 @@ function HomePage() {
             <p className="text-[var(--color-text-secondary)] text-lg max-w-2xl mx-auto mb-12 leading-relaxed font-light transition-colors duration-300">
               Each test is rated on two dimensions: Seriousness reflects the depth of research
               supporting its validity, while Fun captures how engaging the experience is.
-              Some tests excel at both. Some tests are dogshit 👍 We decide, you report!
+              Some tests excel at both. Some tests are dogshit. We decide, you report!
             </p>
             <div className="flex justify-center gap-16">
               <div className="text-center">
@@ -248,7 +253,7 @@ function HomePage() {
       {/* Footer */}
       <footer className="border-t border-[var(--color-border)] py-12 transition-colors duration-300">
         <div className="mx-auto max-w-6xl px-6 text-center">
-          <p className="font-display text-xl text-gold-gradient mb-4">Mēsearch</p>
+          <p className="font-display text-xl text-gold-gradient mb-4">Mesearch</p>
           <p className="text-[var(--color-text-muted)]/50 text-xs">&copy; 2026</p>
         </div>
       </footer>
@@ -326,14 +331,15 @@ function TestCard({
   );
 }
 
-function TestPage() {
+// Generic placeholder for tests not yet implemented
+function ComingSoonTestPage() {
   return (
     <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
       {/* Header */}
       <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
         <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
           <Link to="/" className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
-            Mēsearch
+            Mesearch
           </Link>
           <div className="flex items-center gap-4">
             <ThemeToggle />
@@ -378,6 +384,202 @@ function TestPage() {
   );
 }
 
+// Enneagram Assessment Page
+type EnneagramPhase = 'intro' | 'questions' | 'results';
+
+function EnneagramTestPage() {
+  const [phase, setPhase] = useState<EnneagramPhase>('intro');
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [responses, setResponses] = useState<Record<number, LikertValue>>({});
+  const [result, setResult] = useState<EnneagramResult | null>(null);
+
+  const totalQuestions = enneagramItems.length;
+  const currentItem = enneagramItems[currentQuestion];
+
+  const handleAnswer = (value: LikertValue) => {
+    setResponses((prev) => ({ ...prev, [currentItem.id]: value }));
+
+    // Auto-advance after short delay
+    setTimeout(() => {
+      if (currentQuestion < totalQuestions - 1) {
+        setCurrentQuestion((prev) => prev + 1);
+      } else {
+        // Calculate results
+        const calculatedResult = calculateEnneagramResult({
+          ...responses,
+          [currentItem.id]: value,
+        });
+        setResult(calculatedResult);
+        setPhase('results');
+      }
+    }, 200);
+  };
+
+  const handleRetake = () => {
+    setPhase('intro');
+    setCurrentQuestion(0);
+    setResponses({});
+    setResult(null);
+  };
+
+  return (
+    <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
+      {/* Header */}
+      <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
+        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
+          <Link to="/" className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
+            Mesearch
+          </Link>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <GitHubIcon />
+          </div>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-3xl px-6 py-12">
+        {phase === 'intro' && (
+          <div className="text-center">
+            <div className="card-premium rounded-lg p-12">
+              <p className="text-[var(--color-discovery)] text-xs tracking-[0.3em] uppercase mb-4">
+                Self-Discovery Tool
+              </p>
+              <h1 className="font-display text-4xl font-medium text-[var(--color-text-primary)] mb-4 transition-colors duration-300">
+                Enneagram Assessment
+              </h1>
+              <p className="text-[var(--color-text-secondary)] mb-8 leading-relaxed max-w-lg mx-auto transition-colors duration-300">
+                Explore your core motivations through nine distinct personality archetypes.
+                This assessment will help you understand your patterns of thinking, feeling, and behaving.
+              </p>
+
+              <div className="bg-[var(--color-discovery)]/10 border border-[var(--color-discovery-border)] rounded-lg p-4 mb-8 text-left max-w-md mx-auto">
+                <p className="text-[var(--color-discovery)] text-sm font-medium mb-1">
+                  Important Note
+                </p>
+                <p className="text-[var(--color-text-muted)] text-xs">
+                  The Enneagram is a popular framework for self-reflection but lacks scientific validation.
+                  Use these results for personal exploration, not diagnosis.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+                <div className="flex items-center gap-2 text-[var(--color-text-muted)] text-sm">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>~10 minutes</span>
+                </div>
+                <div className="flex items-center gap-2 text-[var(--color-text-muted)] text-sm">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                  <span>{totalQuestions} questions</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setPhase('questions')}
+                className="btn-gold px-10 py-4 rounded text-sm tracking-widest uppercase"
+              >
+                Begin Assessment
+              </button>
+            </div>
+          </div>
+        )}
+
+        {phase === 'questions' && currentItem && (
+          <div>
+            {/* Progress bar */}
+            <div className="mb-8">
+              <div className="flex justify-between text-sm text-[var(--color-text-muted)] mb-2">
+                <span>Question {currentQuestion + 1} of {totalQuestions}</span>
+                <span>{Math.round(((currentQuestion + 1) / totalQuestions) * 100)}%</span>
+              </div>
+              <div className="h-1 bg-[var(--color-bg-tertiary)] rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-[var(--color-gold)] to-[var(--color-champagne)] transition-all duration-300"
+                  style={{ width: `${((currentQuestion + 1) / totalQuestions) * 100}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Question card */}
+            <div className="card-premium rounded-lg p-8 md:p-12">
+              <p className="font-display text-2xl md:text-3xl text-[var(--color-text-primary)] mb-10 leading-relaxed text-center transition-colors duration-300">
+                {currentItem.text}
+              </p>
+
+              {/* Likert scale */}
+              <div className="space-y-3">
+                {likertScale.map((option) => {
+                  const isSelected = responses[currentItem.id] === option.value;
+                  return (
+                    <button
+                      key={option.value}
+                      onClick={() => handleAnswer(option.value)}
+                      className={`w-full p-4 rounded-lg border text-left transition-all duration-200 ${
+                        isSelected
+                          ? 'border-[var(--color-champagne)] bg-[var(--color-champagne)]/10'
+                          : 'border-[var(--color-border)] hover:border-[var(--color-champagne)]/50 hover:bg-[var(--color-bg-tertiary)]'
+                      }`}
+                    >
+                      <div className="flex items-center gap-4">
+                        <div
+                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                            isSelected
+                              ? 'border-[var(--color-champagne)] bg-[var(--color-champagne)]'
+                              : 'border-[var(--color-text-muted)]'
+                          }`}
+                        >
+                          {isSelected && (
+                            <svg className="w-3 h-3 text-[var(--color-bg-primary)]" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          )}
+                        </div>
+                        <span
+                          className={`text-sm ${
+                            isSelected
+                              ? 'text-[var(--color-champagne)]'
+                              : 'text-[var(--color-text-secondary)]'
+                          } transition-colors`}
+                        >
+                          {option.label}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Navigation hint */}
+            <p className="text-center text-[var(--color-text-muted)] text-xs mt-6">
+              Select an option to continue
+            </p>
+          </div>
+        )}
+
+        {phase === 'results' && result && (
+          <EnneagramResults result={result} onRetake={handleRetake} />
+        )}
+      </main>
+    </div>
+  );
+}
+
+// Route handler that decides which test to show
+function TestRouter() {
+  const { slug } = useParams<{ slug: string }>();
+
+  if (slug === 'enneagram') {
+    return <EnneagramTestPage />;
+  }
+
+  // All other tests show coming soon
+  return <ComingSoonTestPage />;
+}
+
 export default function App() {
   const [hexacoScores, setHexacoScores] = useState<DimensionScore[] | null>(null);
 
@@ -390,7 +592,9 @@ export default function App() {
     <ThemeProvider>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/test/:slug" element={<TestPage />} />
+        <Route path="/test/big-five" element={<BigFiveAssessment />} />
+        <Route path="/test/big-five/results" element={<BigFiveResults />} />
+        <Route path="/test/:slug" element={<TestRouter />} />
         <Route
           path="/hexaco"
           element={<HexacoAssessment onComplete={handleHexacoComplete} />}
