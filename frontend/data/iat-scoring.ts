@@ -1,0 +1,363 @@
+// IAT D-Score Calculation Algorithm
+// Based on: Greenwald, A. G., Nosek, B. A., & Banaji, M. R. (2003).
+// "Understanding and Using the Implicit Association Test: I. An Improved Scoring Algorithm"
+// Journal of Personality and Social Psychology, 85(2), 197-216.
+//
+// This implements the "D2" scoring algorithm (improved scoring algorithm).
+
+export interface TrialResult {
+  blockNumber: number;
+  trialNumber: number;
+  stimulus: string;
+  correctCategory: string;
+  responseKey: 'E' | 'I';
+  correctKey: 'E' | 'I';
+  responseTime: number; // milliseconds from stimulus onset to response
+  correct: boolean;
+  tooFast: boolean; // < 300ms
+  tooSlow: boolean; // > 10000ms
+}
+
+export interface BlockScore {
+  blockNumber: number;
+  blockType: 'practice' | 'test';
+  meanRT: number;
+  medianRT: number;
+  errorRate: number;
+  numTrials: number;
+  numValid: number;
+  numTooFast: number;
+  numTooSlow: number;
+}
+
+export interface IATResults {
+  iatId: string;
+  dScore: number; // -2 to +2, standardized effect size
+  dScoreInterpretation: DScoreInterpretation;
+  interpretationText: string;
+  disclaimer: string;
+  blockScores: BlockScore[];
+  totalTrials: number;
+  validTrials: number;
+  errorRate: number;
+  averageResponseTime: number;
+  medianResponseTime: number;
+  tooFastRate: number;
+  completedAt: string;
+  shouldExclude: boolean; // True if participant should be excluded
+  exclusionReason: string | null;
+}
+
+export type DScoreInterpretation =
+  | 'strong_preference_a' // D < -0.65: Strong automatic preference for Target1+Good
+  | 'moderate_preference_a' // -0.65 <= D < -0.35
+  | 'slight_preference_a' // -0.35 <= D < -0.15
+  | 'little_to_no_preference' // -0.15 <= D <= 0.15
+  | 'slight_preference_b' // 0.15 < D <= 0.35
+  | 'moderate_preference_b' // 0.35 < D <= 0.65
+  | 'strong_preference_b'; // D > 0.65: Strong automatic preference for Target2+Good
+
+// Constants for scoring
+const MIN_RT = 300; // Minimum valid RT in ms
+const MAX_RT = 10000; // Maximum valid RT in ms
+const ERROR_PENALTY = 600; // ms to add for error trials (D2 algorithm uses built-in error penalty)
+const TOO_FAST_EXCLUSION_THRESHOLD = 0.10; // Exclude if >10% of trials are too fast
+
+// D-score interpretation thresholds
+const D_THRESHOLDS = {
+  strong: 0.65,
+  moderate: 0.35,
+  slight: 0.15,
+};
+
+/**
+ * Calculate D-score from trial results using the improved D2 algorithm.
+ *
+ * The D2 algorithm:
+ * 1. Delete trials with RT > 10000ms
+ * 2. Delete trials with RT < 300ms (and exclude participant if >10%)
+ * 3. Compute mean RT for each test block
+ * 4. Compute "inclusive" standard deviation across both test block conditions
+ * 5. Compute D = (Mean_Incompatible - Mean_Compatible) / SD_pooled
+ *
+ * For the Flowers-Insects IAT:
+ * - Compatible: Flowers+Good, Insects+Bad (Blocks 3-4)
+ * - Incompatible: Insects+Good, Flowers+Bad (Blocks 6-7)
+ *
+ * A positive D-score means slower RT on incompatible trials,
+ * suggesting stronger Flowers+Good association.
+ */
+export function calculateDScore(trials: TrialResult[], iatId: string): IATResults {
+  const completedAt = new Date().toISOString();
+
+  // Separate trials by block type
+  const testBlockTrials = trials.filter(
+    (t) => [4, 7].includes(t.blockNumber) // Only use test blocks (4 and 7)
+  );
+
+  const allTrials = trials;
+
+  // Check for exclusion criteria
+  const tooFastTrials = allTrials.filter((t) => t.tooFast);
+  const tooFastRate = tooFastTrials.length / allTrials.length;
+  const shouldExclude = tooFastRate > TOO_FAST_EXCLUSION_THRESHOLD;
+  const exclusionReason = shouldExclude
+    ? `More than 10% of trials (${(tooFastRate * 100).toFixed(1)}%) had response times under 300ms`
+    : null;
+
+  // Filter valid trials (not too fast, not too slow)
+  const validTrials = testBlockTrials.filter((t) => !t.tooFast && !t.tooSlow);
+
+  // Separate by block for D-score calculation
+  // Block 4: Compatible (Flowers+Good, Insects+Bad)
+  // Block 7: Incompatible (Insects+Good, Flowers+Bad)
+  const compatibleTrials = validTrials.filter((t) => t.blockNumber === 4);
+  const incompatibleTrials = validTrials.filter((t) => t.blockNumber === 7);
+
+  // Apply error penalty (D2 algorithm: add 600ms for incorrect responses)
+  const getAdjustedRT = (trial: TrialResult): number => {
+    if (!trial.correct) {
+      return trial.responseTime + ERROR_PENALTY;
+    }
+    return trial.responseTime;
+  };
+
+  // Calculate mean RT for each condition
+  const compatibleRTs = compatibleTrials.map(getAdjustedRT);
+  const incompatibleRTs = incompatibleTrials.map(getAdjustedRT);
+
+  const meanCompatible = calculateMean(compatibleRTs);
+  const meanIncompatible = calculateMean(incompatibleRTs);
+
+  // Calculate pooled standard deviation across both conditions
+  const allTestRTs = [...compatibleRTs, ...incompatibleRTs];
+  const pooledSD = calculateStandardDeviation(allTestRTs);
+
+  // Calculate D-score
+  // Positive D = slower on incompatible = preference for Flowers+Good
+  let dScore = 0;
+  if (pooledSD > 0) {
+    dScore = (meanIncompatible - meanCompatible) / pooledSD;
+  }
+
+  // Clamp D-score to reasonable range
+  dScore = Math.max(-2, Math.min(2, dScore));
+
+  // Interpret D-score
+  const dScoreInterpretation = interpretDScore(dScore);
+  const interpretationText = getDScoreInterpretationText(dScore, iatId);
+
+  // Calculate block-level statistics
+  const blockScores = calculateBlockScores(trials);
+
+  // Overall statistics
+  const totalTrials = allTrials.length;
+  const validTrialCount = validTrials.length;
+  const errorTrials = allTrials.filter((t) => !t.correct);
+  const errorRate = errorTrials.length / totalTrials;
+  const allRTs = allTrials.map((t) => t.responseTime);
+  const averageResponseTime = calculateMean(allRTs);
+  const medianResponseTime = calculateMedian(allRTs);
+
+  return {
+    iatId,
+    dScore: Math.round(dScore * 100) / 100, // Round to 2 decimal places
+    dScoreInterpretation,
+    interpretationText,
+    disclaimer: getDisclaimer(),
+    blockScores,
+    totalTrials,
+    validTrials: validTrialCount,
+    errorRate: Math.round(errorRate * 1000) / 1000,
+    averageResponseTime: Math.round(averageResponseTime),
+    medianResponseTime: Math.round(medianResponseTime),
+    tooFastRate: Math.round(tooFastRate * 1000) / 1000,
+    completedAt,
+    shouldExclude,
+    exclusionReason,
+  };
+}
+
+/**
+ * Interpret D-score into categorical interpretation
+ */
+export function interpretDScore(dScore: number): DScoreInterpretation {
+  if (dScore < -D_THRESHOLDS.strong) return 'strong_preference_a';
+  if (dScore < -D_THRESHOLDS.moderate) return 'moderate_preference_a';
+  if (dScore < -D_THRESHOLDS.slight) return 'slight_preference_a';
+  if (dScore <= D_THRESHOLDS.slight) return 'little_to_no_preference';
+  if (dScore <= D_THRESHOLDS.moderate) return 'slight_preference_b';
+  if (dScore <= D_THRESHOLDS.strong) return 'moderate_preference_b';
+  return 'strong_preference_b';
+}
+
+/**
+ * Get human-readable interpretation text for D-score
+ */
+export function getDScoreInterpretationText(
+  dScore: number,
+  _iatId: string // For future IAT-specific interpretations
+): string {
+  const interpretation = interpretDScore(dScore);
+
+  // For Flowers-Insects IAT:
+  // Positive D = Flowers+Good association (most people)
+  // Negative D = Insects+Good association (uncommon)
+
+  switch (interpretation) {
+    case 'strong_preference_a':
+      return 'Your results suggest a strong automatic association between Insects and Good (compared to Flowers and Good). This is an unusual pattern.';
+    case 'moderate_preference_a':
+      return 'Your results suggest a moderate automatic association between Insects and Good (compared to Flowers and Good). This is an uncommon pattern.';
+    case 'slight_preference_a':
+      return 'Your results suggest a slight automatic association between Insects and Good (compared to Flowers and Good).';
+    case 'little_to_no_preference':
+      return 'Your results suggest little to no difference in automatic associations between Flowers+Good and Insects+Good.';
+    case 'slight_preference_b':
+      return 'Your results suggest a slight automatic association between Flowers and Good (compared to Insects and Good). This is a common pattern.';
+    case 'moderate_preference_b':
+      return 'Your results suggest a moderate automatic association between Flowers and Good (compared to Insects and Good). This is a common pattern.';
+    case 'strong_preference_b':
+      return 'Your results suggest a strong automatic association between Flowers and Good (compared to Insects and Good). This is the most common pattern.';
+  }
+}
+
+/**
+ * Calculate block-level statistics
+ */
+export function calculateBlockScores(trials: TrialResult[]): BlockScore[] {
+  const blockNumbers = [...new Set(trials.map((t) => t.blockNumber))].sort(
+    (a, b) => a - b
+  );
+
+  return blockNumbers.map((blockNum) => {
+    const blockTrials = trials.filter((t) => t.blockNumber === blockNum);
+    const validTrials = blockTrials.filter((t) => !t.tooFast && !t.tooSlow);
+    const rts = validTrials.map((t) => t.responseTime);
+    const errors = blockTrials.filter((t) => !t.correct);
+    const tooFast = blockTrials.filter((t) => t.tooFast);
+    const tooSlow = blockTrials.filter((t) => t.tooSlow);
+
+    return {
+      blockNumber: blockNum,
+      blockType: [3, 4, 6, 7].includes(blockNum) ? 'test' : 'practice',
+      meanRT: Math.round(calculateMean(rts)),
+      medianRT: Math.round(calculateMedian(rts)),
+      errorRate: Math.round((errors.length / blockTrials.length) * 1000) / 1000,
+      numTrials: blockTrials.length,
+      numValid: validTrials.length,
+      numTooFast: tooFast.length,
+      numTooSlow: tooSlow.length,
+    };
+  });
+}
+
+/**
+ * Calculate mean of an array
+ */
+export function calculateMean(values: number[]): number {
+  if (values.length === 0) return 0;
+  return values.reduce((sum, v) => sum + v, 0) / values.length;
+}
+
+/**
+ * Calculate median of an array
+ */
+export function calculateMedian(values: number[]): number {
+  if (values.length === 0) return 0;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  if (sorted.length % 2 === 0) {
+    return (sorted[mid - 1] + sorted[mid]) / 2;
+  }
+  return sorted[mid];
+}
+
+/**
+ * Calculate standard deviation of an array
+ */
+export function calculateStandardDeviation(values: number[]): number {
+  if (values.length < 2) return 0;
+  const mean = calculateMean(values);
+  const squaredDiffs = values.map((v) => Math.pow(v - mean, 2));
+  const avgSquaredDiff = calculateMean(squaredDiffs);
+  return Math.sqrt(avgSquaredDiff);
+}
+
+/**
+ * Check if a response time is valid
+ */
+export function isValidRT(rt: number): { valid: boolean; tooFast: boolean; tooSlow: boolean } {
+  const tooFast = rt < MIN_RT;
+  const tooSlow = rt > MAX_RT;
+  return {
+    valid: !tooFast && !tooSlow,
+    tooFast,
+    tooSlow,
+  };
+}
+
+/**
+ * Get the standard disclaimer text
+ */
+export function getDisclaimer(): string {
+  return `IMPORTANT LIMITATIONS OF THIS RESULT
+
+1. LOW INDIVIDUAL RELIABILITY: IAT scores have a test-retest reliability of approximately 0.50. This means your score could differ substantially if you take the test again.
+
+2. NOT A DIAGNOSIS: This result does not indicate your conscious beliefs, values, or character. It measures automatic associations only.
+
+3. MANY FACTORS AFFECT SCORES: Fatigue, distraction, familiarity with the task, and random variation all influence IAT results.
+
+4. EDUCATIONAL PURPOSE: This tool is designed for self-reflection and learning about implicit cognition. It should not be used to make important decisions.
+
+5. DO NOT SHARE: Project Implicit, the creators of the IAT, explicitly recommend against sharing individual results. Results are most meaningful at the group level.
+
+If you're interested in learning more about the IAT and its limitations, visit implicit.harvard.edu.`;
+}
+
+/**
+ * Serialize results for storage
+ */
+export function serializeIATResults(results: IATResults): string {
+  return JSON.stringify(results);
+}
+
+/**
+ * Deserialize results from storage
+ */
+export function deserializeIATResults(json: string): IATResults | null {
+  try {
+    return JSON.parse(json) as IATResults;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Create a trial result object
+ */
+export function createTrialResult(params: {
+  blockNumber: number;
+  trialNumber: number;
+  stimulus: string;
+  correctCategory: string;
+  responseKey: 'E' | 'I';
+  correctKey: 'E' | 'I';
+  responseTime: number;
+}): TrialResult {
+  const rtValidity = isValidRT(params.responseTime);
+
+  return {
+    blockNumber: params.blockNumber,
+    trialNumber: params.trialNumber,
+    stimulus: params.stimulus,
+    correctCategory: params.correctCategory,
+    responseKey: params.responseKey,
+    correctKey: params.correctKey,
+    responseTime: params.responseTime,
+    correct: params.responseKey === params.correctKey,
+    tooFast: rtValidity.tooFast,
+    tooSlow: rtValidity.tooSlow,
+  };
+}

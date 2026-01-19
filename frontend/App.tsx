@@ -13,6 +13,7 @@ import { FeatureFlagsProvider, useFeatureFlags } from './contexts/FeatureFlagsCo
 import { UserMenu } from './components/UserMenu';
 import { ResultsHistory } from './pages/ResultsHistory';
 import MiniTestAssessment from './components/MiniTestAssessment';
+import IATAssessment from './components/IATAssessment';
 
 // Theme Context
 type Theme = 'dark' | 'light';
@@ -219,6 +220,27 @@ function HomePage() {
               seriousness={2}
               fun={5}
             />
+          </div>
+
+          {/* IAT Section */}
+          <div className="mt-12">
+            <div className="text-center mb-6">
+              <span className="inline-block px-3 py-1 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-400 text-xs tracking-wide uppercase">
+                Research-Backed (Controversial)
+              </span>
+            </div>
+            <div className="max-w-md mx-auto">
+              <TestCard
+                title="IAT"
+                subtitle="Implicit Association Test"
+                slug="iat"
+                keywords={['Reaction Time', 'Automatic Associations', 'Self-Reflection']}
+                description="Measure automatic associations through reaction time. Educational tool for exploring implicit cognition. Low individual reliability."
+                time="5-10 min"
+                seriousness={3}
+                fun={4}
+              />
+            </div>
           </div>
 
           {/* Mini-Test - Admin/Test Users Only */}
@@ -645,6 +667,10 @@ function TestRouter() {
       return <ComingSoonTestPage />;
     }
     return <MiniTestAssessment />;
+  }
+
+  if (slug === 'iat') {
+    return <IATAssessment />;
   }
 
   // All other tests show coming soon
