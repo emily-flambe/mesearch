@@ -44,9 +44,9 @@ test.describe('RMET Assessment', () => {
     await expect(page).toHaveURL('/test/rmet/results');
 
     // Verify results are displayed
-    await expect(page.getByText('Reading the Mind in the Eyes')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Reading the Mind in the Eyes' })).toBeVisible();
     await expect(page.getByText('Your Results')).toBeVisible();
-    await expect(page.getByText('of 36')).toBeVisible();
+    await expect(page.getByText('of 36', { exact: true })).toBeVisible();
   });
 
   test('can resume progress after navigating away', async ({ page }) => {
