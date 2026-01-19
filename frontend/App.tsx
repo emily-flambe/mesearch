@@ -13,6 +13,8 @@ import { FeatureFlagsProvider, useFeatureFlags } from './contexts/FeatureFlagsCo
 import { UserMenu } from './components/UserMenu';
 import { ResultsHistory } from './pages/ResultsHistory';
 import MiniTestAssessment from './components/MiniTestAssessment';
+import RMETAssessment from './components/RMETAssessment';
+import RMETResults from './components/RMETResults';
 
 // Theme Context
 type Theme = 'dark' | 'light';
@@ -218,6 +220,20 @@ function HomePage() {
               time="10 min"
               seriousness={2}
               fun={5}
+            />
+          </div>
+
+          {/* Additional Tests Row */}
+          <div className="grid md:grid-cols-3 gap-8 mt-8">
+            <TestCard
+              title="RMET"
+              subtitle="Eyes Test"
+              slug="rmet"
+              keywords={['Social Cognition', 'Empathy', 'Theory of Mind']}
+              description="Measure your ability to recognize emotions and mental states from eye expressions. Research-backed assessment of social cognition."
+              time="10 min"
+              seriousness={4}
+              fun={4}
             />
           </div>
 
@@ -668,6 +684,8 @@ export default function App() {
             <Route path="/my-results" element={<ResultsHistory />} />
             <Route path="/test/big-five" element={<BigFiveAssessment />} />
             <Route path="/test/big-five/results" element={<BigFiveResults />} />
+            <Route path="/test/rmet" element={<RMETAssessment />} />
+            <Route path="/test/rmet/results" element={<RMETResults />} />
             <Route path="/test/:slug" element={<TestRouter />} />
             <Route
               path="/hexaco"
