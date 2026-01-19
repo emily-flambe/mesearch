@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { UserMenu } from '../components/UserMenu';
 
 interface TestResult {
   id: string;
@@ -74,13 +75,14 @@ export function ResultsHistory() {
           <Link to="/" className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
             Mesearch
           </Link>
-          <nav className="flex items-center gap-4">
+          <nav className="flex items-center gap-6">
             <Link
               to="/"
               className="text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)] transition-colors text-sm"
             >
               Home
             </Link>
+            <UserMenu />
           </nav>
         </div>
       </header>

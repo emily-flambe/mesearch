@@ -19,16 +19,15 @@ test.describe('Authentication - Unauthenticated', () => {
     await expect(signInLink).toHaveAttribute('href', '/api/auth/dev-login');
   });
 
-  test('my-results page shows sign-in prompt when not logged in', async ({ page }) => {
+  test('my-results page shows auth prompt when not logged in', async ({ page }) => {
     await page.goto('/my-results');
 
-    // Should show sign-in required message
-    await expect(page.getByRole('heading', { name: 'Sign In Required' })).toBeVisible();
-    await expect(page.getByText('Sign in to view and track your personality test results')).toBeVisible();
+    // Should show authentication required message
+    await expect(page.getByRole('heading', { name: 'Authentication Required' })).toBeVisible();
+    await expect(page.getByText('Use the link in the header')).toBeVisible();
 
-    // Should have a sign-in button
-    const signInButton = page.getByRole('link', { name: 'Sign In' });
-    await expect(signInButton).toBeVisible();
+    // Sign In should be in the header (via UserMenu)
+    await expect(page.getByRole('link', { name: 'Sign In' })).toBeVisible();
   });
 });
 
@@ -104,8 +103,8 @@ test.describe('Authenticated User - My Results', () => {
     // Should see Results History heading (not sign-in prompt)
     await expect(page.getByRole('heading', { name: 'Results History' })).toBeVisible();
 
-    // Should NOT see sign-in required message
-    await expect(page.getByRole('heading', { name: 'Sign In Required' })).not.toBeVisible();
+    // Should NOT see authentication required message
+    await expect(page.getByRole('heading', { name: 'Authentication Required' })).not.toBeVisible();
   });
 
   test('new user sees empty results state', async ({ page }) => {
