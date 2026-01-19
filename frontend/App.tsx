@@ -5,6 +5,8 @@ import HexacoResults from './components/HexacoResults';
 import { HexacoResponse, calculateScores, DimensionScore } from './data/hexaco-scoring';
 import BigFiveAssessment from './components/BigFiveAssessment';
 import BigFiveResults from './components/BigFiveResults';
+import MFQAssessment from './components/MFQAssessment';
+import MFQResults from './components/MFQResults';
 import { enneagramItems, likertScale, type LikertValue } from './data/enneagram-items';
 import { calculateEnneagramResult, type EnneagramResult } from './data/enneagram-scoring';
 import { EnneagramResults } from './components/EnneagramResults';
@@ -218,6 +220,16 @@ function HomePage() {
               time="10 min"
               seriousness={2}
               fun={5}
+            />
+            <TestCard
+              title="Moral Foundations"
+              subtitle="MFQ-30"
+              slug="mfq"
+              keywords={['Ethics', 'Values', 'Politics']}
+              description="Discover your moral intuitions across five foundations: Care, Fairness, Loyalty, Authority, and Purity. Based on Jonathan Haidt's research."
+              time="10 min"
+              seriousness={4}
+              fun={4}
             />
           </div>
 
@@ -668,6 +680,8 @@ export default function App() {
             <Route path="/my-results" element={<ResultsHistory />} />
             <Route path="/test/big-five" element={<BigFiveAssessment />} />
             <Route path="/test/big-five/results" element={<BigFiveResults />} />
+            <Route path="/test/mfq" element={<MFQAssessment />} />
+            <Route path="/test/mfq/results" element={<MFQResults />} />
             <Route path="/test/:slug" element={<TestRouter />} />
             <Route
               path="/hexaco"
