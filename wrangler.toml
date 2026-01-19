@@ -30,7 +30,7 @@ port = 8787
 enabled = true
 head_sampling_rate = 1
 
-# Secrets (set via wrangler secret put):
+# Secrets (sync via: wrangler secret bulk .dev.vars)
 # JWT_SECRET
 # GOOGLE_CLIENT_ID
 # GOOGLE_CLIENT_SECRET

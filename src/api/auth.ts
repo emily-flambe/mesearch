@@ -27,6 +27,12 @@ function isSecureRequest(c: { req: { url: string } }): boolean {
   return url.protocol === 'https:';
 }
 
+// Helper to get OAuth redirect URI from request
+function getRedirectUri(requestUrl: string): string {
+  const url = new URL(requestUrl);
+  return `${url.origin}/api/auth/google/callback`;
+}
+
 // GET /api/auth/google - Initiate Google OAuth
 auth.get('/google', async (c) => {
   const stateManager = new OAuthStateManager(c.env.JWT_SECRET);
@@ -35,7 +41,7 @@ auth.get('/google', async (c) => {
   const config: GoogleOAuthConfig = {
     clientId: c.env.GOOGLE_CLIENT_ID,
     clientSecret: c.env.GOOGLE_CLIENT_SECRET,
-    redirectUri: c.env.GOOGLE_REDIRECT_URI,
+    redirectUri: getRedirectUri(c.req.url),
   };
 
   const authUrl = getGoogleAuthUrl(config, state);
@@ -62,7 +68,7 @@ auth.get('/google/callback', async (c) => {
     const config: GoogleOAuthConfig = {
       clientId: c.env.GOOGLE_CLIENT_ID,
       clientSecret: c.env.GOOGLE_CLIENT_SECRET,
-      redirectUri: c.env.GOOGLE_REDIRECT_URI,
+      redirectUri: getRedirectUri(c.req.url),
     };
 
     const tokens = await exchangeGoogleCode(code, config);
