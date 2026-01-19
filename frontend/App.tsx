@@ -1,5 +1,7 @@
 import { Routes, Route, Link, useParams } from 'react-router-dom';
 import { createContext, useContext, useEffect, useState } from 'react';
+import BigFiveAssessment from './components/BigFiveAssessment';
+import BigFiveResults from './components/BigFiveResults';
 import { enneagramItems, likertScale, type LikertValue } from './data/enneagram-items';
 import { calculateEnneagramResult, type EnneagramResult } from './data/enneagram-scoring';
 import { EnneagramResults } from './components/EnneagramResults';
@@ -615,6 +617,8 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/my-results" element={<ResultsHistory />} />
+          <Route path="/test/big-five" element={<BigFiveAssessment />} />
+          <Route path="/test/big-five/results" element={<BigFiveResults />} />
           <Route path="/test/:slug" element={<TestRouter />} />
         </Routes>
       </AuthProvider>
