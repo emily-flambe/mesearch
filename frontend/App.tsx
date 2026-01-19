@@ -13,6 +13,8 @@ import { FeatureFlagsProvider, useFeatureFlags } from './contexts/FeatureFlagsCo
 import { UserMenu } from './components/UserMenu';
 import { ResultsHistory } from './pages/ResultsHistory';
 import MiniTestAssessment from './components/MiniTestAssessment';
+import MBTIAssessment from './components/MBTIAssessment';
+import MBTIResults from './components/MBTIResults';
 
 // Theme Context
 type Theme = 'dark' | 'light';
@@ -215,6 +217,20 @@ function HomePage() {
               slug="enneagram"
               keywords={['Motivations', 'Growth', 'Archetypes']}
               description="Explore your core motivations through nine distinct personality archetypes. Renowned for personal growth insights."
+              time="10 min"
+              seriousness={2}
+              fun={5}
+            />
+          </div>
+
+          {/* Second Row - Popular but less scientific */}
+          <div className="grid md:grid-cols-3 gap-8 mt-8">
+            <TestCard
+              title="Myers-Briggs"
+              subtitle="OEJTS"
+              slug="mbti"
+              keywords={['Types', 'Cognitive', 'Popular']}
+              description="The world's most popular personality test. Discover your type across four dichotomies: E/I, S/N, T/F, J/P."
               time="10 min"
               seriousness={2}
               fun={5}
@@ -668,6 +684,8 @@ export default function App() {
             <Route path="/my-results" element={<ResultsHistory />} />
             <Route path="/test/big-five" element={<BigFiveAssessment />} />
             <Route path="/test/big-five/results" element={<BigFiveResults />} />
+            <Route path="/test/mbti" element={<MBTIAssessment />} />
+            <Route path="/test/mbti/results" element={<MBTIResults />} />
             <Route path="/test/:slug" element={<TestRouter />} />
             <Route
               path="/hexaco"
