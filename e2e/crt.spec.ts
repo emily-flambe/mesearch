@@ -231,7 +231,7 @@ test.describe('Cognitive Reflection Test (CRT)', () => {
 
       // Should see prior exposure note
       await expect(page.getByTestId('crt-results')).toBeVisible();
-      await expect(page.getByText('prior exposure', { exact: false })).toBeVisible();
+      await expect(page.getByTestId('crt-prior-exposure-warning')).toBeVisible();
     });
   });
 

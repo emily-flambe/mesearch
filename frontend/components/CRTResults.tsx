@@ -70,7 +70,7 @@ export default function CRTResultsComponent({ results, onRetake }: CRTResultsPro
 
         {/* Prior exposure note */}
         {results.priorExposure !== 'none' && (
-          <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg">
+          <div data-testid="crt-prior-exposure-warning" className="mt-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg">
             <p className="text-amber-400 text-sm">
               <strong>Note:</strong> You indicated prior exposure to these problems.
               This may have influenced your performance.
