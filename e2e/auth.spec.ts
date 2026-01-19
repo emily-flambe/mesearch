@@ -15,26 +15,26 @@ test.describe('Authentication', () => {
     await page.goto('/login');
 
     // Check form elements
-    await expect(page.locator('text=Welcome Back')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Welcome Back' })).toBeVisible();
     await expect(page.locator('input[type="email"]')).toBeVisible();
     await expect(page.locator('input[type="password"]')).toBeVisible();
-    await expect(page.locator('text=Continue with Google')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Continue with Google' })).toBeVisible();
   });
 
   test('can switch between login and register modes', async ({ page }) => {
     await page.goto('/login');
 
     // Initially in login mode
-    await expect(page.locator('text=Welcome Back')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Welcome Back' })).toBeVisible();
 
     // Switch to register mode
     await page.click('text=Don\'t have an account? Sign up');
-    await expect(page.locator('text=Create Account')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Create Account' })).toBeVisible();
     await expect(page.locator('input#displayName')).toBeVisible();
 
     // Switch back to login mode
     await page.click('text=Already have an account? Sign in');
-    await expect(page.locator('text=Welcome Back')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Welcome Back' })).toBeVisible();
   });
 
   test('shows validation errors on empty form submission', async ({ page }) => {
