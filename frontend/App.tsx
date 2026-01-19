@@ -5,6 +5,8 @@ import HexacoResults from './components/HexacoResults';
 import { HexacoResponse, calculateScores, DimensionScore } from './data/hexaco-scoring';
 import BigFiveAssessment from './components/BigFiveAssessment';
 import BigFiveResults from './components/BigFiveResults';
+import SD3Assessment from './components/SD3Assessment';
+import SD3Results from './components/SD3Results';
 import { enneagramItems, likertScale, type LikertValue } from './data/enneagram-items';
 import { calculateEnneagramResult, type EnneagramResult } from './data/enneagram-scoring';
 import { EnneagramResults } from './components/EnneagramResults';
@@ -217,6 +219,16 @@ function HomePage() {
               description="Explore your core motivations through nine distinct personality archetypes. Renowned for personal growth insights."
               time="10 min"
               seriousness={2}
+              fun={5}
+            />
+            <TestCard
+              title="Dark Triad"
+              subtitle="SD3"
+              slug="sd3"
+              keywords={['Strategy', 'Confidence', 'Boldness']}
+              description="Measures subclinical Machiavellianism, Narcissism, and Psychopathy. High engagement due to 'forbidden' appeal."
+              time="5 min"
+              seriousness={4}
               fun={5}
             />
           </div>
@@ -668,6 +680,8 @@ export default function App() {
             <Route path="/my-results" element={<ResultsHistory />} />
             <Route path="/test/big-five" element={<BigFiveAssessment />} />
             <Route path="/test/big-five/results" element={<BigFiveResults />} />
+            <Route path="/test/sd3" element={<SD3Assessment />} />
+            <Route path="/test/sd3/results" element={<SD3Results />} />
             <Route path="/test/:slug" element={<TestRouter />} />
             <Route
               path="/hexaco"
