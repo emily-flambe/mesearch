@@ -5,6 +5,10 @@ import HexacoResults from './components/HexacoResults';
 import { HexacoResponse, calculateScores, DimensionScore } from './data/hexaco-scoring';
 import BigFiveAssessment from './components/BigFiveAssessment';
 import BigFiveResults from './components/BigFiveResults';
+import MFQAssessment from './components/MFQAssessment';
+import MFQResults from './components/MFQResults';
+import SD3Assessment from './components/SD3Assessment';
+import SD3Results from './components/SD3Results';
 import { enneagramItems, likertScale, type LikertValue } from './data/enneagram-items';
 import { calculateEnneagramResult, type EnneagramResult } from './data/enneagram-scoring';
 import { EnneagramResults } from './components/EnneagramResults';
@@ -15,6 +19,13 @@ import { ResultsHistory } from './pages/ResultsHistory';
 import MiniTestAssessment from './components/MiniTestAssessment';
 import LoveLanguagesAssessment from './components/LoveLanguagesAssessment';
 import LoveLanguagesResults from './components/LoveLanguagesResults';
+import ECRAssessment from './components/ECRAssessment';
+import ECRResults from './components/ECRResults';
+import CRTAssessment from './components/CRTAssessment';
+import MBTIAssessment from './components/MBTIAssessment';
+import MBTIResults from './components/MBTIResults';
+import RMETAssessment from './components/RMETAssessment';
+import RMETResults from './components/RMETResults';
 
 // Theme Context
 type Theme = 'dark' | 'light';
@@ -230,6 +241,74 @@ function HomePage() {
               time="5 min"
               seriousness={2}
               fun={5}
+            />
+            <TestCard
+              title="Attachment Style"
+              subtitle="ECR-RS"
+              slug="ecr"
+              keywords={['Relationships', 'Anxiety', 'Avoidance']}
+              description="Understand your attachment patterns in close relationships. Measures anxiety and avoidance on continuous dimensions."
+              time="5 min"
+              seriousness={5}
+              fun={4}
+            />
+            <TestCard
+              title="CRT"
+              subtitle="Cognitive Reflection"
+              slug="crt"
+              keywords={['Reasoning', 'Reflection', 'Intuition']}
+              description="Test your ability to override intuitive wrong answers through deliberate reflection. The famous 'bat and ball' problem and more."
+              time="5 min"
+              seriousness={4}
+              fun={5}
+            />
+          </div>
+
+          {/* Second Row - Popular but less scientific */}
+          <div className="grid md:grid-cols-3 gap-8 mt-8">
+            <TestCard
+              title="Myers-Briggs"
+              subtitle="OEJTS"
+              slug="mbti"
+              keywords={['Types', 'Cognitive', 'Popular']}
+              description="The world's most popular personality test. Discover your type across four dichotomies: E/I, S/N, T/F, J/P."
+              time="10 min"
+              seriousness={2}
+              fun={5}
+            />
+            <TestCard
+              title="Moral Foundations"
+              subtitle="MFQ-30"
+              slug="mfq"
+              keywords={['Ethics', 'Values', 'Politics']}
+              description="Discover your moral intuitions across five foundations: Care, Fairness, Loyalty, Authority, and Purity. Based on Jonathan Haidt's research."
+              time="10 min"
+              seriousness={4}
+              fun={4}
+            />
+            <TestCard
+              title="Dark Triad"
+              subtitle="SD3"
+              slug="sd3"
+              keywords={['Strategy', 'Confidence', 'Boldness']}
+              description="Measures subclinical Machiavellianism, Narcissism, and Psychopathy. High engagement due to 'forbidden' appeal."
+              time="5 min"
+              seriousness={4}
+              fun={5}
+            />
+          </div>
+
+          {/* Additional Tests Row */}
+          <div className="grid md:grid-cols-3 gap-8 mt-8">
+            <TestCard
+              title="RMET"
+              subtitle="Eyes Test"
+              slug="rmet"
+              keywords={['Social Cognition', 'Empathy', 'Theory of Mind']}
+              description="Measure your ability to recognize emotions and mental states from eye expressions. Research-backed assessment of social cognition."
+              time="10 min"
+              seriousness={4}
+              fun={4}
             />
           </div>
 
@@ -655,12 +734,36 @@ function TestRouter() {
     return <LoveLanguagesAssessment />;
   }
 
+  if (slug === 'ecr') {
+    return <ECRAssessment />;
+  }
+
   if (slug === 'mini-test') {
     // Only allow access if feature flag is enabled
     if (!flags.mini_test) {
       return <ComingSoonTestPage />;
     }
     return <MiniTestAssessment />;
+  }
+
+  if (slug === 'crt') {
+    return <CRTAssessment />;
+  }
+
+  if (slug === 'mbti') {
+    return <MBTIAssessment />;
+  }
+
+  if (slug === 'mfq') {
+    return <MFQAssessment />;
+  }
+
+  if (slug === 'rmet') {
+    return <RMETAssessment />;
+  }
+
+  if (slug === 'sd3') {
+    return <SD3Assessment />;
   }
 
   // All other tests show coming soon
@@ -686,6 +789,15 @@ export default function App() {
             <Route path="/test/big-five/results" element={<BigFiveResults />} />
             <Route path="/test/communication-styles" element={<LoveLanguagesAssessment />} />
             <Route path="/test/communication-styles/results" element={<LoveLanguagesResults />} />
+            <Route path="/test/ecr/results" element={<ECRResults />} />
+            <Route path="/test/mbti" element={<MBTIAssessment />} />
+            <Route path="/test/mbti/results" element={<MBTIResults />} />
+            <Route path="/test/mfq" element={<MFQAssessment />} />
+            <Route path="/test/mfq/results" element={<MFQResults />} />
+            <Route path="/test/rmet" element={<RMETAssessment />} />
+            <Route path="/test/rmet/results" element={<RMETResults />} />
+            <Route path="/test/sd3" element={<SD3Assessment />} />
+            <Route path="/test/sd3/results" element={<SD3Results />} />
             <Route path="/test/:slug" element={<TestRouter />} />
             <Route
               path="/hexaco"
