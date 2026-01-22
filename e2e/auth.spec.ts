@@ -11,12 +11,12 @@ test.describe('Authentication - Unauthenticated', () => {
     await expect(page.getByRole('link', { name: 'Sign In' })).toBeVisible();
   });
 
-  test('Sign In link points to dev-login on localhost', async ({ page }) => {
+  test('Sign In link points to login endpoint', async ({ page }) => {
     await page.goto('/');
 
     const signInLink = page.getByRole('link', { name: 'Sign In' });
     await expect(signInLink).toBeVisible();
-    await expect(signInLink).toHaveAttribute('href', '/api/auth/dev-login');
+    await expect(signInLink).toHaveAttribute('href', '/api/auth/login');
   });
 
   test('my-results page shows auth prompt when not logged in', async ({ page }) => {

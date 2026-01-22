@@ -80,6 +80,38 @@ auth.get('/dev-login', async (c) => {
   });
 });
 
+// GET /api/auth/login - Trigger authentication flow
+// In production, this endpoint is protected by Cloudflare Access
+// When user hits this, Cloudflare Access will prompt for login, then redirect back
+auth.get('/login', async (c) => {
+  // Check for Cloudflare Access header (production)
+  const accessEmail = c.req.header('Cf-Access-Authenticated-User-Email');
+
+  // Check for dev cookie (local development)
+  const cookies = c.req.header('Cookie') || '';
+  const devEmailMatch = cookies.match(/dev_user_email=([^;]+)/);
+  const devEmail = devEmailMatch ? decodeURIComponent(devEmailMatch[1]) : null;
+
+  const email = accessEmail || devEmail;
+
+  // If user is already authenticated, redirect to my-results
+  // If not authenticated in production, Cloudflare Access will intercept before this code runs
+  // For local dev without auth, redirect to dev-login
+  if (!email) {
+    // Local dev fallback - redirect to dev-login
+    return new Response(null, {
+      status: 302,
+      headers: { 'Location': '/api/auth/dev-login' },
+    });
+  }
+
+  // User is authenticated, redirect to my-results
+  return new Response(null, {
+    status: 302,
+    headers: { 'Location': '/my-results' },
+  });
+});
+
 // POST /api/auth/logout - Clear session
 auth.post('/logout', (c) => {
   // Clear dev cookie

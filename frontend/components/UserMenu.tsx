@@ -25,14 +25,12 @@ export function UserMenu() {
   }
 
   if (!user) {
-    // For local dev, use dev-login; for production, Access protects /api/results
-    // Clicking "Sign In" will trigger authentication when they try to save results
-    const isLocalDev = window.location.hostname === 'localhost';
-    const loginUrl = isLocalDev ? '/api/auth/dev-login' : '/my-results';
-
+    // /api/auth/login handles both dev and production:
+    // - In production, Cloudflare Access intercepts and prompts for login
+    // - In local dev, it falls back to dev-login
     return (
       <a
-        href={loginUrl}
+        href="/api/auth/login"
         className="text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)] transition-colors duration-300 text-sm tracking-wide uppercase"
       >
         Sign In
