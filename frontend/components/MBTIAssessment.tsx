@@ -200,12 +200,14 @@ export default function MBTIAssessment() {
                   <button
                     onClick={resumeProgress}
                     className="btn-gold w-full py-4 rounded text-sm tracking-widest uppercase"
+                    data-testid="mbti-resume"
                   >
                     Resume Progress
                   </button>
                   <button
                     onClick={startFresh}
                     className="btn-ghost w-full py-4 rounded text-sm tracking-widest uppercase"
+                    data-testid="mbti-start"
                   >
                     Start Over
                   </button>

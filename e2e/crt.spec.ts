@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Cognitive Reflection Test (CRT)', () => {
+  test.beforeEach(async ({ page }) => {
+    // Clear localStorage before each test
+    await page.goto('/');
+    await page.evaluate(() => localStorage.clear());
+  });
+
   test.describe('Navigation and Intro', () => {
     test('CRT card is visible on homepage', async ({ page }) => {
       await page.goto('/');
