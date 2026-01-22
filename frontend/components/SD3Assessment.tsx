@@ -211,12 +211,14 @@ export default function SD3Assessment() {
                   <button
                     onClick={resumeProgress}
                     className="btn-gold w-full py-4 rounded text-sm tracking-widest uppercase"
+                    data-testid="sd3-resume"
                   >
                     Resume Progress
                   </button>
                   <button
                     onClick={startFresh}
                     className="btn-ghost w-full py-4 rounded text-sm tracking-widest uppercase"
+                    data-testid="sd3-start"
                   >
                     Start Over
                   </button>

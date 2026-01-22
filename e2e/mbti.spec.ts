@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Myers-Briggs Style Test (OEJTS)', () => {
+  test.beforeEach(async ({ page }) => {
+    // Clear localStorage before each test
+    await page.goto('/');
+    await page.evaluate(() => localStorage.clear());
+  });
+
   test('MBTI test card is visible on homepage', async ({ page }) => {
     await page.goto('/');
 
