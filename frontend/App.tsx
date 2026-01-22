@@ -18,6 +18,8 @@ import LoveLanguagesResults from './components/LoveLanguagesResults';
 import ECRAssessment from './components/ECRAssessment';
 import ECRResults from './components/ECRResults';
 import CRTAssessment from './components/CRTAssessment';
+import MBTIAssessment from './components/MBTIAssessment';
+import MBTIResults from './components/MBTIResults';
 
 // Theme Context
 type Theme = 'dark' | 'light';
@@ -252,6 +254,20 @@ function HomePage() {
               description="Test your ability to override intuitive wrong answers through deliberate reflection. The famous 'bat and ball' problem and more."
               time="5 min"
               seriousness={4}
+              fun={5}
+            />
+          </div>
+
+          {/* Second Row - Popular but less scientific */}
+          <div className="grid md:grid-cols-3 gap-8 mt-8">
+            <TestCard
+              title="Myers-Briggs"
+              subtitle="OEJTS"
+              slug="mbti"
+              keywords={['Types', 'Cognitive', 'Popular']}
+              description="The world's most popular personality test. Discover your type across four dichotomies: E/I, S/N, T/F, J/P."
+              time="10 min"
+              seriousness={2}
               fun={5}
             />
           </div>
@@ -694,6 +710,10 @@ function TestRouter() {
     return <CRTAssessment />;
   }
 
+  if (slug === 'mbti') {
+    return <MBTIAssessment />;
+  }
+
   // All other tests show coming soon
   return <ComingSoonTestPage />;
 }
@@ -718,6 +738,8 @@ export default function App() {
             <Route path="/test/communication-styles" element={<LoveLanguagesAssessment />} />
             <Route path="/test/communication-styles/results" element={<LoveLanguagesResults />} />
             <Route path="/test/ecr/results" element={<ECRResults />} />
+            <Route path="/test/mbti" element={<MBTIAssessment />} />
+            <Route path="/test/mbti/results" element={<MBTIResults />} />
             <Route path="/test/:slug" element={<TestRouter />} />
             <Route
               path="/hexaco"
