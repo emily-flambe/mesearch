@@ -22,6 +22,8 @@ import ECRResults from './components/ECRResults';
 import CRTAssessment from './components/CRTAssessment';
 import MBTIAssessment from './components/MBTIAssessment';
 import MBTIResults from './components/MBTIResults';
+import RMETAssessment from './components/RMETAssessment';
+import RMETResults from './components/RMETResults';
 
 // Theme Context
 type Theme = 'dark' | 'light';
@@ -278,6 +280,20 @@ function HomePage() {
               slug="mfq"
               keywords={['Ethics', 'Values', 'Politics']}
               description="Discover your moral intuitions across five foundations: Care, Fairness, Loyalty, Authority, and Purity. Based on Jonathan Haidt's research."
+              time="10 min"
+              seriousness={4}
+              fun={4}
+            />
+          </div>
+
+          {/* Additional Tests Row */}
+          <div className="grid md:grid-cols-3 gap-8 mt-8">
+            <TestCard
+              title="RMET"
+              subtitle="Eyes Test"
+              slug="rmet"
+              keywords={['Social Cognition', 'Empathy', 'Theory of Mind']}
+              description="Measure your ability to recognize emotions and mental states from eye expressions. Research-backed assessment of social cognition."
               time="10 min"
               seriousness={4}
               fun={4}
@@ -730,6 +746,10 @@ function TestRouter() {
     return <MFQAssessment />;
   }
 
+  if (slug === 'rmet') {
+    return <RMETAssessment />;
+  }
+
   // All other tests show coming soon
   return <ComingSoonTestPage />;
 }
@@ -758,6 +778,8 @@ export default function App() {
             <Route path="/test/mbti/results" element={<MBTIResults />} />
             <Route path="/test/mfq" element={<MFQAssessment />} />
             <Route path="/test/mfq/results" element={<MFQResults />} />
+            <Route path="/test/rmet" element={<RMETAssessment />} />
+            <Route path="/test/rmet/results" element={<RMETResults />} />
             <Route path="/test/:slug" element={<TestRouter />} />
             <Route
               path="/hexaco"
