@@ -17,6 +17,7 @@ import LoveLanguagesAssessment from './components/LoveLanguagesAssessment';
 import LoveLanguagesResults from './components/LoveLanguagesResults';
 import ECRAssessment from './components/ECRAssessment';
 import ECRResults from './components/ECRResults';
+import CRTAssessment from './components/CRTAssessment';
 
 // Theme Context
 type Theme = 'dark' | 'light';
@@ -242,6 +243,16 @@ function HomePage() {
               time="5 min"
               seriousness={5}
               fun={4}
+            />
+            <TestCard
+              title="CRT"
+              subtitle="Cognitive Reflection"
+              slug="crt"
+              keywords={['Reasoning', 'Reflection', 'Intuition']}
+              description="Test your ability to override intuitive wrong answers through deliberate reflection. The famous 'bat and ball' problem and more."
+              time="5 min"
+              seriousness={4}
+              fun={5}
             />
           </div>
 
@@ -677,6 +688,10 @@ function TestRouter() {
       return <ComingSoonTestPage />;
     }
     return <MiniTestAssessment />;
+  }
+
+  if (slug === 'crt') {
+    return <CRTAssessment />;
   }
 
   // All other tests show coming soon
