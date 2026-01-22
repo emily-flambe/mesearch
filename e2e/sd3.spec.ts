@@ -91,11 +91,12 @@ test.describe('Short Dark Triad (SD3) Assessment', () => {
   test('SD3 test card is visible on home page', async ({ page }) => {
     await page.goto('/');
 
-    // Verify the SD3 test card is displayed
-    await expect(page.getByRole('heading', { name: 'Dark Triad' })).toBeVisible();
-    await expect(page.getByText('SD3')).toBeVisible();
-    await expect(page.getByText('5 min', { exact: true })).toBeVisible();
-    await expect(page.getByText('Machiavellianism, Narcissism, and Psychopathy')).toBeVisible();
+    // Verify the SD3 test card is displayed - scope to the card to avoid strict mode violations
+    const sd3Card = page.locator('.card-premium', { has: page.getByRole('heading', { name: 'Dark Triad' }) });
+    await expect(sd3Card.getByRole('heading', { name: 'Dark Triad' })).toBeVisible();
+    await expect(sd3Card.getByText('SD3')).toBeVisible();
+    await expect(sd3Card.getByText('5 min', { exact: true })).toBeVisible();
+    await expect(sd3Card.getByText('Machiavellianism, Narcissism, and Psychopathy')).toBeVisible();
   });
 
   test('can navigate to SD3 from home page', async ({ page }) => {
