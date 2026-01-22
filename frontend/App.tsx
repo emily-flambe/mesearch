@@ -15,6 +15,8 @@ import { ResultsHistory } from './pages/ResultsHistory';
 import MiniTestAssessment from './components/MiniTestAssessment';
 import LoveLanguagesAssessment from './components/LoveLanguagesAssessment';
 import LoveLanguagesResults from './components/LoveLanguagesResults';
+import ECRAssessment from './components/ECRAssessment';
+import ECRResults from './components/ECRResults';
 
 // Theme Context
 type Theme = 'dark' | 'light';
@@ -230,6 +232,16 @@ function HomePage() {
               time="5 min"
               seriousness={2}
               fun={5}
+            />
+            <TestCard
+              title="Attachment Style"
+              subtitle="ECR-RS"
+              slug="ecr"
+              keywords={['Relationships', 'Anxiety', 'Avoidance']}
+              description="Understand your attachment patterns in close relationships. Measures anxiety and avoidance on continuous dimensions."
+              time="5 min"
+              seriousness={5}
+              fun={4}
             />
           </div>
 
@@ -655,6 +667,10 @@ function TestRouter() {
     return <LoveLanguagesAssessment />;
   }
 
+  if (slug === 'ecr') {
+    return <ECRAssessment />;
+  }
+
   if (slug === 'mini-test') {
     // Only allow access if feature flag is enabled
     if (!flags.mini_test) {
@@ -686,6 +702,7 @@ export default function App() {
             <Route path="/test/big-five/results" element={<BigFiveResults />} />
             <Route path="/test/communication-styles" element={<LoveLanguagesAssessment />} />
             <Route path="/test/communication-styles/results" element={<LoveLanguagesResults />} />
+            <Route path="/test/ecr/results" element={<ECRResults />} />
             <Route path="/test/:slug" element={<TestRouter />} />
             <Route
               path="/hexaco"
