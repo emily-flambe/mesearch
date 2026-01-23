@@ -23,12 +23,12 @@ import {
 } from './rmet-items';
 
 describe('RMET Items Data Integrity', () => {
-  it('has 37 items total (1 practice + 36 scored)', () => {
-    expect(rmetItems.length).toBe(37);
+  it('has 38 items total (1 practice + 37 scored)', () => {
+    expect(rmetItems.length).toBe(38);
   });
 
-  it('has 36 scored items', () => {
-    expect(scoredItems.length).toBe(36);
+  it('has 37 scored items', () => {
+    expect(scoredItems.length).toBe(37);
   });
 
   it('has 1 practice item with id 0', () => {
@@ -36,9 +36,9 @@ describe('RMET Items Data Integrity', () => {
     expect(practiceItem.id).toBe(0);
   });
 
-  it('scored items have ids 1-36', () => {
+  it('scored items have ids 1-37', () => {
     const ids = scoredItems.map((item) => item.id);
-    for (let i = 1; i <= 36; i++) {
+    for (let i = 1; i <= 37; i++) {
       expect(ids).toContain(i);
     }
   });
@@ -104,19 +104,20 @@ describe('Vocabulary Definitions', () => {
 describe('RMET Scoring', () => {
   describe('isCorrect', () => {
     it('returns true for correct answer', () => {
-      const item = scoredItems[0]; // id: 1, correctAnswer: 'playful'
-      expect(isCorrect(item, 'playful')).toBe(true);
+      const item = scoredItems[0]; // id: 1, correctAnswer: 'friendly'
+      expect(isCorrect(item, item.correctAnswer)).toBe(true);
     });
 
     it('returns false for incorrect answer', () => {
       const item = scoredItems[0];
-      expect(isCorrect(item, 'bored')).toBe(false);
+      const wrongAnswer = item.options.find((opt) => opt !== item.correctAnswer)!;
+      expect(isCorrect(item, wrongAnswer)).toBe(false);
     });
 
     it('is case-insensitive', () => {
       const item = scoredItems[0];
-      expect(isCorrect(item, 'PLAYFUL')).toBe(true);
-      expect(isCorrect(item, 'Playful')).toBe(true);
+      expect(isCorrect(item, item.correctAnswer.toUpperCase())).toBe(true);
+      expect(isCorrect(item, item.correctAnswer.charAt(0).toUpperCase() + item.correctAnswer.slice(1))).toBe(true);
     });
   });
 
@@ -161,7 +162,7 @@ describe('RMET Scoring', () => {
 
   describe('calculatePercentile', () => {
     it('returns percentile between 0 and 100', () => {
-      for (let score = 0; score <= 36; score++) {
+      for (let score = 0; score <= 37; score++) {
         const percentile = calculatePercentile(score);
         expect(percentile).toBeGreaterThanOrEqual(0);
         expect(percentile).toBeLessThanOrEqual(100);
@@ -170,15 +171,15 @@ describe('RMET Scoring', () => {
 
     it('returns higher percentile for higher scores', () => {
       const lowPercentile = calculatePercentile(15);
-      const midPercentile = calculatePercentile(26);
-      const highPercentile = calculatePercentile(32);
+      const midPercentile = calculatePercentile(27);
+      const highPercentile = calculatePercentile(33);
 
       expect(midPercentile).toBeGreaterThan(lowPercentile);
       expect(highPercentile).toBeGreaterThan(midPercentile);
     });
 
-    it('returns ~50th percentile for mean score (26)', () => {
-      const percentile = calculatePercentile(26);
+    it('returns ~50th percentile for mean score (27)', () => {
+      const percentile = calculatePercentile(27);
       expect(percentile).toBeGreaterThanOrEqual(45);
       expect(percentile).toBeLessThanOrEqual(55);
     });
@@ -224,8 +225,8 @@ describe('RMET Scoring', () => {
       }));
 
       const results = calculateResults(responses);
-      expect(results.totalCorrect).toBe(36);
-      expect(results.totalQuestions).toBe(36);
+      expect(results.totalCorrect).toBe(37);
+      expect(results.totalQuestions).toBe(37);
       expect(results.percentCorrect).toBe(100);
       expect(results.completedAt).toBeDefined();
     });
@@ -280,7 +281,7 @@ describe('RMET Scoring', () => {
       }));
 
       const results = calculateResults(responses);
-      expect(results.itemResults.length).toBe(36);
+      expect(results.itemResults.length).toBe(37);
     });
   });
 });
