@@ -31,6 +31,9 @@ export default function RMETAssessment() {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [tooltipWord, setTooltipWord] = useState<string | null>(null);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const [pendingResponse, setPendingResponse] = useState<RMETResponse | null>(null);
 
   // Check for saved progress
   useEffect(() => {
@@ -112,52 +115,74 @@ export default function RMETAssessment() {
     [user]
   );
 
-  // Handle response selection
+  // Handle response selection - show feedback first
   const handleResponse = useCallback(
-    (selectedAnswer: string) => {
-      if (phase === 'practice') {
-        // Practice item - just show feedback then continue
-        completePractice();
-        return;
-      }
+    (answer: string) => {
+      if (showFeedback) return; // Ignore clicks while showing feedback
 
-      const currentItem = scoredItems[currentIndex];
+      const currentItem = phase === 'practice' ? practiceItem : scoredItems[currentIndex];
       if (!currentItem) return;
 
       const responseTime = startTime ? Date.now() - startTime : undefined;
 
-      const newResponse: RMETResponse = {
-        itemId: currentItem.id,
-        selectedAnswer,
-        responseTime,
-      };
+      // Store the selected answer and show feedback
+      setSelectedAnswer(answer);
+      setShowFeedback(true);
 
-      const newResponses = [...responses, newResponse];
-      setResponses(newResponses);
-      saveProgress(newResponses);
-      setStartTime(Date.now()); // Reset for next item
-
-      // Check if assessment is complete
-      if (currentIndex + 1 >= scoredItems.length) {
-        const results = calculateResults(newResponses);
-        localStorage.setItem(RESULTS_STORAGE_KEY, serializeResults(results));
-        localStorage.removeItem(STORAGE_KEY);
-        setPhase('complete');
-        saveResultsToBackend(results);
-      } else {
-        setCurrentIndex(currentIndex + 1);
+      if (phase !== 'practice') {
+        // Store the pending response to be committed when user continues
+        const newResponse: RMETResponse = {
+          itemId: currentItem.id,
+          selectedAnswer: answer,
+          responseTime,
+        };
+        setPendingResponse(newResponse);
       }
     },
-    [
-      phase,
-      currentIndex,
-      responses,
-      startTime,
-      saveProgress,
-      completePractice,
-      saveResultsToBackend,
-    ]
+    [showFeedback, phase, currentIndex, startTime]
   );
+
+  // Handle continue after feedback
+  const handleContinue = useCallback(() => {
+    if (phase === 'practice') {
+      // Practice item - just continue to assessment
+      setShowFeedback(false);
+      setSelectedAnswer(null);
+      completePractice();
+      return;
+    }
+
+    if (!pendingResponse) return;
+
+    const newResponses = [...responses, pendingResponse];
+    setResponses(newResponses);
+    saveProgress(newResponses);
+    setStartTime(Date.now()); // Reset for next item
+
+    // Reset feedback state
+    setShowFeedback(false);
+    setSelectedAnswer(null);
+    setPendingResponse(null);
+
+    // Check if assessment is complete
+    if (currentIndex + 1 >= scoredItems.length) {
+      const results = calculateResults(newResponses);
+      localStorage.setItem(RESULTS_STORAGE_KEY, serializeResults(results));
+      localStorage.removeItem(STORAGE_KEY);
+      setPhase('complete');
+      saveResultsToBackend(results);
+    } else {
+      setCurrentIndex(currentIndex + 1);
+    }
+  }, [
+    phase,
+    currentIndex,
+    responses,
+    pendingResponse,
+    saveProgress,
+    completePractice,
+    saveResultsToBackend,
+  ]);
 
   // Go back to previous question
   const handleBack = useCallback(() => {
@@ -398,27 +423,85 @@ export default function RMETAssessment() {
           <div className="grid grid-cols-2 gap-3">
             {currentItem.options.map((option) => {
               const hasDef = hasDefinition(option);
+              const isCorrect = option.toLowerCase() === currentItem.correctAnswer.toLowerCase();
+              const isSelected = selectedAnswer?.toLowerCase() === option.toLowerCase();
+              const showCorrectHighlight = showFeedback && isCorrect;
+              const showWrongHighlight = showFeedback && isSelected && !isCorrect;
+
               return (
                 <button
                   key={option}
                   onClick={() => handleResponse(option)}
-                  onMouseEnter={() => hasDef && setTooltipWord(option)}
+                  onMouseEnter={() => hasDef && !showFeedback && setTooltipWord(option)}
                   onMouseLeave={() => setTooltipWord(null)}
-                  className="relative group"
+                  disabled={showFeedback}
+                  className={`relative group ${showFeedback ? 'cursor-default' : ''}`}
                 >
-                  <div className="p-4 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-secondary)] hover:border-[var(--color-champagne)]/50 hover:bg-[var(--color-bg-secondary)]/80 transition-all duration-200 text-center">
-                    <span
-                      className={`text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors duration-200 capitalize ${
-                        hasDef
-                          ? 'border-b border-dotted border-[var(--color-text-muted)]'
-                          : ''
-                      }`}
-                    >
-                      {option}
-                    </span>
+                  <div
+                    className={`p-4 rounded-lg border transition-all duration-200 text-center ${
+                      showCorrectHighlight
+                        ? 'border-green-500 bg-green-500/20'
+                        : showWrongHighlight
+                        ? 'border-red-500 bg-red-500/20'
+                        : showFeedback
+                        ? 'border-[var(--color-border)] bg-[var(--color-bg-secondary)] opacity-50'
+                        : 'border-[var(--color-border)] bg-[var(--color-bg-secondary)] hover:border-[var(--color-champagne)]/50 hover:bg-[var(--color-bg-secondary)]/80'
+                    }`}
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      {/* Checkmark for correct answer */}
+                      {showCorrectHighlight && (
+                        <svg
+                          className="w-5 h-5 text-green-500 flex-shrink-0"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
+                      {/* X for wrong selection */}
+                      {showWrongHighlight && (
+                        <svg
+                          className="w-5 h-5 text-red-500 flex-shrink-0"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      )}
+                      <span
+                        className={`transition-colors duration-200 capitalize ${
+                          showCorrectHighlight
+                            ? 'text-green-400 font-medium'
+                            : showWrongHighlight
+                            ? 'text-red-400'
+                            : showFeedback
+                            ? 'text-[var(--color-text-muted)]'
+                            : 'text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)]'
+                        } ${
+                          hasDef && !showFeedback
+                            ? 'border-b border-dotted border-[var(--color-text-muted)]'
+                            : ''
+                        }`}
+                      >
+                        {option}
+                      </span>
+                    </div>
                   </div>
                   {/* Tooltip */}
-                  {tooltipWord === option && hasDef && (
+                  {tooltipWord === option && hasDef && !showFeedback && (
                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] rounded-lg shadow-lg z-10 w-48">
                       <p className="text-[var(--color-text-secondary)] text-xs">
                         {getDefinition(option)}
@@ -430,8 +513,21 @@ export default function RMETAssessment() {
             })}
           </div>
 
-          {/* Back button */}
-          {currentIndex > 0 && phase === 'assessment' && (
+          {/* Continue button after feedback */}
+          {showFeedback && (
+            <div className="mt-6 text-center">
+              <button
+                onClick={handleContinue}
+                className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase"
+                data-testid="rmet-continue-button"
+              >
+                Continue
+              </button>
+            </div>
+          )}
+
+          {/* Back button - hide during feedback */}
+          {currentIndex > 0 && phase === 'assessment' && !showFeedback && (
             <div className="mt-8 text-center">
               <button
                 onClick={handleBack}
