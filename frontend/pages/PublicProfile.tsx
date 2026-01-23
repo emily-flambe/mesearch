@@ -33,7 +33,7 @@ export function PublicProfile() {
 
   async function fetchProfile() {
     try {
-      const res = await fetch(`/api/u/${encodeURIComponent(username!)}`);
+      const res = await fetch(`/p/${encodeURIComponent(username!)}`);
       const json = await res.json() as { data: PublicProfileData | null; error: { message: string; code: string } | null };
 
       if (!res.ok) {

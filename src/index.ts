@@ -26,7 +26,8 @@ app.route('/api/auth', auth);
 app.route('/api/flags', flags);
 app.route('/api/results', results);
 app.route('/api/profile', profile);
-app.route('/api/u', publicApi);
+// Public profile routes - outside /api to bypass Cloudflare Access
+app.route('/p', publicApi);
 
 // 404 handler for API routes
 app.notFound(async (c) => {
