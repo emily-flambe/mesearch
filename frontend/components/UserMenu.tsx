@@ -78,6 +78,13 @@ export function UserMenu() {
           >
             My Results
           </Link>
+          <Link
+            to="/settings"
+            onClick={() => setIsOpen(false)}
+            className="block px-4 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] transition-colors"
+          >
+            Settings
+          </Link>
           <button
             onClick={() => {
               logout();

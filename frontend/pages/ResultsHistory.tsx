@@ -8,6 +8,7 @@ interface TestResult {
   test_type: string;
   scores: Record<string, unknown>;
   completed_at: number;
+  is_public: boolean;
 }
 
 export function ResultsHistory() {
@@ -57,8 +58,36 @@ export function ResultsHistory() {
       'big-five': 'Big Five',
       hexaco: 'HEXACO',
       mini_test: 'Mini-Test',
+      mfq: 'Moral Foundations',
+      sd3: 'Dark Triad',
+      ecr: 'Attachment Style',
+      crt: 'Cognitive Reflection',
+      mbti: 'Myers-Briggs',
+      'communication-styles': 'Communication Styles',
+      rmet: 'RMET',
     };
     return names[testType] || testType;
+  }
+
+  async function toggleVisibility(resultId: string, currentVisibility: boolean) {
+    try {
+      const res = await fetch(`/api/results/${resultId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ is_public: !currentVisibility }),
+      });
+
+      if (res.ok) {
+        setResults((prev) =>
+          prev.map((r) =>
+            r.id === resultId ? { ...r, is_public: !currentVisibility } : r
+          )
+        );
+      }
+    } catch (err) {
+      console.error('Failed to toggle visibility:', err);
+    }
   }
 
   if (authLoading || loading) {
@@ -137,20 +166,44 @@ export function ResultsHistory() {
             {results.map((result) => (
               <div key={result.id} className="card-premium rounded-lg p-6">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-display text-lg text-[var(--color-text-primary)]">
-                      {getTestDisplayName(result.test_type)}
-                    </h3>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3">
+                      <h3 className="font-display text-lg text-[var(--color-text-primary)]">
+                        {getTestDisplayName(result.test_type)}
+                      </h3>
+                      {result.is_public && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-xs">
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
+                          Public
+                        </span>
+                      )}
+                    </div>
                     <p className="text-[var(--color-text-muted)] text-sm">
                       Completed {formatDate(result.completed_at)}
                     </p>
                   </div>
-                  <Link
-                    to={`/results/${result.id}`}
-                    className="btn-ghost px-4 py-2 rounded text-xs tracking-wider uppercase"
-                  >
-                    View Details
-                  </Link>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => toggleVisibility(result.id, result.is_public)}
+                      className={`px-3 py-1.5 rounded text-xs transition-colors ${
+                        result.is_public
+                          ? 'bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] hover:bg-red-500/10 hover:text-red-400'
+                          : 'bg-[var(--color-champagne)]/10 text-[var(--color-champagne)] hover:bg-[var(--color-champagne)]/20'
+                      }`}
+                      title={result.is_public ? 'Make private' : 'Make public'}
+                    >
+                      {result.is_public ? 'Hide' : 'Share'}
+                    </button>
+                    <Link
+                      to={`/results/${result.id}`}
+                      className="btn-ghost px-4 py-2 rounded text-xs tracking-wider uppercase"
+                    >
+                      View Details
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}

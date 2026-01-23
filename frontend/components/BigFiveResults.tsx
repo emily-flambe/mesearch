@@ -11,18 +11,31 @@ import { dimensionInfo, facetInfo, type Dimension } from '../data/big-five-items
 
 const RESULTS_STORAGE_KEY = 'mesearch-bigfive-results';
 
-export default function BigFiveResults() {
+interface BigFiveResultsProps {
+  initialResults?: Results;
+  showHeader?: boolean;
+  showActions?: boolean;
+}
+
+export default function BigFiveResults({
+  initialResults,
+  showHeader = true,
+  showActions = true,
+}: BigFiveResultsProps) {
   const navigate = useNavigate();
-  const [results, setResults] = useState<Results | null>(null);
+  const [results, setResults] = useState<Results | null>(initialResults || null);
   const [expandedDimension, setExpandedDimension] = useState<Dimension | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem(RESULTS_STORAGE_KEY);
-    if (saved) {
-      const parsed = deserializeResults(saved);
-      setResults(parsed);
+    // Only load from localStorage if no initialResults were provided
+    if (!initialResults) {
+      const saved = localStorage.getItem(RESULTS_STORAGE_KEY);
+      if (saved) {
+        const parsed = deserializeResults(saved);
+        setResults(parsed);
+      }
     }
-  }, []);
+  }, [initialResults]);
 
   if (!results) {
     return (
@@ -49,6 +62,39 @@ export default function BigFiveResults() {
   }
 
   const dimensionScores = results.dimensions;
+
+  // If embedded mode (no header), return just the results content
+  if (!showHeader) {
+    return (
+      <div className="space-y-8">
+        {/* Radar Chart */}
+        <div className="card-premium rounded-lg p-8">
+          <h3 className="text-center text-[var(--color-text-secondary)] text-sm uppercase tracking-wider mb-6">
+            Personality Overview
+          </h3>
+          <div className="flex justify-center">
+            <RadarChart scores={dimensionScores} />
+          </div>
+        </div>
+
+        {/* Dimension Breakdown */}
+        <div className="space-y-4">
+          {dimensionScores.map((score) => (
+            <DimensionCard
+              key={score.dimension}
+              score={score}
+              isExpanded={expandedDimension === score.dimension}
+              onToggle={() =>
+                setExpandedDimension(
+                  expandedDimension === score.dimension ? null : score.dimension
+                )
+              }
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
@@ -94,20 +140,22 @@ export default function BigFiveResults() {
         </div>
 
         {/* Actions */}
-        <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => navigate('/test/big-five')}
-            className="btn-ghost px-8 py-3 rounded text-sm tracking-widest uppercase"
-          >
-            Retake Test
-          </button>
-          <Link
-            to="/"
-            className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase text-center"
-          >
-            Explore More Tests
-          </Link>
-        </div>
+        {showActions && (
+          <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => navigate('/test/big-five')}
+              className="btn-ghost px-8 py-3 rounded text-sm tracking-widest uppercase"
+            >
+              Retake Test
+            </button>
+            <Link
+              to="/"
+              className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase text-center"
+            >
+              Explore More Tests
+            </Link>
+          </div>
+        )}
 
         {/* Disclaimer */}
         <div className="mt-12 text-center">
