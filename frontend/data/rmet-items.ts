@@ -1,17 +1,16 @@
-// Reading the Mind in the Eyes Test (RMET) Items
-// Source: Baron-Cohen, S., Wheelwright, S., Hill, J., Raste, Y., & Plumb, I. (2001).
-// The "Reading the Mind in the Eyes" Test Revised Version: A Study with Normal Adults,
-// and Adults with Asperger Syndrome or High-functioning Autism.
-// Journal of Child Psychology and Psychiatry, 42(2), 241-251.
+// Multiracial Reading the Mind in the Eyes Test (MRMET) Items
+// Source: Warrier, V., et al. (2024). Multiracial Reading the Mind in the Eyes Test (MRMET):
+// An inclusive version of an influential measure. Behavior Research Methods.
+// https://doi.org/10.3758/s13428-023-02323-x
 //
-// IMPORTANT: The original RMET images are copyrighted and require permission
-// from the Autism Research Centre for use. This implementation uses placeholder
-// image URLs that should be replaced with properly licensed images.
+// Materials obtained from OSF: https://osf.io/ahq6n/
 //
-// Options for image sourcing:
-// 1. Request permission from Autism Research Centre (https://www.autismresearchcentre.com/)
-// 2. Use Multiracial RMET (MRMET) stimuli with appropriate permissions
-// 3. Create or license original eye photographs
+// LICENSE: CC-BY-SA 4.0 (The Many Brains Project and Harvard University)
+// https://creativecommons.org/licenses/by-sa/4.0/
+//
+// Attribution required: Images and test materials are protected by CC-BY-SA 4.0 license.
+// They can be shared with appropriate attribution and derivatives cannot use a more
+// restricted license.
 
 export interface RMETItem {
   id: number;
@@ -24,301 +23,320 @@ export interface RMETItem {
 // Vocabulary definitions for difficult/uncommon words
 export const vocabularyDefinitions: Record<string, string> = {
   aghast: 'Filled with horror or shock',
+  cautious: 'Careful to avoid potential problems or dangers',
   contemplative: 'Deep in thought; meditative',
+  defiant: 'Showing open resistance or bold disobedience',
   despondent: 'In low spirits from loss of hope or courage',
   dispirited: 'Having lost enthusiasm and hope; disheartened',
-  fantasizing: 'Indulging in daydreaming or imagining',
-  flustered: 'Agitated or confused',
-  imploring: 'Making an earnest or desperate appeal',
-  incredulous: 'Unwilling or unable to believe something',
-  pensive: 'Engaged in deep or serious thought',
-  preoccupied: 'Absorbed in thought; distracted',
-  reflective: 'Relating to or characterized by deep thought',
-  sarcastic: 'Using irony to mock or convey contempt',
-  skeptical: 'Not easily convinced; having doubts',
-  tentative: 'Uncertain; hesitant',
   distrustful: 'Feeling or showing distrust of someone or something',
-  defiant: 'Showing open resistance or bold disobedience',
-  baffled: 'Totally bewildered or perplexed',
+  dominant: 'Having power and influence over others',
+  enraged: 'Very angry; furious',
+  fantasizing: 'Indulging in daydreaming or imagining',
+  hostile: 'Unfriendly; antagonistic',
+  indifferent: 'Having no particular interest or concern; uncaring',
+  preoccupied: 'Absorbed in thought; distracted',
+  sarcastic: 'Using irony to mock or convey contempt',
+  tentative: 'Uncertain; hesitant',
+  threatening: 'Having a hostile or deliberately frightening quality',
 };
 
-// Placeholder image base URL - in production, replace with actual licensed images
-// Using a placeholder service for development/testing
-const IMAGE_BASE_URL = '/images/rmet';
+// Image base URL - served from public folder
+const IMAGE_BASE_URL = '/images/mrmet';
 
-// 36 RMET items (plus practice item)
-// Item 0 is the practice item, Items 1-36 are scored
+// 37 MRMET items (plus practice item)
+// Practice item has id=0, scored items are 1-37
 export const rmetItems: RMETItem[] = [
   // Practice item (not scored)
   {
     id: 0,
-    imageUrl: `${IMAGE_BASE_URL}/practice.jpg`,
-    options: ['jealous', 'panicked', 'arrogant', 'hateful'],
-    correctAnswer: 'panicked',
+    imageUrl: `${IMAGE_BASE_URL}/3Aghast-J.jpg`,
+    options: ['anxious', 'disappointed', 'shocked', 'concerned'],
+    correctAnswer: 'shocked',
   },
-  // Scored items 1-36
+  // Scored items 1-37
   {
     id: 1,
-    imageUrl: `${IMAGE_BASE_URL}/01.jpg`,
-    options: ['playful', 'comforting', 'irritated', 'bored'],
-    correctAnswer: 'playful',
-  },
-  {
-    id: 2,
-    imageUrl: `${IMAGE_BASE_URL}/02.jpg`,
-    options: ['terrified', 'upset', 'arrogant', 'annoyed'],
-    correctAnswer: 'upset',
-  },
-  {
-    id: 3,
-    imageUrl: `${IMAGE_BASE_URL}/03.jpg`,
-    options: ['joking', 'flustered', 'desire', 'convinced'],
-    correctAnswer: 'desire',
-    definitions: { flustered: vocabularyDefinitions.flustered },
-  },
-  {
-    id: 4,
-    imageUrl: `${IMAGE_BASE_URL}/04.jpg`,
-    options: ['joking', 'insisting', 'amused', 'relaxed'],
-    correctAnswer: 'insisting',
-  },
-  {
-    id: 5,
-    imageUrl: `${IMAGE_BASE_URL}/05.jpg`,
-    options: ['irritated', 'sarcastic', 'worried', 'friendly'],
-    correctAnswer: 'worried',
+    imageUrl: `${IMAGE_BASE_URL}/37Friendly-J.jpg`,
+    options: ['nervous', 'sarcastic', 'curious', 'friendly'],
+    correctAnswer: 'friendly',
     definitions: { sarcastic: vocabularyDefinitions.sarcastic },
   },
   {
+    id: 2,
+    imageUrl: `${IMAGE_BASE_URL}/52Panicked-M.jpg`,
+    options: ['threatening', 'disappointed', 'panicked', 'concerned'],
+    correctAnswer: 'panicked',
+    definitions: { threatening: vocabularyDefinitions.threatening },
+  },
+  {
+    id: 3,
+    imageUrl: `${IMAGE_BASE_URL}/60Relieved-S.jpg`,
+    options: ['indifferent', 'relieved', 'puzzled', 'terrified'],
+    correctAnswer: 'relieved',
+    definitions: { indifferent: vocabularyDefinitions.indifferent },
+  },
+  {
+    id: 4,
+    imageUrl: `${IMAGE_BASE_URL}/33Excited-J.jpg`,
+    options: ['excited', 'embarrassed', 'interested', 'sarcastic'],
+    correctAnswer: 'excited',
+    definitions: { sarcastic: vocabularyDefinitions.sarcastic },
+  },
+  {
+    id: 5,
+    imageUrl: `${IMAGE_BASE_URL}/52Panicked-J.jpg`,
+    options: ['threatening', 'panicked', 'concerned', 'disappointed'],
+    correctAnswer: 'panicked',
+    definitions: { threatening: vocabularyDefinitions.threatening },
+  },
+  {
     id: 6,
-    imageUrl: `${IMAGE_BASE_URL}/06.jpg`,
-    options: ['aghast', 'fantasizing', 'impatient', 'alarmed'],
-    correctAnswer: 'fantasizing',
-    definitions: {
-      aghast: vocabularyDefinitions.aghast,
-      fantasizing: vocabularyDefinitions.fantasizing,
-    },
+    imageUrl: `${IMAGE_BASE_URL}/17Confident-R.jpg`,
+    options: ['disappointed', 'confident', 'confused', 'uneasy'],
+    correctAnswer: 'confident',
   },
   {
     id: 7,
-    imageUrl: `${IMAGE_BASE_URL}/07.jpg`,
-    options: ['apologetic', 'friendly', 'uneasy', 'dispirited'],
-    correctAnswer: 'uneasy',
-    definitions: { dispirited: vocabularyDefinitions.dispirited },
+    imageUrl: `${IMAGE_BASE_URL}/37Friendly-M.jpg`,
+    options: ['curious', 'friendly', 'sarcastic', 'nervous'],
+    correctAnswer: 'friendly',
+    definitions: { sarcastic: vocabularyDefinitions.sarcastic },
   },
   {
     id: 8,
-    imageUrl: `${IMAGE_BASE_URL}/08.jpg`,
-    options: ['despondent', 'relieved', 'shy', 'excited'],
-    correctAnswer: 'despondent',
-    definitions: { despondent: vocabularyDefinitions.despondent },
+    imageUrl: `${IMAGE_BASE_URL}/5Amused-Lo.jpg`,
+    options: ['amused', 'excited', 'curious', 'disappointed'],
+    correctAnswer: 'amused',
   },
   {
     id: 9,
-    imageUrl: `${IMAGE_BASE_URL}/09.jpg`,
-    options: ['annoyed', 'hostile', 'horrified', 'preoccupied'],
-    correctAnswer: 'preoccupied',
-    definitions: { preoccupied: vocabularyDefinitions.preoccupied },
+    imageUrl: `${IMAGE_BASE_URL}/68Terrified-A.jpg`,
+    options: ['irritated', 'threatening', 'concerned', 'terrified'],
+    correctAnswer: 'terrified',
+    definitions: { threatening: vocabularyDefinitions.threatening },
   },
   {
     id: 10,
-    imageUrl: `${IMAGE_BASE_URL}/10.jpg`,
-    options: ['cautious', 'insisting', 'bored', 'aghast'],
-    correctAnswer: 'cautious',
-    definitions: { aghast: vocabularyDefinitions.aghast },
+    imageUrl: `${IMAGE_BASE_URL}/33Excited-R.jpg`,
+    options: ['interested', 'sarcastic', 'embarrassed', 'excited'],
+    correctAnswer: 'excited',
+    definitions: { sarcastic: vocabularyDefinitions.sarcastic },
   },
   {
     id: 11,
-    imageUrl: `${IMAGE_BASE_URL}/11.jpg`,
-    options: ['terrified', 'amused', 'regretful', 'flirtatious'],
-    correctAnswer: 'regretful',
+    imageUrl: `${IMAGE_BASE_URL}/46Indifferent-S.jpg`,
+    options: ['indifferent', 'preoccupied', 'uneasy', 'puzzled'],
+    correctAnswer: 'indifferent',
+    definitions: {
+      indifferent: vocabularyDefinitions.indifferent,
+      preoccupied: vocabularyDefinitions.preoccupied,
+    },
   },
   {
     id: 12,
-    imageUrl: `${IMAGE_BASE_URL}/12.jpg`,
-    options: ['indifferent', 'embarrassed', 'skeptical', 'dispirited'],
-    correctAnswer: 'skeptical',
-    definitions: {
-      skeptical: vocabularyDefinitions.skeptical,
-      dispirited: vocabularyDefinitions.dispirited,
-    },
+    imageUrl: `${IMAGE_BASE_URL}/37Friendly-Ad.jpg`,
+    options: ['friendly', 'sarcastic', 'curious', 'nervous'],
+    correctAnswer: 'friendly',
+    definitions: { sarcastic: vocabularyDefinitions.sarcastic },
   },
   {
     id: 13,
-    imageUrl: `${IMAGE_BASE_URL}/13.jpg`,
-    options: ['decisive', 'anticipating', 'threatening', 'shy'],
-    correctAnswer: 'anticipating',
+    imageUrl: `${IMAGE_BASE_URL}/33Excited-L.jpg`,
+    options: ['sarcastic', 'interested', 'embarrassed', 'excited'],
+    correctAnswer: 'excited',
+    definitions: { sarcastic: vocabularyDefinitions.sarcastic },
   },
   {
     id: 14,
-    imageUrl: `${IMAGE_BASE_URL}/14.jpg`,
-    options: ['irritated', 'disappointed', 'depressed', 'accusing'],
-    correctAnswer: 'accusing',
+    imageUrl: `${IMAGE_BASE_URL}/5Amused-E.jpg`,
+    options: ['amused', 'excited', 'curious', 'disappointed'],
+    correctAnswer: 'amused',
   },
   {
     id: 15,
-    imageUrl: `${IMAGE_BASE_URL}/15.jpg`,
-    options: ['contemplative', 'flustered', 'encouraging', 'amused'],
-    correctAnswer: 'contemplative',
-    definitions: {
-      contemplative: vocabularyDefinitions.contemplative,
-      flustered: vocabularyDefinitions.flustered,
-    },
+    imageUrl: `${IMAGE_BASE_URL}/60Relieved-D.jpg`,
+    options: ['relieved', 'indifferent', 'puzzled', 'terrified'],
+    correctAnswer: 'relieved',
+    definitions: { indifferent: vocabularyDefinitions.indifferent },
   },
   {
     id: 16,
-    imageUrl: `${IMAGE_BASE_URL}/16.jpg`,
-    options: ['irritated', 'thoughtful', 'encouraging', 'sympathetic'],
-    correctAnswer: 'thoughtful',
+    imageUrl: `${IMAGE_BASE_URL}/52Panicked-G.jpg`,
+    options: ['panicked', 'threatening', 'disappointed', 'concerned'],
+    correctAnswer: 'panicked',
+    definitions: { threatening: vocabularyDefinitions.threatening },
   },
   {
     id: 17,
-    imageUrl: `${IMAGE_BASE_URL}/17.jpg`,
-    options: ['doubtful', 'affectionate', 'playful', 'aghast'],
-    correctAnswer: 'doubtful',
-    definitions: { aghast: vocabularyDefinitions.aghast },
-  },
-  {
-    id: 18,
-    imageUrl: `${IMAGE_BASE_URL}/18.jpg`,
-    options: ['decisive', 'amused', 'aghast', 'bored'],
-    correctAnswer: 'decisive',
-    definitions: { aghast: vocabularyDefinitions.aghast },
-  },
-  {
-    id: 19,
-    imageUrl: `${IMAGE_BASE_URL}/19.jpg`,
-    options: ['arrogant', 'grateful', 'sarcastic', 'tentative'],
-    correctAnswer: 'tentative',
+    imageUrl: `${IMAGE_BASE_URL}/18Confused-Ad.jpg`,
+    options: ['confused', 'hostile', 'threatening', 'amused'],
+    correctAnswer: 'confused',
     definitions: {
-      sarcastic: vocabularyDefinitions.sarcastic,
-      tentative: vocabularyDefinitions.tentative,
+      hostile: vocabularyDefinitions.hostile,
+      threatening: vocabularyDefinitions.threatening,
     },
   },
   {
-    id: 20,
-    imageUrl: `${IMAGE_BASE_URL}/20.jpg`,
-    options: ['dominant', 'friendly', 'guilty', 'horrified'],
-    correctAnswer: 'friendly',
-  },
-  {
-    id: 21,
-    imageUrl: `${IMAGE_BASE_URL}/21.jpg`,
-    options: ['embarrassed', 'fantasizing', 'confused', 'panicked'],
-    correctAnswer: 'fantasizing',
+    id: 18,
+    imageUrl: `${IMAGE_BASE_URL}/50Joking-S.jpg`,
+    options: ['thoughtful', 'excited', 'fantasizing', 'joking'],
+    correctAnswer: 'joking',
     definitions: { fantasizing: vocabularyDefinitions.fantasizing },
   },
   {
-    id: 22,
-    imageUrl: `${IMAGE_BASE_URL}/22.jpg`,
-    options: ['preoccupied', 'grateful', 'insisting', 'imploring'],
-    correctAnswer: 'preoccupied',
+    id: 19,
+    imageUrl: `${IMAGE_BASE_URL}/5Amused-M.jpg`,
+    options: ['curious', 'amused', 'excited', 'disappointed'],
+    correctAnswer: 'amused',
+  },
+  {
+    id: 20,
+    imageUrl: `${IMAGE_BASE_URL}/18Confused-Am.jpg`,
+    options: ['confused', 'hostile', 'threatening', 'amused'],
+    correctAnswer: 'confused',
     definitions: {
+      hostile: vocabularyDefinitions.hostile,
+      threatening: vocabularyDefinitions.threatening,
+    },
+  },
+  {
+    id: 21,
+    imageUrl: `${IMAGE_BASE_URL}/46Indifferent-A.jpg`,
+    options: ['uneasy', 'puzzled', 'indifferent', 'preoccupied'],
+    correctAnswer: 'indifferent',
+    definitions: {
+      indifferent: vocabularyDefinitions.indifferent,
       preoccupied: vocabularyDefinitions.preoccupied,
-      imploring: vocabularyDefinitions.imploring,
+    },
+  },
+  {
+    id: 22,
+    imageUrl: `${IMAGE_BASE_URL}/46Indifferent-B.jpg`,
+    options: ['indifferent', 'preoccupied', 'puzzled', 'uneasy'],
+    correctAnswer: 'indifferent',
+    definitions: {
+      indifferent: vocabularyDefinitions.indifferent,
+      preoccupied: vocabularyDefinitions.preoccupied,
     },
   },
   {
     id: 23,
-    imageUrl: `${IMAGE_BASE_URL}/23.jpg`,
-    options: ['contented', 'apologetic', 'defiant', 'curious'],
-    correctAnswer: 'defiant',
-    definitions: { defiant: vocabularyDefinitions.defiant },
+    imageUrl: `${IMAGE_BASE_URL}/17Confident-M.jpg`,
+    options: ['uneasy', 'confused', 'confident', 'disappointed'],
+    correctAnswer: 'confident',
   },
   {
     id: 24,
-    imageUrl: `${IMAGE_BASE_URL}/24.jpg`,
-    options: ['pensive', 'irritated', 'excited', 'hostile'],
-    correctAnswer: 'pensive',
-    definitions: { pensive: vocabularyDefinitions.pensive },
+    imageUrl: `${IMAGE_BASE_URL}/11Ashamed-J.jpg`,
+    options: ['nervous', 'ashamed', 'affectionate', 'friendly'],
+    correctAnswer: 'ashamed',
   },
   {
     id: 25,
-    imageUrl: `${IMAGE_BASE_URL}/25.jpg`,
-    options: ['panicked', 'incredulous', 'despondent', 'interested'],
-    correctAnswer: 'interested',
-    definitions: {
-      incredulous: vocabularyDefinitions.incredulous,
-      despondent: vocabularyDefinitions.despondent,
-    },
+    imageUrl: `${IMAGE_BASE_URL}/5Amused-Ly.jpg`,
+    options: ['excited', 'disappointed', 'curious', 'amused'],
+    correctAnswer: 'amused',
   },
   {
     id: 26,
-    imageUrl: `${IMAGE_BASE_URL}/26.jpg`,
-    options: ['alarmed', 'shy', 'hostile', 'anxious'],
-    correctAnswer: 'hostile',
-  },
-  {
-    id: 27,
-    imageUrl: `${IMAGE_BASE_URL}/27.jpg`,
-    options: ['joking', 'cautious', 'arrogant', 'reassuring'],
-    correctAnswer: 'cautious',
-  },
-  {
-    id: 28,
-    imageUrl: `${IMAGE_BASE_URL}/28.jpg`,
-    options: ['interested', 'joking', 'affectionate', 'contented'],
-    correctAnswer: 'interested',
-  },
-  {
-    id: 29,
-    imageUrl: `${IMAGE_BASE_URL}/29.jpg`,
-    options: ['impatient', 'aghast', 'irritated', 'reflective'],
-    correctAnswer: 'reflective',
+    imageUrl: `${IMAGE_BASE_URL}/1Accusing-L.jpg`,
+    options: ['accusing', 'confused', 'cautious', 'dominant'],
+    correctAnswer: 'accusing',
     definitions: {
-      aghast: vocabularyDefinitions.aghast,
-      reflective: vocabularyDefinitions.reflective,
+      cautious: vocabularyDefinitions.cautious,
+      dominant: vocabularyDefinitions.dominant,
     },
   },
   {
+    id: 27,
+    imageUrl: `${IMAGE_BASE_URL}/5Amused-D.jpg`,
+    options: ['disappointed', 'excited', 'amused', 'curious'],
+    correctAnswer: 'amused',
+  },
+  {
+    id: 28,
+    imageUrl: `${IMAGE_BASE_URL}/37Friendly-Am.jpg`,
+    options: ['friendly', 'sarcastic', 'curious', 'nervous'],
+    correctAnswer: 'friendly',
+    definitions: { sarcastic: vocabularyDefinitions.sarcastic },
+  },
+  {
+    id: 29,
+    imageUrl: `${IMAGE_BASE_URL}/11Ashamed-B.jpg`,
+    options: ['affectionate', 'ashamed', 'friendly', 'nervous'],
+    correctAnswer: 'ashamed',
+  },
+  {
     id: 30,
-    imageUrl: `${IMAGE_BASE_URL}/30.jpg`,
-    options: ['grateful', 'flirtatious', 'hostile', 'disappointed'],
-    correctAnswer: 'flirtatious',
+    imageUrl: `${IMAGE_BASE_URL}/28Distrustful-A.jpg`,
+    options: ['curious', 'distrustful', 'hostile', 'joking'],
+    correctAnswer: 'distrustful',
+    definitions: {
+      distrustful: vocabularyDefinitions.distrustful,
+      hostile: vocabularyDefinitions.hostile,
+    },
   },
   {
     id: 31,
-    imageUrl: `${IMAGE_BASE_URL}/31.jpg`,
-    options: ['ashamed', 'confident', 'joking', 'dispirited'],
-    correctAnswer: 'confident',
-    definitions: { dispirited: vocabularyDefinitions.dispirited },
+    imageUrl: `${IMAGE_BASE_URL}/16Concerned-J.jpg`,
+    options: ['concerned', 'confused', 'defiant', 'disappointed'],
+    correctAnswer: 'concerned',
+    definitions: { defiant: vocabularyDefinitions.defiant },
   },
   {
     id: 32,
-    imageUrl: `${IMAGE_BASE_URL}/32.jpg`,
-    options: ['serious', 'ashamed', 'bewildered', 'alarmed'],
-    correctAnswer: 'serious',
+    imageUrl: `${IMAGE_BASE_URL}/55Preoccupied-S.jpg`,
+    options: ['depressed', 'preoccupied', 'confused', 'alarmed'],
+    correctAnswer: 'preoccupied',
+    definitions: { preoccupied: vocabularyDefinitions.preoccupied },
   },
   {
     id: 33,
-    imageUrl: `${IMAGE_BASE_URL}/33.jpg`,
-    options: ['embarrassed', 'guilty', 'fantasizing', 'concerned'],
-    correctAnswer: 'concerned',
-    definitions: { fantasizing: vocabularyDefinitions.fantasizing },
+    imageUrl: `${IMAGE_BASE_URL}/33Excited-K.jpg`,
+    options: ['excited', 'embarrassed', 'interested', 'sarcastic'],
+    correctAnswer: 'excited',
+    definitions: { sarcastic: vocabularyDefinitions.sarcastic },
   },
   {
     id: 34,
-    imageUrl: `${IMAGE_BASE_URL}/34.jpg`,
-    options: ['aghast', 'baffled', 'distrustful', 'terrified'],
-    correctAnswer: 'distrustful',
+    imageUrl: `${IMAGE_BASE_URL}/46Indifferent-Ja.jpg`,
+    options: ['preoccupied', 'indifferent', 'uneasy', 'puzzled'],
+    correctAnswer: 'indifferent',
     definitions: {
-      aghast: vocabularyDefinitions.aghast,
-      baffled: vocabularyDefinitions.baffled,
-      distrustful: vocabularyDefinitions.distrustful,
+      indifferent: vocabularyDefinitions.indifferent,
+      preoccupied: vocabularyDefinitions.preoccupied,
     },
   },
   {
     id: 35,
-    imageUrl: `${IMAGE_BASE_URL}/35.jpg`,
-    options: ['puzzled', 'nervous', 'insisting', 'contemplative'],
-    correctAnswer: 'nervous',
-    definitions: { contemplative: vocabularyDefinitions.contemplative },
+    imageUrl: `${IMAGE_BASE_URL}/70Threatening-E.jpg`,
+    options: ['enraged', 'angry', 'threatening', 'scared'],
+    correctAnswer: 'threatening',
+    definitions: {
+      enraged: vocabularyDefinitions.enraged,
+      threatening: vocabularyDefinitions.threatening,
+    },
   },
   {
     id: 36,
-    imageUrl: `${IMAGE_BASE_URL}/36.jpg`,
-    options: ['ashamed', 'nervous', 'suspicious', 'indecisive'],
-    correctAnswer: 'suspicious',
+    imageUrl: `${IMAGE_BASE_URL}/46Indifferent-Ju.jpg`,
+    options: ['indifferent', 'preoccupied', 'puzzled', 'uneasy'],
+    correctAnswer: 'indifferent',
+    definitions: {
+      indifferent: vocabularyDefinitions.indifferent,
+      preoccupied: vocabularyDefinitions.preoccupied,
+    },
+  },
+  {
+    id: 37,
+    imageUrl: `${IMAGE_BASE_URL}/41Hostile-R.jpg`,
+    options: ['hostile', 'threatening', 'shocked', 'tentative'],
+    correctAnswer: 'hostile',
+    definitions: {
+      hostile: vocabularyDefinitions.hostile,
+      threatening: vocabularyDefinitions.threatening,
+      tentative: vocabularyDefinitions.tentative,
+    },
   },
 ];
 
@@ -337,3 +355,15 @@ export function getDefinition(word: string): string | undefined {
 export function hasDefinition(word: string): boolean {
   return word.toLowerCase() in vocabularyDefinitions;
 }
+
+// Attribution text for display in the UI
+export const MRMET_ATTRIBUTION = {
+  title: 'Multiracial Reading the Mind in the Eyes Test (MRMET)',
+  citation:
+    'Warrier, V., et al. (2024). Multiracial Reading the Mind in the Eyes Test (MRMET): An inclusive version of an influential measure. Behavior Research Methods.',
+  doi: 'https://doi.org/10.3758/s13428-023-02323-x',
+  license: 'CC-BY-SA 4.0',
+  licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+  copyright: 'The Many Brains Project and Harvard University',
+  osf: 'https://osf.io/ahq6n/',
+};
