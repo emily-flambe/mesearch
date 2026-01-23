@@ -73,7 +73,7 @@ export function PublicResultDetail() {
       mfq: 'Moral Foundations',
       sd3: 'Dark Triad',
       ecr: 'Attachment Style',
-      crt: 'Cognitive Reflection',
+      crt: 'CRT',
       mbti: 'Myers-Briggs',
       'communication-styles': 'Communication Styles',
       rmet: 'RMET',
