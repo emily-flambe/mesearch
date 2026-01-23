@@ -203,7 +203,7 @@ export default function RMETAssessment() {
                   How it works:
                 </h3>
                 <ul className="list-disc list-inside space-y-2 text-[var(--color-text-muted)]">
-                  <li>You will see 36 photographs of eye regions</li>
+                  <li>You will see 37 photographs of eye regions</li>
                   <li>For each image, choose the word that best describes what the person is feeling or thinking</li>
                   <li>There are 4 options per image - pick the one that fits best</li>
                   <li>Hover or tap words with a dotted underline to see definitions</li>
@@ -216,9 +216,26 @@ export default function RMETAssessment() {
                   Research Note
                 </p>
                 <p className="text-[var(--color-text-muted)] text-xs">
-                  The RMET was developed by Baron-Cohen et al. (2001) at the Autism
-                  Research Centre. It measures &quot;theory of mind&quot; - the ability to
-                  attribute mental states to others.
+                  This is the Multiracial RMET (MRMET) developed by Warrier et al. (2024),
+                  an inclusive version of the original RMET with racially diverse stimuli.
+                  It measures &quot;theory of mind&quot; - the ability to attribute mental states to others.
+                </p>
+              </div>
+
+              <div className="text-[var(--color-text-muted)] text-xs border-t border-[var(--color-border-subtle)] pt-4 mt-4">
+                <p className="font-medium mb-1">Attribution</p>
+                <p>
+                  MRMET stimuli © The Many Brains Project and Harvard University.
+                  Licensed under{' '}
+                  <a
+                    href="https://creativecommons.org/licenses/by-sa/4.0/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[var(--color-champagne)] hover:underline"
+                  >
+                    CC-BY-SA 4.0
+                  </a>
+                  .
                 </p>
               </div>
 
@@ -458,9 +475,9 @@ function EyeImage({ item }: { item: RMETItem }) {
     setImageLoaded(false);
   }, [item.id]);
 
-  // For development/testing, show a placeholder
-  // In production, this would load actual licensed images
-  const showPlaceholder = imageError || !item.imageUrl.startsWith('http');
+  // Show placeholder only if there's an error loading the image
+  // MRMET images are served from /images/mrmet/
+  const showPlaceholder = imageError;
 
   if (showPlaceholder) {
     return (
