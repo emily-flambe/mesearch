@@ -5,9 +5,11 @@ import { getTypeById } from '../data/enneagram-types';
 interface EnneagramResultsProps {
   result: EnneagramResult;
   onRetake: () => void;
+  showHeader?: boolean;
+  showActions?: boolean;
 }
 
-export function EnneagramResults({ result, onRetake }: EnneagramResultsProps) {
+export function EnneagramResults({ result, onRetake, showHeader = true, showActions = true }: EnneagramResultsProps) {
   const primaryTypeInfo = getTypeById(result.primaryType);
   const wingTypeInfo = getTypeById(result.wing);
   const sortedScores = sortScoresByPercentage(result.scores);
@@ -161,20 +163,22 @@ export function EnneagramResults({ result, onRetake }: EnneagramResultsProps) {
       </div>
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row gap-4 justify-center">
-        <button
-          onClick={onRetake}
-          className="btn-ghost px-8 py-3 rounded text-sm tracking-widest uppercase"
-        >
-          Retake Test
-        </button>
-        <Link
-          to="/"
-          className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase text-center"
-        >
-          Explore Other Tests
-        </Link>
-      </div>
+      {showActions && (
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <button
+            onClick={onRetake}
+            className="btn-ghost px-8 py-3 rounded text-sm tracking-widest uppercase"
+          >
+            Retake Test
+          </button>
+          <Link
+            to="/"
+            className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase text-center"
+          >
+            Explore Other Tests
+          </Link>
+        </div>
+      )}
 
       {/* Attribution */}
       <div className="text-center pt-6 border-t border-[var(--color-border-subtle)]">

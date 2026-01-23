@@ -1,26 +1,26 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  type BigFiveResults as Results,
-  type DimensionScore,
+  type MFQResults as Results,
+  type FoundationScore,
   deserializeResults,
   getPercentileInterpretation,
-  getDimensionDescription,
-} from '../data/big-five-scoring';
-import { dimensionInfo, facetInfo, type Dimension } from '../data/big-five-items';
+  getFoundationDescription,
+} from '../data/mfq-scoring';
+import { foundationInfo, scoredFoundations, type Foundation, citation } from '../data/mfq-items';
 
-const RESULTS_STORAGE_KEY = 'mesearch-bigfive-results';
+const RESULTS_STORAGE_KEY = 'mesearch-mfq-results';
 
-interface BigFiveResultsProps {
+interface MFQResultsProps {
   initialResults?: Results;
   showHeader?: boolean;
   showActions?: boolean;
 }
 
-export default function BigFiveResults({ initialResults, showHeader = true, showActions = true }: BigFiveResultsProps) {
+export default function MFQResults({ initialResults, showHeader = true, showActions = true }: MFQResultsProps) {
   const navigate = useNavigate();
   const [results, setResults] = useState<Results | null>(initialResults || null);
-  const [expandedDimension, setExpandedDimension] = useState<Dimension | null>(null);
+  const [expandedFoundation, setExpandedFoundation] = useState<Foundation | null>(null);
 
   useEffect(() => {
     // Only load from localStorage if no initial results provided
@@ -43,10 +43,10 @@ export default function BigFiveResults({ initialResults, showHeader = true, show
               No Results Found
             </h2>
             <p className="text-[var(--color-text-secondary)] mb-8">
-              You haven&apos;t completed the Big Five assessment yet.
+              You haven&apos;t completed the Moral Foundations Questionnaire yet.
             </p>
             <button
-              onClick={() => navigate('/test/big-five')}
+              onClick={() => navigate('/test/mfq')}
               className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase"
             >
               Take the Test
@@ -57,7 +57,7 @@ export default function BigFiveResults({ initialResults, showHeader = true, show
     );
   }
 
-  const dimensionScores = results.dimensions;
+  const foundationScores = results.foundations;
 
   return (
     <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
@@ -69,33 +69,43 @@ export default function BigFiveResults({ initialResults, showHeader = true, show
             Your Results
           </p>
           <h2 className="font-display text-4xl font-medium text-[var(--color-text-primary)] mb-2 transition-colors duration-300">
-            Big Five Personality Profile
+            Moral Foundations Profile
           </h2>
           <p className="text-[var(--color-text-muted)] text-sm">
             Completed {new Date(results.completedAt).toLocaleDateString()}
           </p>
         </div>
 
+        {/* Profile Summary */}
+        <div className="card-premium rounded-lg p-8 mb-8">
+          <h3 className="text-center text-[var(--color-text-secondary)] text-sm uppercase tracking-wider mb-4">
+            Profile Summary
+          </h3>
+          <p className="text-[var(--color-text-secondary)] text-center leading-relaxed">
+            {results.profile}
+          </p>
+        </div>
+
         {/* Radar Chart */}
         <div className="card-premium rounded-lg p-8 mb-8">
           <h3 className="text-center text-[var(--color-text-secondary)] text-sm uppercase tracking-wider mb-6">
-            Personality Overview
+            Moral Foundations Overview
           </h3>
           <div className="flex justify-center">
-            <RadarChart scores={dimensionScores} />
+            <RadarChart scores={foundationScores} />
           </div>
         </div>
 
-        {/* Dimension Breakdown */}
+        {/* Foundation Breakdown */}
         <div className="space-y-4">
-          {dimensionScores.map((score) => (
-            <DimensionCard
-              key={score.dimension}
+          {foundationScores.map((score) => (
+            <FoundationCard
+              key={score.foundation}
               score={score}
-              isExpanded={expandedDimension === score.dimension}
+              isExpanded={expandedFoundation === score.foundation}
               onToggle={() =>
-                setExpandedDimension(
-                  expandedDimension === score.dimension ? null : score.dimension
+                setExpandedFoundation(
+                  expandedFoundation === score.foundation ? null : score.foundation
                 )
               }
             />
@@ -106,7 +116,7 @@ export default function BigFiveResults({ initialResults, showHeader = true, show
         {showActions && (
           <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
             <button
-              onClick={() => navigate('/test/big-five')}
+              onClick={() => navigate('/test/mfq')}
               className="btn-ghost px-8 py-3 rounded text-sm tracking-widest uppercase"
             >
               Retake Test
@@ -120,21 +130,26 @@ export default function BigFiveResults({ initialResults, showHeader = true, show
           </div>
         )}
 
-        {/* Disclaimer */}
-        <div className="mt-12 text-center">
+        {/* Citation and Disclaimer */}
+        <div className="mt-12 text-center space-y-4">
+          <div className="bg-[var(--color-bg-secondary)] rounded-lg p-6">
+            <h4 className="text-[var(--color-text-secondary)] text-xs uppercase tracking-wider mb-2">
+              Citation
+            </h4>
+            <p className="text-[var(--color-text-muted)] text-xs leading-relaxed">
+              {citation}
+            </p>
+          </div>
           <p className="text-[var(--color-text-muted)] text-xs leading-relaxed max-w-2xl mx-auto">
-            This assessment provides a snapshot of your personality based on self-reported responses.
-            Results should be used for self-reflection and personal growth, not as clinical diagnoses.
-            Personality can be influenced by context and may change over time.
+            This assessment provides a snapshot of your moral intuitions based on self-reported responses.
+            Results should be used for self-reflection and personal understanding, not as clinical diagnoses.
+            Moral foundations can be influenced by context and may change over time.
           </p>
         </div>
       </main>
     </div>
   );
 }
-
-// Export the Results type for use in ResultDetail
-export type { Results as BigFiveResultsType };
 
 function Header() {
   return (
@@ -144,7 +159,7 @@ function Header() {
           to="/"
           className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
         >
-          Mēsearch
+          Mesearch
         </Link>
       </div>
     </header>
@@ -152,7 +167,7 @@ function Header() {
 }
 
 interface RadarChartProps {
-  scores: DimensionScore[];
+  scores: FoundationScore[];
 }
 
 function RadarChart({ scores }: RadarChartProps) {
@@ -161,19 +176,19 @@ function RadarChart({ scores }: RadarChartProps) {
   const maxRadius = size / 2 - 40;
   const levels = 5;
 
-  // Order dimensions for the radar chart: O, C, E, A, N (clockwise from top)
-  const orderedDimensions: Dimension[] = ['O', 'C', 'E', 'A', 'N'];
+  // Order foundations for the radar chart (clockwise from top)
+  const orderedFoundations: Foundation[] = ['care', 'fairness', 'loyalty', 'authority', 'purity'];
   const orderedScores = useMemo(() => {
-    return orderedDimensions.map((d) => scores.find((s) => s.dimension === d)!);
+    return orderedFoundations.map((f) => scores.find((s) => s.foundation === f)!);
   }, [scores]);
 
   // Calculate points for the radar
-  const angleStep = (2 * Math.PI) / orderedDimensions.length;
+  const angleStep = (2 * Math.PI) / orderedFoundations.length;
   const startAngle = -Math.PI / 2; // Start from top
 
   const getPoint = (index: number, value: number) => {
     const angle = startAngle + index * angleStep;
-    const radius = (value / 5) * maxRadius; // Assuming max score is 5
+    const radius = (value / 5) * maxRadius; // Max score is 5
     return {
       x: center + radius * Math.cos(angle),
       y: center + radius * Math.sin(angle),
@@ -208,7 +223,7 @@ function RadarChart({ scores }: RadarChartProps) {
       })}
 
       {/* Axis lines */}
-      {orderedDimensions.map((_, i) => {
+      {orderedFoundations.map((_, i) => {
         const angle = startAngle + i * angleStep;
         const x2 = center + maxRadius * Math.cos(angle);
         const y2 = center + maxRadius * Math.sin(angle);
@@ -238,34 +253,35 @@ function RadarChart({ scores }: RadarChartProps) {
       {/* Score points */}
       {orderedScores.map((score, i) => {
         const point = getPoint(i, score.meanScore);
+        const info = foundationInfo[score.foundation];
         return (
           <circle
-            key={score.dimension}
+            key={score.foundation}
             cx={point.x}
             cy={point.y}
             r={6}
-            fill="var(--color-champagne)"
+            fill={info.color}
           />
         );
       })}
 
       {/* Labels */}
-      {orderedDimensions.map((dim, i) => {
+      {orderedFoundations.map((foundation, i) => {
         const angle = startAngle + i * angleStep;
         const labelRadius = maxRadius + 25;
         const x = center + labelRadius * Math.cos(angle);
         const y = center + labelRadius * Math.sin(angle);
-        const info = dimensionInfo[dim];
+        const info = foundationInfo[foundation];
         return (
           <text
-            key={dim}
+            key={foundation}
             x={x}
             y={y}
             textAnchor="middle"
             dominantBaseline="middle"
             className="fill-[var(--color-text-secondary)] text-xs font-medium"
           >
-            {info.name.split(' ')[0]}
+            {info.name.split('/')[0]}
           </text>
         );
       })}
@@ -273,16 +289,16 @@ function RadarChart({ scores }: RadarChartProps) {
   );
 }
 
-interface DimensionCardProps {
-  score: DimensionScore;
+interface FoundationCardProps {
+  score: FoundationScore;
   isExpanded: boolean;
   onToggle: () => void;
 }
 
-function DimensionCard({ score, isExpanded, onToggle }: DimensionCardProps) {
-  const info = dimensionInfo[score.dimension];
+function FoundationCard({ score, isExpanded, onToggle }: FoundationCardProps) {
+  const info = foundationInfo[score.foundation];
   const interpretation = getPercentileInterpretation(score.percentile);
-  const description = getDimensionDescription(score.dimension, score.percentile);
+  const description = getFoundationDescription(score.foundation, score.percentile);
 
   return (
     <div className="card-premium rounded-lg overflow-hidden">
@@ -348,42 +364,44 @@ function DimensionCard({ score, isExpanded, onToggle }: DimensionCardProps) {
         </div>
       </button>
 
-      {/* Expanded facet breakdown */}
+      {/* Expanded details */}
       {isExpanded && (
         <div className="border-t border-[var(--color-border)] bg-[var(--color-bg-secondary)]/30 p-6">
-          <h5 className="text-[var(--color-text-muted)] text-xs uppercase tracking-wider mb-4">
-            Facet Breakdown
-          </h5>
           <div className="space-y-4">
-            {score.facets.map((facetScore) => {
-              const fInfo = facetInfo[facetScore.facet];
-              const fInterpretation = getPercentileInterpretation(facetScore.percentile);
-              return (
-                <div key={facetScore.facet}>
-                  <div className="flex justify-between items-baseline mb-1">
-                    <span className="text-[var(--color-text-secondary)] text-sm">
-                      {fInfo.name}
-                    </span>
-                    <span className="text-[var(--color-text-muted)] text-xs">
-                      {fInterpretation}
-                    </span>
-                  </div>
-                  <div className="relative h-1.5 bg-[var(--color-border)] rounded-full overflow-hidden">
-                    <div
-                      className="absolute h-full rounded-full transition-all duration-500"
-                      style={{
-                        width: `${facetScore.percentile}%`,
-                        backgroundColor: info.color,
-                        opacity: 0.7,
-                      }}
-                    />
-                  </div>
-                  <p className="text-[var(--color-text-muted)] text-xs mt-1">
-                    {fInfo.description}
-                  </p>
-                </div>
-              );
-            })}
+            <div>
+              <h5 className="text-[var(--color-text-muted)] text-xs uppercase tracking-wider mb-2">
+                Description
+              </h5>
+              <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed">
+                {info.description}
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <h5 className="text-[var(--color-text-muted)] text-xs uppercase tracking-wider mb-2">
+                  Concerns
+                </h5>
+                <p className="text-[var(--color-text-secondary)] text-sm">
+                  {info.concernsWith}
+                </p>
+              </div>
+              <div>
+                <h5 className="text-[var(--color-text-muted)] text-xs uppercase tracking-wider mb-2">
+                  Opposite
+                </h5>
+                <p className="text-[var(--color-text-secondary)] text-sm">
+                  {info.oppositeOf}
+                </p>
+              </div>
+            </div>
+            <div>
+              <h5 className="text-[var(--color-text-muted)] text-xs uppercase tracking-wider mb-2">
+                Your Score
+              </h5>
+              <p className="text-[var(--color-text-secondary)] text-sm">
+                Mean score: {score.meanScore.toFixed(2)} / 5.00
+              </p>
+            </div>
           </div>
         </div>
       )}
