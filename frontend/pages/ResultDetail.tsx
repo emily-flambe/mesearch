@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { UserMenu } from '../components/UserMenu';
+import BigFiveResults from '../components/BigFiveResults';
+import type { BigFiveResults as BigFiveResultsType } from '../data/big-five-scoring';
 
 interface TestResult {
   id: string;
@@ -170,11 +172,29 @@ export function ResultDetail() {
         </div>
 
         {/* Results display based on test type */}
-        <div className="card-premium rounded-lg p-8" data-testid="result-detail-content">
-          {result.test_type === 'mini_test' && <MiniTestResultDisplay scores={result.scores} />}
-          {result.test_type === 'big-five' && <BigFiveResultDisplay scores={result.scores} />}
-          {result.test_type === 'enneagram' && <EnneagramResultDisplay scores={result.scores} />}
-          {result.test_type === 'hexaco' && <HexacoResultDisplay scores={result.scores} />}
+        <div data-testid="result-detail-content">
+          {result.test_type === 'mini_test' && (
+            <div className="card-premium rounded-lg p-8">
+              <MiniTestResultDisplay scores={result.scores} />
+            </div>
+          )}
+          {result.test_type === 'big-five' && (
+            <BigFiveResults
+              initialResults={result.scores as unknown as BigFiveResultsType}
+              showHeader={false}
+              showActions={false}
+            />
+          )}
+          {result.test_type === 'enneagram' && (
+            <div className="card-premium rounded-lg p-8">
+              <EnneagramResultDisplay scores={result.scores} />
+            </div>
+          )}
+          {result.test_type === 'hexaco' && (
+            <div className="card-premium rounded-lg p-8">
+              <HexacoResultDisplay scores={result.scores} />
+            </div>
+          )}
         </div>
 
         {/* Actions */}
