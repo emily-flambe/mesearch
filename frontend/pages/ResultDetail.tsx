@@ -50,6 +50,7 @@ const testUrls: Record<string, string> = {
   'communication-styles': '/test/communication-styles',
   rmet: '/test/rmet',
   crt: '/test/crt',
+  mini_test: '/test/mini-test',
 };
 
 function formatDate(timestamp: number) {
@@ -158,7 +159,7 @@ export function ResultDetail() {
           <div className="card-premium rounded-lg p-12 text-center">
             <h2 className="font-display text-xl text-[var(--color-text-primary)] mb-2">Result Not Found</h2>
             <p className="text-[var(--color-text-secondary)] mb-6">
-              This result doesn't exist or you don't have permission to view it.
+              This result doesn&apos;t exist or you don&apos;t have permission to view it.
             </p>
             <Link
               to="/my-results"
@@ -203,7 +204,9 @@ export function ResultDetail() {
         </div>
 
         {/* Result visualization */}
-        <ResultVisualization testType={result.test_type} scores={result.scores} />
+        <div data-testid="result-detail-content">
+          <ResultVisualization testType={result.test_type} scores={result.scores} />
+        </div>
 
         {/* Actions */}
         <div className="mt-8 flex gap-4 justify-center">
@@ -279,6 +282,12 @@ function ResultVisualization({ testType, scores }: ResultVisualizationProps) {
 
     case 'crt':
       return <CRTResultDisplay scores={scores as unknown as CRTResultsType} />;
+
+    case 'hexaco':
+      return <HexacoResultDisplay scores={scores} />;
+
+    case 'mini_test':
+      return <MiniTestResultDisplay scores={scores} />;
 
     default:
       return <GenericResultDisplay testType={testType} scores={scores} />;
@@ -441,7 +450,6 @@ function SD3ResultDisplay({ scores }: { scores: SD3ResultsType }) {
 
 // ECR result display
 function ECRResultDisplay({ scores }: { scores: ECRResultsType }) {
-  // Map suggested style to display name
   const styleNames: Record<string, string> = {
     'secure': 'Secure',
     'anxious-preoccupied': 'Anxious-Preoccupied',
@@ -484,7 +492,6 @@ function ECRResultDisplay({ scores }: { scores: ECRResultsType }) {
 
 // Communication Styles result display
 function CommunicationStylesResultDisplay({ scores }: { scores: CommunicationStylesResults }) {
-  // Style display names
   const styleNames: Record<string, string> = {
     words: 'Words of Affirmation',
     time: 'Quality Time',
@@ -547,7 +554,6 @@ function RMETResultDisplay({ scores }: { scores: RMETResultsType }) {
 function CRTResultDisplay({ scores }: { scores: CRTResultsType }) {
   const percentage = (scores.totalCorrect / scores.totalQuestions) * 100;
 
-  // Generate interpretation based on score
   let interpretation = '';
   if (scores.totalCorrect === scores.totalQuestions) {
     interpretation = 'Excellent! You consistently overrode intuitive responses with reflective thinking.';
@@ -571,6 +577,100 @@ function CRTResultDisplay({ scores }: { scores: CRTResultsType }) {
       <p className="text-[var(--color-text-secondary)]">
         {interpretation}
       </p>
+    </div>
+  );
+}
+
+// HEXACO result display
+interface HexacoScores {
+  dimension?: string;
+  score?: number;
+}
+
+function HexacoResultDisplay({ scores }: { scores: Record<string, unknown> }) {
+  const dimensionScores = Array.isArray(scores) ? scores as HexacoScores[] : [];
+
+  const dimensionColors: Record<string, string> = {
+    'Honesty-Humility': 'var(--color-champagne)',
+    'Emotionality': '#a888a8',
+    'Extraversion': '#e8a87c',
+    'Agreeableness': '#7cb8a8',
+    'Conscientiousness': '#8899cc',
+    'Openness': '#cc8899',
+  };
+
+  if (dimensionScores.length === 0) {
+    return <GenericResultDisplay testType="hexaco" scores={scores} />;
+  }
+
+  return (
+    <div className="card-premium rounded-lg p-8">
+      <h3 className="font-display text-xl text-[var(--color-text-primary)] mb-6 text-center">
+        HEXACO Profile
+      </h3>
+      <div className="space-y-4">
+        {dimensionScores.map((dim) => (
+          <div key={dim.dimension} className="space-y-2">
+            <div className="flex justify-between items-center">
+              <span className="text-[var(--color-text-secondary)] text-sm">
+                {dim.dimension}
+              </span>
+              <span className="text-[var(--color-text-muted)] text-xs">
+                {dim.score?.toFixed(2)} / 5
+              </span>
+            </div>
+            <div className="h-2 bg-[var(--color-bg-tertiary)] rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-500"
+                style={{
+                  width: `${((dim.score || 0) / 5) * 100}%`,
+                  backgroundColor: dimensionColors[dim.dimension || ''] || 'var(--color-champagne)',
+                }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Mini-Test result display
+interface MiniTestScores {
+  dimensionScores?: { dimension: string; dimensionName: string; score: number; color: string }[];
+}
+
+function MiniTestResultDisplay({ scores }: { scores: Record<string, unknown> }) {
+  const typedScores = scores as MiniTestScores;
+  const dimensionScores = typedScores.dimensionScores || [];
+
+  if (dimensionScores.length === 0) {
+    return <GenericResultDisplay testType="mini_test" scores={scores} />;
+  }
+
+  return (
+    <div className="card-premium rounded-lg p-8">
+      <h3 className="font-display text-xl text-[var(--color-text-primary)] mb-6 text-center">
+        Mini-Test Results
+      </h3>
+      <div className="space-y-4">
+        {dimensionScores.map((score) => (
+          <div key={score.dimension} className="flex items-center justify-between p-4 rounded-lg bg-[var(--color-bg-tertiary)]">
+            <div className="flex items-center gap-3">
+              <div
+                className="w-3 h-3 rounded-full"
+                style={{ backgroundColor: score.color }}
+              />
+              <span className="text-[var(--color-text-primary)] font-medium">
+                {score.dimensionName}
+              </span>
+            </div>
+            <span className="text-[var(--color-text-secondary)]">
+              {score.score} / 5
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
