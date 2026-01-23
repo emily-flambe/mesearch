@@ -17,17 +17,13 @@ interface BigFiveResultsProps {
   showActions?: boolean;
 }
 
-export default function BigFiveResults({
-  initialResults,
-  showHeader = true,
-  showActions = true,
-}: BigFiveResultsProps) {
+export default function BigFiveResults({ initialResults, showHeader = true, showActions = true }: BigFiveResultsProps) {
   const navigate = useNavigate();
   const [results, setResults] = useState<Results | null>(initialResults || null);
   const [expandedDimension, setExpandedDimension] = useState<Dimension | null>(null);
 
   useEffect(() => {
-    // Only load from localStorage if no initialResults were provided
+    // Only load from localStorage if no initial results provided
     if (!initialResults) {
       const saved = localStorage.getItem(RESULTS_STORAGE_KEY);
       if (saved) {
@@ -39,8 +35,8 @@ export default function BigFiveResults({
 
   if (!results) {
     return (
-      <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
-        <Header />
+      <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
+        {showHeader && <Header />}
         <main className="mx-auto max-w-2xl px-6 py-16 text-center">
           <div className="card-premium rounded-lg p-10">
             <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-4">
@@ -97,8 +93,8 @@ export default function BigFiveResults({
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
-      <Header />
+    <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
+      {showHeader && <Header />}
       <main className="mx-auto max-w-4xl px-6 py-12">
         {/* Title */}
         <div className="text-center mb-12">
@@ -169,6 +165,9 @@ export default function BigFiveResults({
     </div>
   );
 }
+
+// Export the Results type for use in ResultDetail
+export type { Results as BigFiveResultsType };
 
 function Header() {
   return (

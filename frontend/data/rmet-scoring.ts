@@ -1,8 +1,10 @@
-// RMET Scoring Logic
-// Based on Baron-Cohen et al. (2001)
-// Reference: Baron-Cohen, S., Wheelwright, S., Hill, J., Raste, Y., & Plumb, I. (2001).
-// The "Reading the Mind in the Eyes" Test Revised Version.
-// Journal of Child Psychology and Psychiatry, 42(2), 241-251.
+// MRMET Scoring Logic
+// Based on Warrier, V., et al. (2024)
+// Reference: Warrier, V., et al. (2024). Multiracial Reading the Mind in the Eyes Test (MRMET):
+// An inclusive version of an influential measure. Behavior Research Methods.
+// https://doi.org/10.3758/s13428-023-02323-x
+//
+// The MRMET has 37 scored items (vs 36 in original RMET)
 
 import { type RMETItem, scoredItems } from './rmet-items';
 
@@ -50,11 +52,12 @@ export function calculateItemResult(
   };
 }
 
-// Normative data from Baron-Cohen et al. (2001)
-// General population: Mean = 26.2, SD = 3.6
-// These norms are used to calculate percentiles
-const NORM_MEAN = 26.2;
-const NORM_SD = 3.6;
+// Normative data adapted for MRMET (37 items)
+// Original RMET (36 items): Mean = 26.2, SD = 3.6 (Baron-Cohen et al., 2001)
+// MRMET shows statistically indistinguishable reliability with RMET (Warrier et al., 2024)
+// Scaled proportionally for 37 items: Mean ≈ 27.0, SD ≈ 3.7
+const NORM_MEAN = 27.0;
+const NORM_SD = 3.7;
 
 // Convert z-score to percentile using standard normal CDF approximation
 function zToPercentile(z: number): number {
@@ -84,26 +87,26 @@ export function calculatePercentile(totalCorrect: number): number {
   return zToPercentile(z);
 }
 
-// Get interpretation based on score
+// Get interpretation based on score (thresholds adjusted for 37 items)
 export function getInterpretation(totalCorrect: number): string {
-  if (totalCorrect >= 30) {
+  if (totalCorrect >= 31) {
     return 'Your score indicates above-average ability to recognize mental states from eye expressions. You may be particularly skilled at reading subtle emotional cues.';
   }
-  if (totalCorrect >= 22) {
+  if (totalCorrect >= 23) {
     return 'Your score falls within the typical range for adults. You demonstrate a normal ability to recognize mental states from eye expressions.';
   }
-  if (totalCorrect >= 15) {
+  if (totalCorrect >= 16) {
     return 'Your score is somewhat below the typical range. This may suggest some difficulty recognizing subtle mental states from eye expressions.';
   }
   return 'Your score is notably below the typical range. This pattern is sometimes associated with differences in social cognition, though many factors can influence test performance.';
 }
 
-// Get score level label
+// Get score level label (thresholds adjusted for 37 items)
 export function getScoreLevel(totalCorrect: number): string {
-  if (totalCorrect >= 30) return 'High';
-  if (totalCorrect >= 26) return 'Above Average';
-  if (totalCorrect >= 22) return 'Average';
-  if (totalCorrect >= 18) return 'Below Average';
+  if (totalCorrect >= 31) return 'High';
+  if (totalCorrect >= 27) return 'Above Average';
+  if (totalCorrect >= 23) return 'Average';
+  if (totalCorrect >= 19) return 'Below Average';
   return 'Low';
 }
 

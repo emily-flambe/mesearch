@@ -11,19 +11,39 @@ interface TestResult {
   is_public: boolean;
 }
 
+interface Profile {
+  is_public: boolean;
+  username: string | null;
+}
+
 export function ResultsHistory() {
   const { user, loading: authLoading } = useAuth();
   const [results, setResults] = useState<TestResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [showProfileMessage, setShowProfileMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
       fetchResults();
+      fetchProfile();
     } else if (!authLoading) {
       setLoading(false);
     }
   }, [user, authLoading]);
+
+  async function fetchProfile() {
+    try {
+      const res = await fetch('/api/profile', { credentials: 'include' });
+      const data = await res.json() as { data: Profile | null };
+      if (res.ok && data.data) {
+        setProfile(data.data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch profile:', err);
+    }
+  }
 
   async function fetchResults() {
     try {
@@ -84,6 +104,13 @@ export function ResultsHistory() {
             r.id === resultId ? { ...r, is_public: !currentVisibility } : r
           )
         );
+
+        // Show message if making result public but profile is private
+        if (!currentVisibility && profile && !profile.is_public) {
+          setShowProfileMessage(resultId);
+          // Auto-dismiss after 5 seconds
+          setTimeout(() => setShowProfileMessage(null), 5000);
+        }
       }
     } catch (err) {
       console.error('Failed to toggle visibility:', err);
@@ -205,6 +232,17 @@ export function ResultsHistory() {
                     </Link>
                   </div>
                 </div>
+                {/* Profile visibility message */}
+                {showProfileMessage === result.id && (
+                  <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-start gap-3">
+                    <svg className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p className="text-amber-400/90 text-xs">
+                      Your profile is private. <Link to="/settings" className="underline hover:text-amber-300">Make your profile public</Link> for others to see your shared results.
+                    </p>
+                  </div>
+                )}
               </div>
             ))}
           </div>
