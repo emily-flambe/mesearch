@@ -1,7 +1,25 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import BigFiveResults from '../components/BigFiveResults';
+import { EnneagramResults } from '../components/EnneagramResults';
+import HexacoResults from '../components/HexacoResults';
+import ECRResults from '../components/ECRResults';
+import MBTIResults from '../components/MBTIResults';
+import MFQResults from '../components/MFQResults';
+import SD3Results from '../components/SD3Results';
+import LoveLanguagesResults from '../components/LoveLanguagesResults';
+import RMETResults from '../components/RMETResults';
+import CRTResultsComponent from '../components/CRTResults';
 import type { BigFiveResults as BigFiveResultsType } from '../data/big-five-scoring';
+import type { EnneagramResult } from '../data/enneagram-scoring';
+import type { DimensionScore as HexacoDimensionScore } from '../data/hexaco-scoring';
+import type { ECRResults as ECRResultsType } from '../data/ecr-scoring';
+import type { MBTIResults as MBTIResultsType } from '../data/mbti-scoring';
+import type { MFQResults as MFQResultsType } from '../data/mfq-scoring';
+import type { SD3Results as SD3ResultsType } from '../data/sd3-scoring';
+import type { CommunicationStylesResults } from '../data/love-languages-scoring';
+import type { RMETResults as RMETResultsType } from '../data/rmet-scoring';
+import type { CRTResults } from '../data/crt-scoring';
 
 interface PublicUser {
   username: string;
@@ -20,8 +38,39 @@ interface PublicResultData {
   result: PublicResult;
 }
 
+// Test type display names
+const testDisplayNames: Record<string, string> = {
+  enneagram: 'Enneagram',
+  'big-five': 'Big Five',
+  hexaco: 'HEXACO',
+  mini_test: 'Mini-Test',
+  mbti: 'Myers-Briggs',
+  mfq: 'Moral Foundations',
+  sd3: 'Dark Triad',
+  ecr: 'Attachment Style',
+  'communication-styles': 'Communication Styles',
+  rmet: 'RMET',
+  crt: 'Cognitive Reflection',
+};
+
+// Map test types to their retake URLs
+const testUrls: Record<string, string> = {
+  enneagram: '/test/enneagram',
+  'big-five': '/test/big-five',
+  hexaco: '/hexaco',
+  mbti: '/test/mbti',
+  mfq: '/test/mfq',
+  sd3: '/test/sd3',
+  ecr: '/test/ecr',
+  'communication-styles': '/test/communication-styles',
+  rmet: '/test/rmet',
+  crt: '/test/crt',
+  mini_test: '/test/mini-test',
+};
+
 export function PublicResultDetail() {
   const { username, id } = useParams<{ username: string; id: string }>();
+  const navigate = useNavigate();
   const [data, setData] = useState<PublicResultData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -65,27 +114,11 @@ export function PublicResultDetail() {
     });
   }
 
-  function getTestDisplayName(testType: string) {
-    const names: Record<string, string> = {
-      enneagram: 'Enneagram',
-      'big-five': 'Big Five',
-      hexaco: 'HEXACO',
-      mfq: 'Moral Foundations',
-      sd3: 'Dark Triad',
-      ecr: 'Attachment Style',
-      crt: 'CRT',
-      mbti: 'Myers-Briggs',
-      'communication-styles': 'Communication Styles',
-      rmet: 'RMET',
-      mini_test: 'Mini-Test',
-    };
-    return names[testType] || testType;
-  }
-
   function renderResultContent() {
     if (!data) return null;
 
     const { test_type, scores } = data.result;
+    const retakeUrl = testUrls[test_type] || `/test/${test_type}`;
 
     switch (test_type) {
       case 'big-five':
@@ -97,25 +130,82 @@ export function PublicResultDetail() {
           />
         );
       case 'mini_test':
-        return <MiniTestResultDisplay scores={scores} />;
+        return (
+          <div className="card-premium rounded-lg p-8">
+            <MiniTestResultDisplay scores={scores} />
+          </div>
+        );
       case 'enneagram':
-        return <EnneagramResultDisplay scores={scores} />;
+        return (
+          <EnneagramResults
+            result={scores as unknown as EnneagramResult}
+            onRetake={() => navigate(retakeUrl)}
+            showActions={false}
+          />
+        );
       case 'hexaco':
-        return <HexacoResultDisplay scores={scores} />;
-      case 'mfq':
-        return <MFQResultDisplay scores={scores} />;
-      case 'sd3':
-        return <SD3ResultDisplay scores={scores} />;
+        return (
+          <HexacoResults
+            scores={scores as unknown as HexacoDimensionScore[]}
+            showHeader={false}
+            showActions={false}
+          />
+        );
       case 'ecr':
-        return <ECRResultDisplay scores={scores} />;
-      case 'crt':
-        return <CRTResultDisplay scores={scores} />;
+        return (
+          <ECRResults
+            initialResults={scores as unknown as ECRResultsType}
+            showHeader={false}
+            showActions={false}
+          />
+        );
       case 'mbti':
-        return <MBTIResultDisplay scores={scores} />;
+        return (
+          <MBTIResults
+            initialResults={scores as unknown as MBTIResultsType}
+            showHeader={false}
+            showActions={false}
+          />
+        );
+      case 'mfq':
+        return (
+          <MFQResults
+            initialResults={scores as unknown as MFQResultsType}
+            showHeader={false}
+            showActions={false}
+          />
+        );
+      case 'sd3':
+        return (
+          <SD3Results
+            initialResults={scores as unknown as SD3ResultsType}
+            showHeader={false}
+            showActions={false}
+          />
+        );
       case 'communication-styles':
-        return <CommunicationStylesResultDisplay scores={scores} />;
+        return (
+          <LoveLanguagesResults
+            initialResults={scores as unknown as CommunicationStylesResults}
+            showHeader={false}
+            showActions={false}
+          />
+        );
       case 'rmet':
-        return <RMETResultDisplay scores={scores} />;
+        return (
+          <RMETResults
+            initialResults={scores as unknown as RMETResultsType}
+            showHeader={false}
+            showActions={false}
+          />
+        );
+      case 'crt':
+        return (
+          <CRTResultsComponent
+            results={scores as unknown as CRTResults}
+            onRetake={() => navigate(retakeUrl)}
+          />
+        );
       default:
         return (
           <div className="card-premium rounded-lg p-6">
@@ -189,15 +279,20 @@ export function PublicResultDetail() {
                 </svg>
                 Back to {data.user.display_name || data.user.username}'s profile
               </Link>
+              <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-2">
+                {testDisplayNames[data.result.test_type] || data.result.test_type}
+              </p>
               <h1 className="font-display text-3xl font-medium text-[var(--color-text-primary)]">
-                {getTestDisplayName(data.result.test_type)}
+                Result Details
               </h1>
               <p className="text-[var(--color-text-muted)] text-sm mt-2">
                 Completed by {data.user.display_name || data.user.username} on {formatDate(data.result.completed_at)}
               </p>
             </div>
 
-            {renderResultContent()}
+            <div data-testid="public-result-detail-content">
+              {renderResultContent()}
+            </div>
           </>
         ) : null}
       </main>
@@ -205,7 +300,7 @@ export function PublicResultDetail() {
   );
 }
 
-// Mini-Test result display
+// Mini-Test result display (kept as simple display since it's a debug test)
 interface MiniTestScores {
   dimensionScores?: { dimension: string; dimensionName: string; score: number; color: string }[];
 }
@@ -215,15 +310,11 @@ function MiniTestResultDisplay({ scores }: { scores: Record<string, unknown> }) 
   const dimensionScores = typedScores.dimensionScores || [];
 
   if (dimensionScores.length === 0) {
-    return (
-      <div className="card-premium rounded-lg p-6">
-        <p className="text-[var(--color-text-muted)]">No detailed scores available.</p>
-      </div>
-    );
+    return <p className="text-[var(--color-text-muted)]">No detailed scores available.</p>;
   }
 
   return (
-    <div className="card-premium rounded-lg p-6 space-y-4">
+    <div className="space-y-4">
       <h3 className="font-display text-lg text-[var(--color-text-primary)] mb-4">Dimension Scores</h3>
       {dimensionScores.map((score) => (
         <div key={score.dimension} className="flex items-center justify-between p-4 rounded-lg bg-[var(--color-bg-tertiary)]">
@@ -241,527 +332,6 @@ function MiniTestResultDisplay({ scores }: { scores: Record<string, unknown> }) 
           </span>
         </div>
       ))}
-    </div>
-  );
-}
-
-// Enneagram result display
-interface EnneagramScores {
-  primaryType?: number;
-  wing?: number;
-  wingLabel?: string;
-  scores?: { type: number; percentage: number }[];
-}
-
-function EnneagramResultDisplay({ scores }: { scores: Record<string, unknown> }) {
-  const typedScores = scores as EnneagramScores;
-  const typeScores = typedScores.scores || [];
-
-  const typeNames: Record<number, string> = {
-    1: 'The Reformer',
-    2: 'The Helper',
-    3: 'The Achiever',
-    4: 'The Individualist',
-    5: 'The Investigator',
-    6: 'The Loyalist',
-    7: 'The Enthusiast',
-    8: 'The Challenger',
-    9: 'The Peacemaker',
-  };
-
-  return (
-    <div className="card-premium rounded-lg p-6 space-y-6">
-      {typedScores.primaryType && (
-        <div className="text-center mb-8">
-          <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-2">Primary Type</p>
-          <h3 className="font-display text-4xl font-medium text-[var(--color-text-primary)]">
-            Type {typedScores.primaryType}
-          </h3>
-          <p className="text-gold-gradient text-xl">{typeNames[typedScores.primaryType]}</p>
-          {typedScores.wingLabel && (
-            <p className="text-[var(--color-text-muted)] text-sm mt-2">{typedScores.wingLabel}</p>
-          )}
-        </div>
-      )}
-
-      {typeScores.length > 0 && (
-        <div>
-          <h4 className="font-display text-lg text-[var(--color-text-primary)] mb-4">All Type Scores</h4>
-          <div className="space-y-3">
-            {typeScores
-              .sort((a, b) => b.percentage - a.percentage)
-              .map((score) => (
-                <div key={score.type}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[var(--color-text-primary)]">
-                      Type {score.type} - {typeNames[score.type]}
-                    </span>
-                    <span className="text-[var(--color-text-secondary)] text-sm">
-                      {score.percentage}%
-                    </span>
-                  </div>
-                  <div className="h-2 bg-[var(--color-bg-tertiary)] rounded-full overflow-hidden">
-                    <div
-                      className="h-full rounded-full transition-all duration-500"
-                      style={{
-                        width: `${score.percentage}%`,
-                        backgroundColor: score.type === typedScores.primaryType ? 'var(--color-champagne)' : 'var(--color-text-muted)',
-                        opacity: score.type === typedScores.primaryType ? 1 : 0.4,
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
-
-      {typeScores.length === 0 && !typedScores.primaryType && (
-        <p className="text-[var(--color-text-muted)]">No detailed scores available.</p>
-      )}
-    </div>
-  );
-}
-
-// HEXACO result display
-interface HexacoScores {
-  dimension?: string;
-  score?: number;
-  facetScores?: { facet: string; score: number }[];
-}
-
-function HexacoResultDisplay({ scores }: { scores: Record<string, unknown> }) {
-  const dimensionScores = Array.isArray(scores) ? scores as HexacoScores[] : [];
-
-  const dimensionColors: Record<string, string> = {
-    'Honesty-Humility': 'var(--color-champagne)',
-    'Emotionality': '#a888a8',
-    'Extraversion': '#e8a87c',
-    'Agreeableness': '#7cb8a8',
-    'Conscientiousness': '#8899cc',
-    'Openness': '#cc8899',
-  };
-
-  if (dimensionScores.length === 0) {
-    return (
-      <div className="card-premium rounded-lg p-6">
-        <p className="text-[var(--color-text-muted)]">No detailed scores available.</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="card-premium rounded-lg p-6 space-y-6">
-      <h3 className="font-display text-lg text-[var(--color-text-primary)] mb-4">Dimension Scores</h3>
-      {dimensionScores.map((dim) => (
-        <div key={dim.dimension}>
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[var(--color-text-primary)] font-medium">
-              {dim.dimension}
-            </span>
-            <span className="text-[var(--color-text-secondary)] text-sm">
-              {dim.score?.toFixed(2)} / 5
-            </span>
-          </div>
-          <div className="h-2 bg-[var(--color-bg-tertiary)] rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all duration-500"
-              style={{
-                width: `${((dim.score || 0) / 5) * 100}%`,
-                backgroundColor: dimensionColors[dim.dimension || ''] || 'var(--color-champagne)',
-              }}
-            />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// MFQ (Moral Foundations) result display
-interface MFQScores {
-  foundations?: { name: string; score: number; maxScore: number }[];
-}
-
-function MFQResultDisplay({ scores }: { scores: Record<string, unknown> }) {
-  const typedScores = scores as MFQScores;
-  const foundations = typedScores.foundations || [];
-
-  const foundationColors: Record<string, string> = {
-    'Care/Harm': '#f472b6',
-    'Fairness/Cheating': '#22d3ee',
-    'Loyalty/Betrayal': '#fbbf24',
-    'Authority/Subversion': '#a78bfa',
-    'Sanctity/Degradation': '#34d399',
-  };
-
-  if (foundations.length === 0) {
-    return (
-      <div className="card-premium rounded-lg p-6">
-        <p className="text-[var(--color-text-muted)]">No detailed scores available.</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="card-premium rounded-lg p-6 space-y-6">
-      <h3 className="font-display text-lg text-[var(--color-text-primary)] mb-4">Moral Foundations</h3>
-      {foundations.map((foundation) => (
-        <div key={foundation.name}>
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[var(--color-text-primary)] font-medium">
-              {foundation.name}
-            </span>
-            <span className="text-[var(--color-text-secondary)] text-sm">
-              {foundation.score.toFixed(1)} / {foundation.maxScore}
-            </span>
-          </div>
-          <div className="h-2 bg-[var(--color-bg-tertiary)] rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all duration-500"
-              style={{
-                width: `${(foundation.score / foundation.maxScore) * 100}%`,
-                backgroundColor: foundationColors[foundation.name] || 'var(--color-champagne)',
-              }}
-            />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// SD3 (Dark Triad) result display
-interface SD3Scores {
-  machiavellianism?: number;
-  narcissism?: number;
-  psychopathy?: number;
-}
-
-function SD3ResultDisplay({ scores }: { scores: Record<string, unknown> }) {
-  const typedScores = scores as SD3Scores;
-
-  const traits = [
-    { name: 'Machiavellianism', score: typedScores.machiavellianism, color: '#a78bfa' },
-    { name: 'Narcissism', score: typedScores.narcissism, color: '#fbbf24' },
-    { name: 'Psychopathy', score: typedScores.psychopathy, color: '#f472b6' },
-  ].filter(t => t.score !== undefined);
-
-  if (traits.length === 0) {
-    return (
-      <div className="card-premium rounded-lg p-6">
-        <p className="text-[var(--color-text-muted)]">No detailed scores available.</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="card-premium rounded-lg p-6 space-y-6">
-      <h3 className="font-display text-lg text-[var(--color-text-primary)] mb-4">Dark Triad Traits</h3>
-      {traits.map((trait) => (
-        <div key={trait.name}>
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[var(--color-text-primary)] font-medium">
-              {trait.name}
-            </span>
-            <span className="text-[var(--color-text-secondary)] text-sm">
-              {trait.score?.toFixed(2)} / 5
-            </span>
-          </div>
-          <div className="h-2 bg-[var(--color-bg-tertiary)] rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all duration-500"
-              style={{
-                width: `${((trait.score || 0) / 5) * 100}%`,
-                backgroundColor: trait.color,
-              }}
-            />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// ECR (Attachment Style) result display
-interface ECRScores {
-  anxiety?: number;
-  avoidance?: number;
-  style?: string;
-}
-
-function ECRResultDisplay({ scores }: { scores: Record<string, unknown> }) {
-  const typedScores = scores as ECRScores;
-
-  const styleDescriptions: Record<string, string> = {
-    'Secure': 'Low anxiety, low avoidance - comfortable with intimacy and independence',
-    'Anxious-Preoccupied': 'High anxiety, low avoidance - seeks closeness, fears rejection',
-    'Dismissive-Avoidant': 'Low anxiety, high avoidance - values independence, avoids intimacy',
-    'Fearful-Avoidant': 'High anxiety, high avoidance - desires closeness but fears it',
-  };
-
-  return (
-    <div className="card-premium rounded-lg p-6 space-y-6">
-      {typedScores.style && (
-        <div className="text-center mb-6">
-          <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-2">Attachment Style</p>
-          <h3 className="font-display text-2xl font-medium text-[var(--color-text-primary)]">
-            {typedScores.style}
-          </h3>
-          <p className="text-[var(--color-text-muted)] text-sm mt-2">
-            {styleDescriptions[typedScores.style] || ''}
-          </p>
-        </div>
-      )}
-
-      <div className="space-y-4">
-        {typedScores.anxiety !== undefined && (
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[var(--color-text-primary)] font-medium">Anxiety</span>
-              <span className="text-[var(--color-text-secondary)] text-sm">
-                {typedScores.anxiety.toFixed(2)} / 7
-              </span>
-            </div>
-            <div className="h-2 bg-[var(--color-bg-tertiary)] rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full transition-all duration-500"
-                style={{
-                  width: `${(typedScores.anxiety / 7) * 100}%`,
-                  backgroundColor: '#f472b6',
-                }}
-              />
-            </div>
-          </div>
-        )}
-        {typedScores.avoidance !== undefined && (
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[var(--color-text-primary)] font-medium">Avoidance</span>
-              <span className="text-[var(--color-text-secondary)] text-sm">
-                {typedScores.avoidance.toFixed(2)} / 7
-              </span>
-            </div>
-            <div className="h-2 bg-[var(--color-bg-tertiary)] rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full transition-all duration-500"
-                style={{
-                  width: `${(typedScores.avoidance / 7) * 100}%`,
-                  backgroundColor: '#22d3ee',
-                }}
-              />
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// CRT result display
-interface CRTScores {
-  correct?: number;
-  intuitive?: number;
-  other?: number;
-  total?: number;
-  priorExposure?: boolean;
-}
-
-function CRTResultDisplay({ scores }: { scores: Record<string, unknown> }) {
-  const typedScores = scores as CRTScores;
-
-  return (
-    <div className="card-premium rounded-lg p-6 space-y-6">
-      <div className="text-center mb-6">
-        <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-2">Score</p>
-        <h3 className="font-display text-4xl font-medium text-[var(--color-text-primary)]">
-          {typedScores.correct || 0} / {typedScores.total || 7}
-        </h3>
-        <p className="text-[var(--color-text-muted)] text-sm mt-2">Correct Answers</p>
-      </div>
-
-      <div className="grid grid-cols-3 gap-4 text-center">
-        <div className="p-4 rounded-lg bg-[var(--color-bg-tertiary)]">
-          <p className="text-2xl font-medium text-green-400">{typedScores.correct || 0}</p>
-          <p className="text-[var(--color-text-muted)] text-xs">Reflective</p>
-        </div>
-        <div className="p-4 rounded-lg bg-[var(--color-bg-tertiary)]">
-          <p className="text-2xl font-medium text-amber-400">{typedScores.intuitive || 0}</p>
-          <p className="text-[var(--color-text-muted)] text-xs">Intuitive</p>
-        </div>
-        <div className="p-4 rounded-lg bg-[var(--color-bg-tertiary)]">
-          <p className="text-2xl font-medium text-[var(--color-text-secondary)]">{typedScores.other || 0}</p>
-          <p className="text-[var(--color-text-muted)] text-xs">Other</p>
-        </div>
-      </div>
-
-      {typedScores.priorExposure && (
-        <p className="text-amber-400 text-sm text-center">
-          Note: Prior exposure to these questions was indicated
-        </p>
-      )}
-    </div>
-  );
-}
-
-// MBTI result display
-interface MBTIScores {
-  type?: string;
-  dimensions?: { dimension: string; preference: string; score: number }[];
-}
-
-function MBTIResultDisplay({ scores }: { scores: Record<string, unknown> }) {
-  const typedScores = scores as MBTIScores;
-  const dimensions = typedScores.dimensions || [];
-
-  const dimensionLabels: Record<string, [string, string]> = {
-    'E-I': ['Extraversion', 'Introversion'],
-    'S-N': ['Sensing', 'Intuition'],
-    'T-F': ['Thinking', 'Feeling'],
-    'J-P': ['Judging', 'Perceiving'],
-  };
-
-  return (
-    <div className="card-premium rounded-lg p-6 space-y-6">
-      {typedScores.type && (
-        <div className="text-center mb-6">
-          <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-2">Your Type</p>
-          <h3 className="font-display text-4xl font-medium text-[var(--color-text-primary)]">
-            {typedScores.type}
-          </h3>
-        </div>
-      )}
-
-      {dimensions.length > 0 && (
-        <div className="space-y-4">
-          {dimensions.map((dim) => {
-            const [left, right] = dimensionLabels[dim.dimension] || [dim.dimension, dim.dimension];
-            const isLeft = dim.preference === dim.dimension.split('-')[0];
-            return (
-              <div key={dim.dimension}>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[var(--color-text-secondary)] text-sm">{left}</span>
-                  <span className="text-[var(--color-text-primary)] font-medium">{dim.preference}</span>
-                  <span className="text-[var(--color-text-secondary)] text-sm">{right}</span>
-                </div>
-                <div className="h-2 bg-[var(--color-bg-tertiary)] rounded-full overflow-hidden relative">
-                  <div
-                    className="absolute h-full rounded-full transition-all duration-500"
-                    style={{
-                      width: `${Math.abs(dim.score) * 10}%`,
-                      backgroundColor: 'var(--color-champagne)',
-                      left: isLeft ? `${50 - Math.abs(dim.score) * 10}%` : '50%',
-                    }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// Communication Styles result display
-interface CommunicationStylesScores {
-  styles?: { name: string; score: number; maxScore: number }[];
-  primary?: string;
-}
-
-function CommunicationStylesResultDisplay({ scores }: { scores: Record<string, unknown> }) {
-  const typedScores = scores as CommunicationStylesScores;
-  const styles = typedScores.styles || [];
-
-  const styleColors: Record<string, string> = {
-    'Words of Affirmation': '#fbbf24',
-    'Quality Time': '#22d3ee',
-    'Acts of Service': '#34d399',
-    'Receiving Gifts': '#a78bfa',
-    'Physical Touch': '#f472b6',
-  };
-
-  if (styles.length === 0) {
-    return (
-      <div className="card-premium rounded-lg p-6">
-        <p className="text-[var(--color-text-muted)]">No detailed scores available.</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="card-premium rounded-lg p-6 space-y-6">
-      {typedScores.primary && (
-        <div className="text-center mb-6">
-          <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-2">Primary Style</p>
-          <h3 className="font-display text-2xl font-medium text-[var(--color-text-primary)]">
-            {typedScores.primary}
-          </h3>
-        </div>
-      )}
-
-      <div className="space-y-4">
-        {styles
-          .sort((a, b) => b.score - a.score)
-          .map((style) => (
-            <div key={style.name}>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[var(--color-text-primary)] font-medium">{style.name}</span>
-                <span className="text-[var(--color-text-secondary)] text-sm">
-                  {style.score} / {style.maxScore}
-                </span>
-              </div>
-              <div className="h-2 bg-[var(--color-bg-tertiary)] rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full transition-all duration-500"
-                  style={{
-                    width: `${(style.score / style.maxScore) * 100}%`,
-                    backgroundColor: styleColors[style.name] || 'var(--color-champagne)',
-                  }}
-                />
-              </div>
-            </div>
-          ))}
-      </div>
-    </div>
-  );
-}
-
-// RMET result display
-interface RMETScores {
-  correct?: number;
-  total?: number;
-  percentage?: number;
-}
-
-function RMETResultDisplay({ scores }: { scores: Record<string, unknown> }) {
-  const typedScores = scores as RMETScores;
-
-  return (
-    <div className="card-premium rounded-lg p-6 space-y-6">
-      <div className="text-center">
-        <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-2">Score</p>
-        <h3 className="font-display text-4xl font-medium text-[var(--color-text-primary)]">
-          {typedScores.correct || 0} / {typedScores.total || 36}
-        </h3>
-        <p className="text-[var(--color-text-muted)] text-sm mt-2">
-          {typedScores.percentage !== undefined ? `${typedScores.percentage.toFixed(0)}%` : ''} Correct
-        </p>
-      </div>
-
-      <div className="h-3 bg-[var(--color-bg-tertiary)] rounded-full overflow-hidden">
-        <div
-          className="h-full rounded-full transition-all duration-500"
-          style={{
-            width: `${((typedScores.correct || 0) / (typedScores.total || 36)) * 100}%`,
-            backgroundColor: 'var(--color-champagne)',
-          }}
-        />
-      </div>
-
-      <p className="text-[var(--color-text-secondary)] text-sm text-center">
-        Reading the Mind in the Eyes Test measures the ability to identify emotions from facial expressions.
-      </p>
     </div>
   );
 }

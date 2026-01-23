@@ -23,6 +23,7 @@ export function ResultsHistory() {
   const [error, setError] = useState<string | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [showProfileMessage, setShowProfileMessage] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -114,6 +115,20 @@ export function ResultsHistory() {
       }
     } catch (err) {
       console.error('Failed to toggle visibility:', err);
+    }
+  }
+
+  async function copyShareLink(resultId: string) {
+    if (!profile?.username) return;
+
+    const url = `${window.location.origin}/u/${profile.username}/results/${resultId}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiedId(resultId);
+      // Auto-clear after 2 seconds
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy to clipboard:', err);
     }
   }
 
@@ -212,7 +227,7 @@ export function ResultsHistory() {
                       Completed {formatDate(result.completed_at)}
                     </p>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     <button
                       onClick={() => toggleVisibility(result.id, result.is_public)}
                       className={`px-3 py-1.5 rounded text-xs transition-colors ${
@@ -224,6 +239,33 @@ export function ResultsHistory() {
                     >
                       {result.is_public ? 'Hide' : 'Share'}
                     </button>
+                    {result.is_public && profile?.username && (
+                      <button
+                        onClick={() => copyShareLink(result.id)}
+                        className={`px-3 py-1.5 rounded text-xs transition-colors inline-flex items-center gap-1.5 ${
+                          copiedId === result.id
+                            ? 'bg-green-500/10 text-green-400'
+                            : 'bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)]'
+                        }`}
+                        title="Copy share link"
+                      >
+                        {copiedId === result.id ? (
+                          <>
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            Copied!
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                            </svg>
+                            Copy Link
+                          </>
+                        )}
+                      </button>
+                    )}
                     <Link
                       to={`/results/${result.id}`}
                       className="btn-ghost px-4 py-2 rounded text-xs tracking-wider uppercase"
