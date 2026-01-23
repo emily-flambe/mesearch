@@ -9,30 +9,39 @@ import { styleInfo, type CommunicationStyle } from '../data/love-languages-items
 
 const RESULTS_STORAGE_KEY = 'mesearch-communication-styles-results';
 
-export default function LoveLanguagesResults() {
+interface LoveLanguagesResultsProps {
+  initialResults?: CommunicationStylesResults;
+  showHeader?: boolean;
+  showActions?: boolean;
+}
+
+export default function LoveLanguagesResults({ initialResults, showHeader = true, showActions = true }: LoveLanguagesResultsProps) {
   const navigate = useNavigate();
-  const [results, setResults] = useState<CommunicationStylesResults | null>(null);
+  const [results, setResults] = useState<CommunicationStylesResults | null>(initialResults || null);
   const [expandedStyle, setExpandedStyle] = useState<CommunicationStyle | null>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem(RESULTS_STORAGE_KEY);
-    if (stored) {
-      const parsed = deserializeResults(stored);
-      if (parsed) {
-        setResults(parsed);
+    // Only load from localStorage if no initial results provided
+    if (!initialResults) {
+      const stored = localStorage.getItem(RESULTS_STORAGE_KEY);
+      if (stored) {
+        const parsed = deserializeResults(stored);
+        if (parsed) {
+          setResults(parsed);
+        } else {
+          // Invalid data, redirect to assessment
+          navigate('/test/communication-styles');
+        }
       } else {
-        // Invalid data, redirect to assessment
+        // No results, redirect to assessment
         navigate('/test/communication-styles');
       }
-    } else {
-      // No results, redirect to assessment
-      navigate('/test/communication-styles');
     }
-  }, [navigate]);
+  }, [navigate, initialResults]);
 
   if (!results) {
     return (
-      <div className="min-h-screen bg-[var(--color-bg-primary)] flex items-center justify-center">
+      <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] flex items-center justify-center" : ""}>
         <div className="text-[var(--color-text-muted)]">Loading results...</div>
       </div>
     );
@@ -42,18 +51,20 @@ export default function LoveLanguagesResults() {
   const secondaryStyle = styleInfo[results.secondary];
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
+    <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
       {/* Header */}
-      <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
-        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-          <Link
-            to="/"
-            className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
-          >
-            Mesearch
-          </Link>
-        </div>
-      </header>
+      {showHeader && (
+        <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
+          <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
+            <Link
+              to="/"
+              className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
+            >
+              Mesearch
+            </Link>
+          </div>
+        </header>
+      )}
 
       <main className="mx-auto max-w-3xl px-6 py-12" data-testid="love-languages-results">
         {/* Results Header */}
@@ -251,20 +262,22 @@ export default function LoveLanguagesResults() {
         </div>
 
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            to="/test/communication-styles"
-            className="btn-ghost px-8 py-4 rounded text-sm tracking-widest uppercase text-center"
-          >
-            Retake Assessment
-          </Link>
-          <Link
-            to="/"
-            className="btn-gold px-8 py-4 rounded text-sm tracking-widest uppercase text-center"
-          >
-            Return Home
-          </Link>
-        </div>
+        {showActions && (
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              to="/test/communication-styles"
+              className="btn-ghost px-8 py-4 rounded text-sm tracking-widest uppercase text-center"
+            >
+              Retake Assessment
+            </Link>
+            <Link
+              to="/"
+              className="btn-gold px-8 py-4 rounded text-sm tracking-widest uppercase text-center"
+            >
+              Return Home
+            </Link>
+          </div>
+        )}
       </main>
     </div>
   );

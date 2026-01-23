@@ -13,6 +13,8 @@ import {
 
 interface HexacoResultsProps {
   scores: DimensionScore[] | null;
+  showHeader?: boolean;
+  showActions?: boolean;
 }
 
 // Dimension colors for visual distinction
@@ -124,7 +126,7 @@ function DimensionCard({ dimensionScore }: { dimensionScore: DimensionScore }) {
   );
 }
 
-export default function HexacoResults({ scores }: HexacoResultsProps) {
+export default function HexacoResults({ scores, showHeader = true, showActions = true }: HexacoResultsProps) {
   // Add noindex meta tag
   useEffect(() => {
     const meta = document.createElement('meta');
@@ -138,17 +140,19 @@ export default function HexacoResults({ scores }: HexacoResultsProps) {
 
   if (!scores) {
     return (
-      <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
-        <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
-          <div className="mx-auto max-w-6xl px-6 py-5">
-            <Link
-              to="/"
-              className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
-            >
-              Mēsearch
-            </Link>
-          </div>
-        </header>
+      <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
+        {showHeader && (
+          <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
+            <div className="mx-auto max-w-6xl px-6 py-5">
+              <Link
+                to="/"
+                className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
+              >
+                Mēsearch
+              </Link>
+            </div>
+          </header>
+        )}
         <main className="mx-auto max-w-2xl px-6 py-24 text-center">
           <div className="card-premium rounded-lg p-12">
             <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">
@@ -180,24 +184,26 @@ export default function HexacoResults({ scores }: HexacoResultsProps) {
   });
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
+    <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
       {/* Header */}
-      <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
-        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-          <Link
-            to="/"
-            className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
-          >
-            Mēsearch
-          </Link>
-          <Link
-            to="/"
-            className="text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)] transition-colors duration-300 text-sm tracking-wide"
-          >
-            Back to Home
-          </Link>
-        </div>
-      </header>
+      {showHeader && (
+        <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
+          <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
+            <Link
+              to="/"
+              className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
+            >
+              Mēsearch
+            </Link>
+            <Link
+              to="/"
+              className="text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)] transition-colors duration-300 text-sm tracking-wide"
+            >
+              Back to Home
+            </Link>
+          </div>
+        </header>
+      )}
 
       <main className="mx-auto max-w-4xl px-6 py-12">
         {/* Results Header */}
@@ -285,32 +291,36 @@ export default function HexacoResults({ scores }: HexacoResultsProps) {
         </div>
 
         {/* Actions */}
-        <div className="mt-12 text-center">
-          <Link
-            to="/hexaco"
-            className="btn-ghost inline-block px-8 py-3 rounded text-xs tracking-widest uppercase mr-4"
-          >
-            Retake Assessment
-          </Link>
-          <Link
-            to="/"
-            className="btn-gold inline-block px-8 py-3 rounded text-xs tracking-widest uppercase"
-          >
-            Explore More Tests
-          </Link>
-        </div>
+        {showActions && (
+          <div className="mt-12 text-center">
+            <Link
+              to="/hexaco"
+              className="btn-ghost inline-block px-8 py-3 rounded text-xs tracking-widest uppercase mr-4"
+            >
+              Retake Assessment
+            </Link>
+            <Link
+              to="/"
+              className="btn-gold inline-block px-8 py-3 rounded text-xs tracking-widest uppercase"
+            >
+              Explore More Tests
+            </Link>
+          </div>
+        )}
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[var(--color-border)] py-12 mt-12 transition-colors duration-300">
-        <div className="mx-auto max-w-6xl px-6 text-center">
-          <p className="font-display text-xl text-gold-gradient mb-4">Mēsearch</p>
-          <p className="text-[var(--color-text-muted)] text-xs mb-2">
-            HEXACO-60 is copyrighted by K. Lee & M.C. Ashton
-          </p>
-          <p className="text-[var(--color-text-muted)]/50 text-xs">&copy; 2026</p>
-        </div>
-      </footer>
+      {showHeader && (
+        <footer className="border-t border-[var(--color-border)] py-12 mt-12 transition-colors duration-300">
+          <div className="mx-auto max-w-6xl px-6 text-center">
+            <p className="font-display text-xl text-gold-gradient mb-4">Mēsearch</p>
+            <p className="text-[var(--color-text-muted)] text-xs mb-2">
+              HEXACO-60 is copyrighted by K. Lee & M.C. Ashton
+            </p>
+            <p className="text-[var(--color-text-muted)]/50 text-xs">&copy; 2026</p>
+          </div>
+        </footer>
+      )}
     </div>
   );
 }
