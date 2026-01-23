@@ -20,18 +20,22 @@ test.describe('RMET Assessment', () => {
     // Should see practice question indicator
     await expect(page.getByText('Practice Question', { exact: true })).toBeVisible();
 
-    // Click first option to complete practice
-    const practiceOptions = page.locator('button').filter({ hasText: /jealous|panicked|arrogant|hateful/i });
+    // Click first option to complete practice (MRMET practice options)
+    const practiceOptions = page.locator('button').filter({ hasText: /anxious|disappointed|shocked|concerned/i });
     await practiceOptions.first().click();
+    // Click Continue after feedback
+    await page.getByRole('button', { name: /Continue/i }).click();
 
-    // Now in main assessment - answer all 36 questions
-    for (let i = 1; i <= 36; i++) {
+    // Now in main assessment - answer all 37 questions (MRMET has 37 scored items)
+    for (let i = 1; i <= 37; i++) {
       // Verify we're on question i
-      await expect(page.getByText(`${i} of 36`)).toBeVisible();
+      await expect(page.getByText(`${i} of 37`)).toBeVisible();
 
       // Click the first option for each question
       const options = page.locator('main button').filter({ has: page.locator('span') });
       await options.first().click();
+      // Click Continue after feedback
+      await page.getByRole('button', { name: /Continue/i }).click();
     }
 
     // Should see completion screen
@@ -46,7 +50,7 @@ test.describe('RMET Assessment', () => {
     // Verify results are displayed
     await expect(page.getByRole('heading', { name: 'Reading the Mind in the Eyes' })).toBeVisible();
     await expect(page.getByText('Your Results')).toBeVisible();
-    await expect(page.getByText('of 36', { exact: true })).toBeVisible();
+    await expect(page.getByText('of 37', { exact: true })).toBeVisible();
   });
 
   test('can resume progress after navigating away', async ({ page }) => {
@@ -54,18 +58,20 @@ test.describe('RMET Assessment', () => {
     await page.goto('/test/rmet');
     await page.getByRole('button', { name: /Begin Assessment/i }).click();
 
-    // Complete practice
-    const practiceOptions = page.locator('button').filter({ hasText: /jealous|panicked|arrogant|hateful/i });
+    // Complete practice (MRMET practice options)
+    const practiceOptions = page.locator('button').filter({ hasText: /anxious|disappointed|shocked|concerned/i });
     await practiceOptions.first().click();
+    await page.getByRole('button', { name: /Continue/i }).click();
 
     // Answer first 5 questions
     for (let i = 0; i < 5; i++) {
       const options = page.locator('main button').filter({ has: page.locator('span') });
       await options.first().click();
+      await page.getByRole('button', { name: /Continue/i }).click();
     }
 
     // Verify we're on question 6
-    await expect(page.getByText('6 of 36')).toBeVisible();
+    await expect(page.getByText('6 of 37')).toBeVisible();
 
     // Navigate away
     await page.goto('/');
@@ -80,20 +86,23 @@ test.describe('RMET Assessment', () => {
     await page.getByRole('button', { name: /Resume Progress/i }).click();
 
     // Should be on question 6
-    await expect(page.getByText('6 of 36')).toBeVisible();
+    await expect(page.getByText('6 of 37')).toBeVisible();
   });
 
-  test('shows placeholder images when images are unavailable', async ({ page }) => {
+  test('displays MRMET stimulus images', async ({ page }) => {
     // Start assessment
     await page.goto('/test/rmet');
     await page.getByRole('button', { name: /Begin Assessment/i }).click();
 
-    // Complete practice to get to main assessment
-    const practiceOptions = page.locator('button').filter({ hasText: /jealous|panicked|arrogant|hateful/i });
+    // Complete practice to get to main assessment (MRMET practice options)
+    const practiceOptions = page.locator('button').filter({ hasText: /anxious|disappointed|shocked|concerned/i });
     await practiceOptions.first().click();
+    await page.getByRole('button', { name: /Continue/i }).click();
 
-    // Should show placeholder image (since we don't have actual images)
-    await expect(page.locator('[data-testid="rmet-image-placeholder"]')).toBeVisible();
+    // Should show actual MRMET stimulus image (no placeholder)
+    await expect(page.locator('[data-testid="rmet-image"]')).toBeVisible();
+    // Placeholder should NOT be visible when images load correctly
+    await expect(page.locator('[data-testid="rmet-image-placeholder"]')).not.toBeVisible();
   });
 
   test('shows definition tooltip on hover for difficult words', async ({ page }) => {
@@ -101,16 +110,16 @@ test.describe('RMET Assessment', () => {
     await page.goto('/test/rmet');
     await page.getByRole('button', { name: /Begin Assessment/i }).click();
 
-    // Practice item has "panicked" which doesn't have a tooltip, but let's
-    // advance to an item that has definitions
-    // Complete practice
-    const practiceOptions = page.locator('button').filter({ hasText: /jealous|panicked|arrogant|hateful/i });
+    // Complete practice (MRMET practice options)
+    const practiceOptions = page.locator('button').filter({ hasText: /anxious|disappointed|shocked|concerned/i });
     await practiceOptions.first().click();
+    await page.getByRole('button', { name: /Continue/i }).click();
 
-    // Answer questions until we get to one with definitions (item 6 has "aghast" and "fantasizing")
+    // Answer questions until we get to one with definitions
     for (let i = 0; i < 5; i++) {
       const options = page.locator('main button').filter({ has: page.locator('span') });
       await options.first().click();
+      await page.getByRole('button', { name: /Continue/i }).click();
     }
 
     // Now on question 6, hover over a word with definition if present
@@ -128,24 +137,26 @@ test.describe('RMET Assessment', () => {
     await page.goto('/test/rmet');
     await page.getByRole('button', { name: /Begin Assessment/i }).click();
 
-    // Complete practice
-    const practiceOptions = page.locator('button').filter({ hasText: /jealous|panicked|arrogant|hateful/i });
+    // Complete practice (MRMET practice options)
+    const practiceOptions = page.locator('button').filter({ hasText: /anxious|disappointed|shocked|concerned/i });
     await practiceOptions.first().click();
+    await page.getByRole('button', { name: /Continue/i }).click();
 
     // Answer first 2 questions
     for (let i = 0; i < 2; i++) {
       const options = page.locator('main button').filter({ has: page.locator('span') });
       await options.first().click();
+      await page.getByRole('button', { name: /Continue/i }).click();
     }
 
     // Should be on question 3
-    await expect(page.getByText('3 of 36')).toBeVisible();
+    await expect(page.getByText('3 of 37')).toBeVisible();
 
     // Click back button
     await page.getByRole('button', { name: /Previous Question/i }).click();
 
     // Should be on question 2
-    await expect(page.getByText('2 of 36')).toBeVisible();
+    await expect(page.getByText('2 of 37')).toBeVisible();
   });
 
   test('displays RMET card on home page', async ({ page }) => {
@@ -162,14 +173,16 @@ test.describe('RMET Assessment', () => {
     await page.goto('/test/rmet');
     await page.getByRole('button', { name: /Begin Assessment/i }).click();
 
-    // Complete practice
-    const practiceOptions = page.locator('button').filter({ hasText: /jealous|panicked|arrogant|hateful/i });
+    // Complete practice (MRMET practice options)
+    const practiceOptions = page.locator('button').filter({ hasText: /anxious|disappointed|shocked|concerned/i });
     await practiceOptions.first().click();
+    await page.getByRole('button', { name: /Continue/i }).click();
 
-    // Answer all 36 questions quickly by clicking first option
-    for (let i = 1; i <= 36; i++) {
+    // Answer all 37 questions quickly by clicking first option (MRMET has 37 scored items)
+    for (let i = 1; i <= 37; i++) {
       const options = page.locator('main button').filter({ has: page.locator('span') });
       await options.first().click();
+      await page.getByRole('button', { name: /Continue/i }).click();
     }
 
     // View results
@@ -180,6 +193,6 @@ test.describe('RMET Assessment', () => {
 
     // Should see item results
     await expect(page.getByText('#1', { exact: true })).toBeVisible();
-    await expect(page.getByText('#36', { exact: true })).toBeVisible();
+    await expect(page.getByText('#37', { exact: true })).toBeVisible();
   });
 });
