@@ -650,9 +650,10 @@ function MiniTestResultDisplay({ scores }: { scores: Record<string, unknown> }) 
 
   return (
     <div className="card-premium rounded-lg p-8">
-      <h3 className="font-display text-xl text-[var(--color-text-primary)] mb-6 text-center">
-        Mini-Test Results
+      <h3 className="font-display text-xl text-[var(--color-text-primary)] mb-2 text-center">
+        Mini-Test
       </h3>
+      <p className="text-[var(--color-text-muted)] text-sm text-center mb-6">Dimension Scores</p>
       <div className="space-y-4">
         {dimensionScores.map((score) => (
           <div key={score.dimension} className="flex items-center justify-between p-4 rounded-lg bg-[var(--color-bg-tertiary)]">
