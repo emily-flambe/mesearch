@@ -158,8 +158,9 @@ test.describe('Mini-Test Feature Flag', () => {
       // Should see the result detail content
       await expect(page.getByTestId('result-detail-content')).toBeVisible();
 
-      // Should see Mini-Test as the title
-      await expect(page.getByRole('heading', { name: 'Mini-Test' })).toBeVisible();
+      // Should see Result Details as the heading and Mini-Test as the test type label
+      await expect(page.getByRole('heading', { name: 'Result Details' })).toBeVisible();
+      await expect(page.getByText('Mini-Test')).toBeVisible();
 
       // Should see dimension scores
       await expect(page.getByText('Dimension Scores')).toBeVisible();
