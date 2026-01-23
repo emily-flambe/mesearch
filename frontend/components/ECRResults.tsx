@@ -12,22 +12,31 @@ import {
 
 const RESULTS_STORAGE_KEY = 'mesearch-ecr-results';
 
-export default function ECRResults() {
+interface ECRResultsProps {
+  initialResults?: Results;
+  showHeader?: boolean;
+  showActions?: boolean;
+}
+
+export default function ECRResults({ initialResults, showHeader = true, showActions = true }: ECRResultsProps) {
   const navigate = useNavigate();
-  const [results, setResults] = useState<Results | null>(null);
+  const [results, setResults] = useState<Results | null>(initialResults || null);
 
   useEffect(() => {
-    const saved = localStorage.getItem(RESULTS_STORAGE_KEY);
-    if (saved) {
-      const parsed = deserializeResults(saved);
-      setResults(parsed);
+    // Only load from localStorage if no initial results provided
+    if (!initialResults) {
+      const saved = localStorage.getItem(RESULTS_STORAGE_KEY);
+      if (saved) {
+        const parsed = deserializeResults(saved);
+        setResults(parsed);
+      }
     }
-  }, []);
+  }, [initialResults]);
 
   if (!results) {
     return (
-      <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
-        <Header />
+      <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
+        {showHeader && <Header />}
         <main className="mx-auto max-w-2xl px-6 py-16 text-center">
           <div className="card-premium rounded-lg p-10">
             <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-4">
@@ -52,8 +61,8 @@ export default function ECRResults() {
   const styleInfo = attachmentStyleInfo[suggestedStyle];
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
-      <Header />
+    <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
+      {showHeader && <Header />}
       <main className="mx-auto max-w-4xl px-6 py-12">
         {/* Title */}
         <div className="text-center mb-12">
@@ -199,20 +208,22 @@ export default function ECRResults() {
         </div>
 
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => navigate('/test/ecr')}
-            className="btn-ghost px-8 py-3 rounded text-sm tracking-widest uppercase"
-          >
-            Retake Test
-          </button>
-          <Link
-            to="/"
-            className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase text-center"
-          >
-            Explore More Tests
-          </Link>
-        </div>
+        {showActions && (
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => navigate('/test/ecr')}
+              className="btn-ghost px-8 py-3 rounded text-sm tracking-widest uppercase"
+            >
+              Retake Test
+            </button>
+            <Link
+              to="/"
+              className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase text-center"
+            >
+              Explore More Tests
+            </Link>
+          </div>
+        )}
       </main>
     </div>
   );
