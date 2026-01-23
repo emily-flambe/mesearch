@@ -23,33 +23,74 @@ import type { CommunicationStylesResults } from '../data/love-languages-scoring'
 import type { RMETResults as RMETResultsType } from '../data/rmet-scoring';
 import type { CRTResults } from '../data/crt-scoring';
 
-interface TestResult {
+interface StoredResult {
   id: string;
+  user_id: string;
   test_type: string;
   scores: Record<string, unknown>;
   completed_at: number;
+}
+
+// Test type display names
+const testDisplayNames: Record<string, string> = {
+  enneagram: 'Enneagram',
+  'big-five': 'Big Five',
+  hexaco: 'HEXACO',
+  mini_test: 'Mini-Test',
+  mbti: 'Myers-Briggs',
+  mfq: 'Moral Foundations',
+  sd3: 'Dark Triad',
+  ecr: 'Attachment Style',
+  'communication-styles': 'Communication Styles',
+  rmet: 'RMET',
+  crt: 'Cognitive Reflection',
+};
+
+// Map test types to their retake URLs
+const testUrls: Record<string, string> = {
+  enneagram: '/test/enneagram',
+  'big-five': '/test/big-five',
+  hexaco: '/hexaco',
+  mbti: '/test/mbti',
+  mfq: '/test/mfq',
+  sd3: '/test/sd3',
+  ecr: '/test/ecr',
+  'communication-styles': '/test/communication-styles',
+  rmet: '/test/rmet',
+  crt: '/test/crt',
+  mini_test: '/test/mini-test',
+};
+
+function formatDate(timestamp: number) {
+  return new Date(timestamp * 1000).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 }
 
 export function ResultDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
-  const [result, setResult] = useState<TestResult | null>(null);
+  const [result, setResult] = useState<StoredResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (user && id) {
+    if (id && user) {
       fetchResult();
-    } else if (!authLoading) {
+    } else if (!authLoading && !user) {
       setLoading(false);
     }
-  }, [user, authLoading, id]);
+  }, [id, user, authLoading]);
 
   async function fetchResult() {
     try {
       const res = await fetch(`/api/results/${id}`, { credentials: 'include' });
-      const data = await res.json() as { data: TestResult | null; error: { message: string } | null };
+      const data = await res.json() as { data: StoredResult | null; error: { message: string } | null };
 
       if (!res.ok) {
         setError(data.error?.message || 'Failed to load result');
@@ -63,48 +104,6 @@ export function ResultDetail() {
     } finally {
       setLoading(false);
     }
-  }
-
-  function formatDate(timestamp: number) {
-    return new Date(timestamp * 1000).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  }
-
-  function getTestDisplayName(testType: string) {
-    const names: Record<string, string> = {
-      enneagram: 'Enneagram',
-      'big-five': 'Big Five',
-      hexaco: 'HEXACO',
-      mini_test: 'Mini-Test',
-      ecr: 'Attachment Style',
-      mbti: 'Myers-Briggs Type',
-      mfq: 'Moral Foundations',
-      sd3: 'Short Dark Triad',
-      'communication-styles': 'Communication Styles',
-      rmet: 'Reading the Mind in the Eyes',
-      crt: 'Cognitive Reflection Test',
-    };
-    return names[testType] || testType;
-  }
-
-  function getRetakeUrl(testType: string) {
-    const urls: Record<string, string> = {
-      enneagram: '/test/enneagram',
-      'big-five': '/test/big-five',
-      hexaco: '/hexaco',
-      mini_test: '/test/mini-test',
-      ecr: '/test/ecr',
-      mbti: '/test/mbti',
-      mfq: '/test/mfq',
-      sd3: '/test/sd3',
-      'communication-styles': '/test/communication-styles',
-      rmet: '/test/rmet',
-      crt: '/test/crt',
-    };
-    return urls[testType] || '/';
   }
 
   if (authLoading || loading) {
@@ -121,9 +120,14 @@ export function ResultDetail() {
         <Header />
         <main className="mx-auto max-w-4xl px-6 py-12">
           <div className="card-premium rounded-lg p-12 text-center">
+            <div className="w-16 h-16 mx-auto mb-6 rounded-full border border-[var(--color-champagne)]/30 flex items-center justify-center">
+              <svg className="w-8 h-8 text-[var(--color-champagne)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
             <h2 className="font-display text-xl text-[var(--color-text-primary)] mb-2">Authentication Required</h2>
             <p className="text-[var(--color-text-secondary)]">
-              Please sign in to view your results.
+              Please sign in to view your saved results.
             </p>
           </div>
         </main>
@@ -137,6 +141,11 @@ export function ResultDetail() {
         <Header />
         <main className="mx-auto max-w-4xl px-6 py-12">
           <div className="card-premium rounded-lg p-12 text-center">
+            <div className="w-16 h-16 mx-auto mb-6 rounded-full border border-red-500/30 flex items-center justify-center">
+              <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
             <h2 className="font-display text-xl text-[var(--color-text-primary)] mb-2">Error</h2>
             <p className="text-[var(--color-text-secondary)] mb-6">{error}</p>
             <Link
@@ -159,7 +168,7 @@ export function ResultDetail() {
           <div className="card-premium rounded-lg p-12 text-center">
             <h2 className="font-display text-xl text-[var(--color-text-primary)] mb-2">Result Not Found</h2>
             <p className="text-[var(--color-text-secondary)] mb-6">
-              This result could not be found or you don&apos;t have permission to view it.
+              This result doesn&apos;t exist or you don&apos;t have permission to view it.
             </p>
             <Link
               to="/my-results"
@@ -173,37 +182,37 @@ export function ResultDetail() {
     );
   }
 
+  const retakeUrl = testUrls[result.test_type] || `/test/${result.test_type}`;
+
   return (
     <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
       <Header />
       <main className="mx-auto max-w-4xl px-6 py-12">
         {/* Back link */}
-        <div className="mb-8">
-          <Link
-            to="/my-results"
-            className="text-[var(--color-text-muted)] hover:text-[var(--color-champagne)] transition-colors text-sm flex items-center gap-2"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Back to Results History
-          </Link>
-        </div>
+        <Link
+          to="/my-results"
+          className="inline-flex items-center gap-2 text-[var(--color-text-muted)] hover:text-[var(--color-champagne)] transition-colors mb-6"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to Results
+        </Link>
 
-        {/* Title */}
-        <div className="text-center mb-12">
-          <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">
-            Your Results
+        {/* Header */}
+        <div className="mb-8">
+          <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-2">
+            {testDisplayNames[result.test_type] || result.test_type}
           </p>
-          <h1 className="font-display text-4xl font-medium text-[var(--color-text-primary)] mb-2 transition-colors duration-300">
-            {getTestDisplayName(result.test_type)}
+          <h1 className="font-display text-3xl font-medium text-[var(--color-text-primary)] mb-2">
+            Result Details
           </h1>
           <p className="text-[var(--color-text-muted)] text-sm">
             Completed {formatDate(result.completed_at)}
           </p>
         </div>
 
-        {/* Results display based on test type */}
+        {/* Results display based on test type - using full Results components */}
         <div data-testid="result-detail-content">
           {result.test_type === 'mini_test' && (
             <div className="card-premium rounded-lg p-8">
@@ -220,7 +229,7 @@ export function ResultDetail() {
           {result.test_type === 'enneagram' && (
             <EnneagramResults
               result={result.scores as unknown as EnneagramResult}
-              onRetake={() => navigate(getRetakeUrl('enneagram'))}
+              onRetake={() => navigate(retakeUrl)}
               showActions={false}
             />
           )}
@@ -276,24 +285,18 @@ export function ResultDetail() {
           {result.test_type === 'crt' && (
             <CRTResultsComponent
               results={result.scores as unknown as CRTResults}
-              onRetake={() => navigate(getRetakeUrl('crt'))}
+              onRetake={() => navigate(retakeUrl)}
             />
           )}
         </div>
 
         {/* Actions */}
-        <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => navigate(getRetakeUrl(result.test_type))}
-            className="btn-ghost px-8 py-3 rounded text-sm tracking-widest uppercase"
+        <div className="mt-8 flex gap-4 justify-center">
+          <Link
+            to={retakeUrl}
+            className="btn-ghost px-6 py-3 rounded text-xs tracking-widest uppercase"
           >
             Retake Test
-          </button>
-          <Link
-            to="/my-results"
-            className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase text-center"
-          >
-            View All Results
           </Link>
         </div>
       </main>
@@ -310,10 +313,10 @@ function Header() {
         </Link>
         <nav className="flex items-center gap-6">
           <Link
-            to="/"
+            to="/my-results"
             className="text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)] transition-colors text-sm"
           >
-            Home
+            My Results
           </Link>
           <UserMenu />
         </nav>
