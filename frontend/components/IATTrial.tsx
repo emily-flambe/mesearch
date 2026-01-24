@@ -51,6 +51,7 @@ export default function IATTrial({
 
   // Reset state when stimulus changes
   useEffect(() => {
+    console.log('[IAT Debug] New stimulus:', stimulus, '- resetting state');
     hasRespondedRef.current = false;
     showErrorFeedbackRef.current = false;
     setShowErrorFeedback(false);
@@ -61,12 +62,18 @@ export default function IATTrial({
   // Set up keyboard listener - use stable callback that reads from refs
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      // Ignore key repeat events (when user holds key down)
+      if (event.repeat) return;
+
       // Only respond to E or I keys
       const key = event.key.toLowerCase();
       if (key !== 'e' && key !== 'i') return;
 
       // Prevent double responses
       if (hasRespondedRef.current) return;
+
+      // Debug logging - remove after fixing
+      console.log('[IAT Debug] Key pressed:', key, 'hasResponded:', hasRespondedRef.current, 'showError:', showErrorFeedbackRef.current);
 
       // Get current props from ref
       const { stimulus: currentStimulus, correctCategory: currentCategory,
@@ -86,10 +93,13 @@ export default function IATTrial({
       if (showErrorFeedbackRef.current) {
         if (isCorrect) {
           // Correct response after error - record it
+          console.log('[IAT Debug] Correct after error, recording response');
           hasRespondedRef.current = true;
           showErrorFeedbackRef.current = false;
           setShowErrorFeedback(false);
           respond(responseKey as 'E' | 'I', responseTime, currentStimulus);
+        } else {
+          console.log('[IAT Debug] Still wrong key in error state, ignoring');
         }
         // Wrong response while in error state - ignore (keep showing error)
         return;
@@ -98,12 +108,14 @@ export default function IATTrial({
       // Not in error state - normal processing
       if (!isCorrect && feedback) {
         // Show error feedback but don't record the response yet
+        console.log('[IAT Debug] Wrong key, showing error feedback');
         showErrorFeedbackRef.current = true;
         setShowErrorFeedback(true);
         return;
       }
 
       // Record the response
+      console.log('[IAT Debug] Correct! Recording response for:', currentStimulus);
       hasRespondedRef.current = true;
       respond(responseKey as 'E' | 'I', responseTime, currentStimulus);
     };
