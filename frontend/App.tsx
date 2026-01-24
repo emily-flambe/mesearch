@@ -64,41 +64,6 @@ function HomePage() {
             Explore Tests
           </Link>
         </section>
-
-        {/* Divider */}
-        <div className="divider-elegant mx-auto max-w-md" />
-
-        {/* About Section */}
-        <section id="about" className="relative py-24 overflow-hidden scroll-mt-24">
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-bg-primary)] via-[var(--color-accent-purple)] to-[var(--color-bg-primary)] opacity-50 transition-colors duration-300" />
-          <div className="relative mx-auto max-w-6xl px-6 text-center">
-            <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">Methodology</p>
-            <h3 className="font-display text-4xl font-medium text-[var(--color-text-primary)] mb-6 transition-colors duration-300">
-              The Science Behind It
-            </h3>
-            <p className="text-[var(--color-text-secondary)] text-lg max-w-2xl mx-auto mb-12 leading-relaxed font-light transition-colors duration-300">
-              Each test is rated on two dimensions: Seriousness reflects the depth of research
-              supporting its validity, while Fun captures how engaging the experience is.
-              Some tests excel at both. Some tests are dogshit. We decide, you report!
-            </p>
-            <div className="flex justify-center gap-16">
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-3">
-                  <span className="text-[var(--color-text-secondary)] text-sm">Seriousness</span>
-                  <RatingDots value={5} />
-                </div>
-                <p className="text-[var(--color-text-muted)] text-sm transition-colors duration-300">Strong empirical support</p>
-              </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-3">
-                  <span className="text-[var(--color-text-secondary)] text-sm">Fun</span>
-                  <RatingDots value={5} />
-                </div>
-                <p className="text-[var(--color-text-muted)] text-sm transition-colors duration-300">Engaging and enjoyable</p>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
 
       {/* Footer */}
@@ -109,23 +74,6 @@ function HomePage() {
         </div>
       </footer>
     </Layout>
-  );
-}
-
-function RatingDots({ value, max = 5 }: { value: number; max?: number }) {
-  return (
-    <div className="flex gap-1">
-      {Array.from({ length: max }).map((_, i) => (
-        <div
-          key={i}
-          className={`w-1.5 h-1.5 rounded-full ${
-            i < value
-              ? 'bg-[var(--color-champagne)]'
-              : 'bg-[var(--color-border)]'
-          }`}
-        />
-      ))}
-    </div>
   );
 }
 
