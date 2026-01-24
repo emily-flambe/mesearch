@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Layout } from './Layout';
 import {
   type ECRResults as Results,
   deserializeResults,
@@ -34,38 +35,35 @@ export default function ECRResults({ initialResults, showHeader = true, showActi
   }, [initialResults]);
 
   if (!results) {
-    return (
-      <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
-        {showHeader && <Header />}
-        <main className="mx-auto max-w-2xl px-6 py-16 text-center">
-          <div className="card-premium rounded-lg p-10">
-            <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-4">
-              No Results Found
-            </h2>
-            <p className="text-[var(--color-text-secondary)] mb-8">
-              You haven&apos;t completed the Attachment Style assessment yet.
-            </p>
-            <button
-              onClick={() => navigate('/test/ecr')}
-              className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase"
-            >
-              Take the Test
-            </button>
-          </div>
-        </main>
-      </div>
+    const content = (
+      <main className="mx-auto max-w-2xl px-6 py-16 text-center">
+        <div className="card-premium rounded-lg p-10">
+          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-4">
+            No Results Found
+          </h2>
+          <p className="text-[var(--color-text-secondary)] mb-8">
+            You haven&apos;t completed the Attachment Style assessment yet.
+          </p>
+          <button
+            onClick={() => navigate('/test/ecr')}
+            className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase"
+          >
+            Take the Test
+          </button>
+        </div>
+      </main>
     );
+
+    return showHeader ? <Layout>{content}</Layout> : content;
   }
 
   const { anxiety, avoidance, suggestedStyle } = results;
   const styleInfo = attachmentStyleInfo[suggestedStyle];
 
-  return (
-    <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
-      {showHeader && <Header />}
-      <main className="mx-auto max-w-4xl px-6 py-12">
-        {/* Title */}
-        <div className="text-center mb-12">
+  const mainContent = (
+    <main className="mx-auto max-w-4xl px-6 py-12">
+      {/* Title */}
+      <div className="text-center mb-12">
           <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">
             Your Results
           </p>
@@ -207,41 +205,27 @@ export default function ECRResults({ initialResults, showHeader = true, showActi
           </p>
         </div>
 
-        {/* Actions */}
-        {showActions && (
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => navigate('/test/ecr')}
-              className="btn-ghost px-8 py-3 rounded text-sm tracking-widest uppercase"
-            >
-              Retake Test
-            </button>
-            <Link
-              to="/"
-              className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase text-center"
-            >
-              Explore More Tests
-            </Link>
-          </div>
-        )}
-      </main>
-    </div>
+      {/* Actions */}
+      {showActions && (
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <button
+            onClick={() => navigate('/test/ecr')}
+            className="btn-ghost px-8 py-3 rounded text-sm tracking-widest uppercase"
+          >
+            Retake Test
+          </button>
+          <Link
+            to="/"
+            className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase text-center"
+          >
+            Explore More Tests
+          </Link>
+        </div>
+      )}
+    </main>
   );
-}
 
-function Header() {
-  return (
-    <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
-      <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-        <Link
-          to="/"
-          className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
-        >
-          Mesearch
-        </Link>
-      </div>
-    </header>
-  );
+  return showHeader ? <Layout>{mainContent}</Layout> : mainContent;
 }
 
 interface AttachmentPlotProps {

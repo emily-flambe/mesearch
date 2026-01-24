@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { UserMenu } from '../components/UserMenu';
+import { Layout } from '../components/Layout';
 
 interface Profile {
   id: string;
@@ -136,24 +136,7 @@ export function Settings() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
-      <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
-        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-          <Link to="/" className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
-            Mesearch
-          </Link>
-          <nav className="flex items-center gap-6">
-            <Link
-              to="/"
-              className="text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)] transition-colors text-sm"
-            >
-              Home
-            </Link>
-            <UserMenu />
-          </nav>
-        </div>
-      </header>
-
+    <Layout>
       <main className="mx-auto max-w-2xl px-6 py-12">
         <div className="mb-8">
           <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-2">Account</p>
@@ -314,6 +297,6 @@ export function Settings() {
           </form>
         )}
       </main>
-    </div>
+    </Layout>
   );
 }

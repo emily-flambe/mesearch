@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Layout } from './Layout';
 import {
   DimensionScore,
   scoreToPercentage,
@@ -139,41 +140,29 @@ export default function HexacoResults({ scores, showHeader = true, showActions =
   }, []);
 
   if (!scores) {
-    return (
-      <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
-        {showHeader && (
-          <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
-            <div className="mx-auto max-w-6xl px-6 py-5">
-              <Link
-                to="/"
-                className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
-              >
-                Mēsearch
-              </Link>
-            </div>
-          </header>
-        )}
-        <main className="mx-auto max-w-2xl px-6 py-24 text-center">
-          <div className="card-premium rounded-lg p-12">
-            <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">
-              No Results Found
-            </p>
-            <h2 className="font-display text-3xl font-medium text-[var(--color-text-primary)] mb-4 transition-colors duration-300">
-              Assessment Incomplete
-            </h2>
-            <p className="text-[var(--color-text-secondary)] mb-10 leading-relaxed transition-colors duration-300">
-              Please complete the HEXACO-60 assessment to view your results.
-            </p>
-            <Link
-              to="/hexaco"
-              className="btn-gold inline-block px-8 py-3 rounded text-xs tracking-widest uppercase"
-            >
-              Start Assessment
-            </Link>
-          </div>
-        </main>
-      </div>
+    const content = (
+      <main className="mx-auto max-w-2xl px-6 py-24 text-center">
+        <div className="card-premium rounded-lg p-12">
+          <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">
+            No Results Found
+          </p>
+          <h2 className="font-display text-3xl font-medium text-[var(--color-text-primary)] mb-4 transition-colors duration-300">
+            Assessment Incomplete
+          </h2>
+          <p className="text-[var(--color-text-secondary)] mb-10 leading-relaxed transition-colors duration-300">
+            Please complete the HEXACO-60 assessment to view your results.
+          </p>
+          <Link
+            to="/hexaco"
+            className="btn-gold inline-block px-8 py-3 rounded text-xs tracking-widest uppercase"
+          >
+            Start Assessment
+          </Link>
+        </div>
+      </main>
     );
+
+    return showHeader ? <Layout>{content}</Layout> : content;
   }
 
   // Reorder to put Honesty-Humility first (as the unique HEXACO insight)
@@ -183,28 +172,8 @@ export default function HexacoResults({ scores, showHeader = true, showActions =
     return 0;
   });
 
-  return (
-    <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
-      {/* Header */}
-      {showHeader && (
-        <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
-          <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-            <Link
-              to="/"
-              className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
-            >
-              Mēsearch
-            </Link>
-            <Link
-              to="/"
-              className="text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)] transition-colors duration-300 text-sm tracking-wide"
-            >
-              Back to Home
-            </Link>
-          </div>
-        </header>
-      )}
-
+  const mainContent = (
+    <>
       <main className="mx-auto max-w-4xl px-6 py-12">
         {/* Results Header */}
         <div className="text-center mb-12">
@@ -313,7 +282,7 @@ export default function HexacoResults({ scores, showHeader = true, showActions =
       {showHeader && (
         <footer className="border-t border-[var(--color-border)] py-12 mt-12 transition-colors duration-300">
           <div className="mx-auto max-w-6xl px-6 text-center">
-            <p className="font-display text-xl text-gold-gradient mb-4">Mēsearch</p>
+            <p className="font-display text-xl text-gold-gradient mb-4">Mesearch</p>
             <p className="text-[var(--color-text-muted)] text-xs mb-2">
               HEXACO-60 is copyrighted by K. Lee & M.C. Ashton
             </p>
@@ -321,6 +290,8 @@ export default function HexacoResults({ scores, showHeader = true, showActions =
           </div>
         </footer>
       )}
-    </div>
+    </>
   );
+
+  return showHeader ? <Layout>{mainContent}</Layout> : mainContent;
 }

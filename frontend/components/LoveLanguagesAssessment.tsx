@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { Layout } from './Layout';
 import { items, shuffleItems, type ForcedChoiceItem } from '../data/love-languages-items';
 import {
   type ForcedChoiceResponse,
@@ -139,8 +140,7 @@ export default function LoveLanguagesAssessment() {
   // Render intro phase
   if (phase === 'intro') {
     return (
-      <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
-        <Header />
+      <Layout>
         <main className="mx-auto max-w-2xl px-6 py-16">
           <div className="card-premium rounded-lg p-10">
             <div className="text-center mb-8">
@@ -233,15 +233,14 @@ export default function LoveLanguagesAssessment() {
             </div>
           </div>
         </main>
-      </div>
+      </Layout>
     );
   }
 
   // Render completion phase
   if (phase === 'complete') {
     return (
-      <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
-        <Header />
+      <Layout>
         <main className="mx-auto max-w-2xl px-6 py-16">
           <div className="card-premium rounded-lg p-10 text-center">
             <div className="w-16 h-16 mx-auto mb-6 rounded-full border-2 border-[var(--color-champagne)] flex items-center justify-center">
@@ -277,7 +276,7 @@ export default function LoveLanguagesAssessment() {
             </button>
           </div>
         </main>
-      </div>
+      </Layout>
     );
   }
 
@@ -397,20 +396,5 @@ export default function LoveLanguagesAssessment() {
         </div>
       </footer>
     </div>
-  );
-}
-
-function Header() {
-  return (
-    <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
-      <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-        <Link
-          to="/"
-          className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
-        >
-          Mesearch
-        </Link>
-      </div>
-    </header>
   );
 }

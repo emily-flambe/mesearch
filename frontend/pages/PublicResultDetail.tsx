@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Layout } from '../components/Layout';
 import BigFiveResults from '../components/BigFiveResults';
 import { EnneagramResults } from '../components/EnneagramResults';
 import HexacoResults from '../components/HexacoResults';
@@ -227,23 +228,7 @@ export function PublicResultDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
-      <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
-        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-          <Link to="/" className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
-            Mesearch
-          </Link>
-          <nav className="flex items-center gap-6">
-            <Link
-              to="/"
-              className="text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)] transition-colors text-sm"
-            >
-              Home
-            </Link>
-          </nav>
-        </div>
-      </header>
-
+    <Layout>
       <main className="mx-auto max-w-4xl px-6 py-12">
         {error ? (
           <div className="card-premium rounded-lg p-12 text-center">
@@ -296,7 +281,7 @@ export function PublicResultDetail() {
           </>
         ) : null}
       </main>
-    </div>
+    </Layout>
   );
 }
 

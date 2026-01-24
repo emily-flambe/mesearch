@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Layout } from './Layout';
 import {
   type BigFiveResults as Results,
   type DimensionScore,
@@ -34,27 +35,26 @@ export default function BigFiveResults({ initialResults, showHeader = true, show
   }, [initialResults]);
 
   if (!results) {
-    return (
-      <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
-        {showHeader && <Header />}
-        <main className="mx-auto max-w-2xl px-6 py-16 text-center">
-          <div className="card-premium rounded-lg p-10">
-            <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-4">
-              No Results Found
-            </h2>
-            <p className="text-[var(--color-text-secondary)] mb-8">
-              You haven&apos;t completed the Big Five assessment yet.
-            </p>
-            <button
-              onClick={() => navigate('/test/big-five')}
-              className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase"
-            >
-              Take the Test
-            </button>
-          </div>
-        </main>
-      </div>
+    const content = (
+      <main className="mx-auto max-w-2xl px-6 py-16 text-center">
+        <div className="card-premium rounded-lg p-10">
+          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-4">
+            No Results Found
+          </h2>
+          <p className="text-[var(--color-text-secondary)] mb-8">
+            You haven&apos;t completed the Big Five assessment yet.
+          </p>
+          <button
+            onClick={() => navigate('/test/big-five')}
+            className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase"
+          >
+            Take the Test
+          </button>
+        </div>
+      </main>
     );
+
+    return showHeader ? <Layout>{content}</Layout> : content;
   }
 
   const dimensionScores = results.dimensions;
@@ -92,12 +92,10 @@ export default function BigFiveResults({ initialResults, showHeader = true, show
     );
   }
 
-  return (
-    <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
-      {showHeader && <Header />}
-      <main className="mx-auto max-w-4xl px-6 py-12">
-        {/* Title */}
-        <div className="text-center mb-12">
+  const mainContent = (
+    <main className="mx-auto max-w-4xl px-6 py-12">
+      {/* Title */}
+      <div className="text-center mb-12">
           <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">
             Your Results
           </p>
@@ -153,36 +151,22 @@ export default function BigFiveResults({ initialResults, showHeader = true, show
           </div>
         )}
 
-        {/* Disclaimer */}
-        <div className="mt-12 text-center">
-          <p className="text-[var(--color-text-muted)] text-xs leading-relaxed max-w-2xl mx-auto">
-            This assessment provides a snapshot of your personality based on self-reported responses.
-            Results should be used for self-reflection and personal growth, not as clinical diagnoses.
-            Personality can be influenced by context and may change over time.
-          </p>
-        </div>
-      </main>
-    </div>
+      {/* Disclaimer */}
+      <div className="mt-12 text-center">
+        <p className="text-[var(--color-text-muted)] text-xs leading-relaxed max-w-2xl mx-auto">
+          This assessment provides a snapshot of your personality based on self-reported responses.
+          Results should be used for self-reflection and personal growth, not as clinical diagnoses.
+          Personality can be influenced by context and may change over time.
+        </p>
+      </div>
+    </main>
   );
+
+  return showHeader ? <Layout>{mainContent}</Layout> : mainContent;
 }
 
 // Export the Results type for use in ResultDetail
 export type { Results as BigFiveResultsType };
-
-function Header() {
-  return (
-    <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
-      <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-        <Link
-          to="/"
-          className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
-        >
-          Mēsearch
-        </Link>
-      </div>
-    </header>
-  );
-}
 
 interface RadarChartProps {
   scores: DimensionScore[];

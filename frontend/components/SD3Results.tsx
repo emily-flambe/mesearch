@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Layout } from './Layout';
 import {
   type SD3Results as Results,
   type TraitScore,
@@ -34,37 +35,34 @@ export default function SD3Results({ initialResults, showHeader = true, showActi
   }, [initialResults]);
 
   if (!results) {
-    return (
-      <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
-        {showHeader && <Header />}
-        <main className="mx-auto max-w-2xl px-6 py-16 text-center">
-          <div className="card-premium rounded-lg p-10">
-            <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-4">
-              No Results Found
-            </h2>
-            <p className="text-[var(--color-text-secondary)] mb-8">
-              You haven&apos;t completed the Short Dark Triad assessment yet.
-            </p>
-            <button
-              onClick={() => navigate('/test/sd3')}
-              className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase"
-            >
-              Take the Test
-            </button>
-          </div>
-        </main>
-      </div>
+    const content = (
+      <main className="mx-auto max-w-2xl px-6 py-16 text-center">
+        <div className="card-premium rounded-lg p-10">
+          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-4">
+            No Results Found
+          </h2>
+          <p className="text-[var(--color-text-secondary)] mb-8">
+            You haven&apos;t completed the Short Dark Triad assessment yet.
+          </p>
+          <button
+            onClick={() => navigate('/test/sd3')}
+            className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase"
+          >
+            Take the Test
+          </button>
+        </div>
+      </main>
     );
+
+    return showHeader ? <Layout>{content}</Layout> : content;
   }
 
   const traitScores = results.traits;
 
-  return (
-    <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
-      {showHeader && <Header />}
-      <main className="mx-auto max-w-4xl px-6 py-12">
-        {/* Title */}
-        <div className="text-center mb-12">
+  const mainContent = (
+    <main className="mx-auto max-w-4xl px-6 py-12">
+      {/* Title */}
+      <div className="text-center mb-12">
           <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">
             Your Results
           </p>
@@ -159,36 +157,22 @@ export default function SD3Results({ initialResults, showHeader = true, showActi
           </div>
         )}
 
-        {/* Citation */}
-        <div className="mt-12 text-center">
-          <p className="text-[var(--color-text-muted)] text-xs leading-relaxed max-w-2xl mx-auto mb-4">
-            This assessment is based on self-reported responses and measures subclinical
-            personality traits. Results should be used for self-reflection and personal insight,
-            not as clinical diagnoses or labels.
-          </p>
-          <p className="text-[var(--color-text-muted)] text-xs italic">
-            Citation: Jones, D.N., & Paulhus, D.L. (2014). Introducing the Short Dark Triad (SD3):
-            A Brief Measure of Dark Personality Traits. <em>Assessment</em>, 21(1), 28-41.
-          </p>
-        </div>
-      </main>
-    </div>
-  );
-}
-
-function Header() {
-  return (
-    <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
-      <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-        <Link
-          to="/"
-          className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
-        >
-          Mesearch
-        </Link>
+      {/* Citation */}
+      <div className="mt-12 text-center">
+        <p className="text-[var(--color-text-muted)] text-xs leading-relaxed max-w-2xl mx-auto mb-4">
+          This assessment is based on self-reported responses and measures subclinical
+          personality traits. Results should be used for self-reflection and personal insight,
+          not as clinical diagnoses or labels.
+        </p>
+        <p className="text-[var(--color-text-muted)] text-xs italic">
+          Citation: Jones, D.N., & Paulhus, D.L. (2014). Introducing the Short Dark Triad (SD3):
+          A Brief Measure of Dark Personality Traits. <em>Assessment</em>, 21(1), 28-41.
+        </p>
       </div>
-    </header>
+    </main>
   );
+
+  return showHeader ? <Layout>{mainContent}</Layout> : mainContent;
 }
 
 interface TriangleChartProps {
