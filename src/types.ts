@@ -15,7 +15,9 @@ export interface User {
   display_name: string | null;
   avatar_url: string | null;
   google_id: string | null;
-  email_verified: boolean;
+  username: string | null;
+  is_public: number; // 0 = private, 1 = public
+  email_verified: number; // 0 or 1
   created_at: number;
   updated_at: number;
 }
@@ -26,6 +28,7 @@ export interface TestResult {
   user_id: string;
   test_type: string;
   scores: string; // JSON blob
+  is_public: number; // 0 = private, 1 = public
   completed_at: number;
 }
 

@@ -68,7 +68,8 @@ results.get('/', async (c) => {
   return c.json({
     data: userResults.results.map(r => ({
       ...r,
-      scores: JSON.parse(r.scores)
+      scores: JSON.parse(r.scores),
+      is_public: Boolean(r.is_public),
     })),
     error: null
   });
@@ -102,7 +103,8 @@ results.get('/:id', async (c) => {
   return c.json({
     data: {
       ...result,
-      scores: JSON.parse(result.scores)
+      scores: JSON.parse(result.scores),
+      is_public: Boolean(result.is_public),
     },
     error: null
   });
@@ -179,6 +181,50 @@ results.delete('/:id', async (c) => {
   await c.env.DB.prepare('DELETE FROM results WHERE id = ?').bind(resultId).run();
 
   return c.json({ data: { success: true }, error: null });
+});
+
+// PATCH /api/results/:id - Update result visibility
+results.patch('/:id', async (c) => {
+  const email = getUserEmail(c);
+  const resultId = c.req.param('id');
+
+  if (!email) {
+    return c.json({
+      data: null,
+      error: { message: 'Unauthorized', code: 'UNAUTHORIZED' }
+    }, 401);
+  }
+
+  const userId = await getOrCreateUser(email, c.env.DB);
+
+  const result = await c.env.DB.prepare(
+    'SELECT id, is_public FROM results WHERE id = ? AND user_id = ?'
+  ).bind(resultId, userId).first<{ id: string; is_public: number }>();
+
+  if (!result) {
+    return c.json({
+      data: null,
+      error: { message: 'Result not found', code: 'NOT_FOUND' }
+    }, 404);
+  }
+
+  const body = await c.req.json<{ is_public?: boolean }>();
+
+  if (body.is_public === undefined) {
+    return c.json({
+      data: null,
+      error: { message: 'No fields to update', code: 'NO_UPDATES' }
+    }, 400);
+  }
+
+  await c.env.DB.prepare(
+    'UPDATE results SET is_public = ? WHERE id = ?'
+  ).bind(body.is_public ? 1 : 0, resultId).run();
+
+  return c.json({
+    data: { id: resultId, is_public: body.is_public },
+    error: null
+  });
 });
 
 export default results;

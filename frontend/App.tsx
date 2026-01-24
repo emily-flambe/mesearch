@@ -17,6 +17,9 @@ import { FeatureFlagsProvider, useFeatureFlags } from './contexts/FeatureFlagsCo
 import { UserMenu } from './components/UserMenu';
 import { ResultsHistory } from './pages/ResultsHistory';
 import { ResultDetail } from './pages/ResultDetail';
+import { Settings } from './pages/Settings';
+import { PublicProfile } from './pages/PublicProfile';
+import { PublicResultDetail } from './pages/PublicResultDetail';
 import MiniTestAssessment from './components/MiniTestAssessment';
 import LoveLanguagesAssessment from './components/LoveLanguagesAssessment';
 import LoveLanguagesResults from './components/LoveLanguagesResults';
@@ -787,6 +790,9 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/my-results" element={<ResultsHistory />} />
             <Route path="/results/:id" element={<ResultDetail />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/u/:username" element={<PublicProfile />} />
+            <Route path="/u/:username/results/:id" element={<PublicResultDetail />} />
             <Route path="/test/big-five" element={<BigFiveAssessment />} />
             <Route path="/test/big-five/results" element={<BigFiveResults />} />
             <Route path="/test/communication-styles" element={<LoveLanguagesAssessment />} />

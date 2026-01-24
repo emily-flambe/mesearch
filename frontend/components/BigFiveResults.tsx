@@ -59,6 +59,39 @@ export default function BigFiveResults({ initialResults, showHeader = true, show
 
   const dimensionScores = results.dimensions;
 
+  // If embedded mode (no header), return just the results content
+  if (!showHeader) {
+    return (
+      <div className="space-y-8">
+        {/* Radar Chart */}
+        <div className="card-premium rounded-lg p-8">
+          <h3 className="text-center text-[var(--color-text-secondary)] text-sm uppercase tracking-wider mb-6">
+            Personality Overview
+          </h3>
+          <div className="flex justify-center">
+            <RadarChart scores={dimensionScores} />
+          </div>
+        </div>
+
+        {/* Dimension Breakdown */}
+        <div className="space-y-4">
+          {dimensionScores.map((score) => (
+            <DimensionCard
+              key={score.dimension}
+              score={score}
+              isExpanded={expandedDimension === score.dimension}
+              onToggle={() =>
+                setExpandedDimension(
+                  expandedDimension === score.dimension ? null : score.dimension
+                )
+              }
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
       {showHeader && <Header />}
