@@ -80,6 +80,49 @@ auth.get('/dev-login', async (c) => {
   });
 });
 
+// GET /api/auth/login - Production login redirect
+// This endpoint should be protected by Cloudflare Access.
+// When a user hits it, Access will authenticate them first,
+// then redirect them to /my-results with auth headers set.
+auth.get('/login', async (c) => {
+  // Check for Cloudflare Access header (production)
+  const accessEmail = c.req.header('Cf-Access-Authenticated-User-Email');
+
+  // Check for dev cookie (local development)
+  const cookies = c.req.header('Cookie') || '';
+  const devEmailMatch = cookies.match(/dev_user_email=([^;]+)/);
+  const devEmail = devEmailMatch ? decodeURIComponent(devEmailMatch[1]) : null;
+
+  const email = accessEmail || devEmail;
+
+  if (!email) {
+    // If Access isn't configured to protect this route, show a helpful message
+    return c.json({
+      data: null,
+      error: {
+        message: 'Authentication not configured. Please use Cloudflare Access.',
+        code: 'AUTH_NOT_CONFIGURED'
+      }
+    }, 503);
+  }
+
+  // User is authenticated - find or create them in DB, then redirect
+  let user = await c.env.DB.prepare(
+    'SELECT id, email, display_name, avatar_url, created_at FROM users WHERE email = ?'
+  ).bind(email).first();
+
+  if (!user) {
+    const userId = generateId();
+    await c.env.DB.prepare(`
+      INSERT INTO users (id, email, email_verified)
+      VALUES (?, ?, 1)
+    `).bind(userId, email).run();
+  }
+
+  // Redirect to results page
+  return c.redirect('/my-results');
+});
+
 // POST /api/auth/logout - Clear session
 auth.post('/logout', (c) => {
   // Clear dev cookie

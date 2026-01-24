@@ -5,7 +5,7 @@ test.describe('Authentication - Unauthenticated', () => {
     await page.goto('/');
 
     // Check that the page loads
-    await expect(page.getByRole('link', { name: 'Mesearch' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Mesearch', exact: true })).toBeVisible();
 
     // Check for Sign In link (when not logged in)
     await expect(page.getByRole('link', { name: 'Sign In' })).toBeVisible();
@@ -63,7 +63,7 @@ test.describe('Authentication - Dev Login Flow', () => {
     await expect(page.getByRole('button').filter({ hasText: 'J' })).toBeVisible();
   });
 
-  test('user menu shows My Results link', async ({ page }) => {
+  test('user menu shows Settings link', async ({ page }) => {
     // Login first
     await page.goto('/api/auth/dev-login?email=test@example.com');
     await expect(page).toHaveURL('/');
@@ -71,8 +71,17 @@ test.describe('Authentication - Dev Login Flow', () => {
     // Click user menu to open dropdown
     await page.getByRole('button').filter({ hasText: 'T' }).click();
 
-    // Should see My Results link in dropdown
-    await expect(page.getByRole('link', { name: 'My Results' })).toBeVisible();
+    // Should see Settings link in dropdown (My Results moved to main nav as "Results")
+    await expect(page.getByRole('link', { name: 'Settings' })).toBeVisible();
+  });
+
+  test('Results link is visible in main nav when logged in', async ({ page }) => {
+    // Login first
+    await page.goto('/api/auth/dev-login?email=test@example.com');
+    await expect(page).toHaveURL('/');
+
+    // Should see Results link in the main nav
+    await expect(page.getByRole('link', { name: 'Results' })).toBeVisible();
   });
 
   test('logout clears session', async ({ page }) => {

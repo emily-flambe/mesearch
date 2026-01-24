@@ -11,8 +11,8 @@ test.describe('HEXACO-60 Assessment', () => {
     // Navigate to HEXACO assessment
     await page.goto('/hexaco');
 
-    // Verify we're on the assessment page
-    await expect(page.getByText('HEXACO-60 Assessment')).toBeVisible();
+    // Verify we're on the assessment page (HEXACO goes directly to questions, no intro)
+    await expect(page.getByText('Question 1')).toBeVisible();
 
     // Answer all 60 questions with "Neutral" (value 3)
     for (let i = 1; i <= 60; i++) {

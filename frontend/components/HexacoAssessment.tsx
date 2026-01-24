@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Layout } from './Layout';
 import { hexacoItems } from '../data/hexaco-items';
 import { HexacoResponse, getProgress } from '../data/hexaco-scoring';
 
@@ -76,22 +77,7 @@ export default function HexacoAssessment({ onComplete }: HexacoAssessmentProps) 
   };
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
-      {/* Minimal Header */}
-      <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
-        <div className="mx-auto max-w-4xl px-6 py-4 flex items-center justify-between">
-          <Link
-            to="/"
-            className="font-display text-xl font-semibold tracking-wide text-gold-gradient"
-          >
-            Mēsearch
-          </Link>
-          <span className="text-[var(--color-text-muted)] text-sm">
-            HEXACO-60 Assessment
-          </span>
-        </div>
-      </header>
-
+    <Layout>
       {/* Progress Bar */}
       <div className="bg-[var(--color-bg-secondary)] border-b border-[var(--color-border-subtle)]">
         <div className="mx-auto max-w-4xl px-6 py-3">
@@ -209,6 +195,6 @@ export default function HexacoAssessment({ onComplete }: HexacoAssessmentProps) 
           There are no right or wrong answers.
         </p>
       </main>
-    </div>
+    </Layout>
   );
 }

@@ -1,154 +1,41 @@
 import { Routes, Route, Link, useParams } from 'react-router-dom';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { useState } from 'react';
 import HexacoAssessment from './components/HexacoAssessment';
 import HexacoResults from './components/HexacoResults';
 import { HexacoResponse, calculateScores, DimensionScore } from './data/hexaco-scoring';
 import BigFiveAssessment from './components/BigFiveAssessment';
 import BigFiveResults from './components/BigFiveResults';
+import MFQAssessment from './components/MFQAssessment';
+import MFQResults from './components/MFQResults';
+import SD3Assessment from './components/SD3Assessment';
+import SD3Results from './components/SD3Results';
 import { enneagramItems, likertScale, type LikertValue } from './data/enneagram-items';
 import { calculateEnneagramResult, type EnneagramResult } from './data/enneagram-scoring';
 import { EnneagramResults } from './components/EnneagramResults';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { FeatureFlagsProvider, useFeatureFlags } from './contexts/FeatureFlagsContext';
-import { UserMenu } from './components/UserMenu';
+import { Layout, ThemeProvider } from './components/Layout';
 import { ResultsHistory } from './pages/ResultsHistory';
+import { ResultDetail } from './pages/ResultDetail';
+import { Settings } from './pages/Settings';
+import { PublicProfile } from './pages/PublicProfile';
+import { PublicResultDetail } from './pages/PublicResultDetail';
 import MiniTestAssessment from './components/MiniTestAssessment';
 import IATAssessment from './components/IATAssessment';
-
-// Theme Context
-type Theme = 'dark' | 'light';
-
-const ThemeContext = createContext<{
-  theme: Theme;
-  toggleTheme: () => void;
-}>({
-  theme: 'dark',
-  toggleTheme: () => {},
-});
-
-function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('mesearch-theme');
-      return (saved as Theme) || 'dark';
-    }
-    return 'dark';
-  });
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (theme === 'light') {
-      root.classList.add('light');
-    } else {
-      root.classList.remove('light');
-    }
-    localStorage.setItem('mesearch-theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
-
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-}
-
-function useTheme() {
-  return useContext(ThemeContext);
-}
-
-// Theme Toggle Button
-function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
-
-  return (
-    <button
-      onClick={toggleTheme}
-      className="theme-toggle"
-      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-    >
-      {theme === 'dark' ? (
-        // Sun icon for switching to light
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-          />
-        </svg>
-      ) : (
-        // Moon icon for switching to dark
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-          />
-        </svg>
-      )}
-    </button>
-  );
-}
-
-function GitHubIcon() {
-  return (
-    <a
-      href="https://github.com/emily-flambe/mesearch"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-[var(--color-text-muted)] hover:text-[var(--color-champagne)] transition-colors duration-300"
-      aria-label="View on GitHub"
-    >
-      <svg
-        viewBox="0 0 24 24"
-        width="22"
-        height="22"
-        fill="currentColor"
-        aria-hidden="true"
-      >
-        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-      </svg>
-    </a>
-  );
-}
+import LoveLanguagesAssessment from './components/LoveLanguagesAssessment';
+import LoveLanguagesResults from './components/LoveLanguagesResults';
+import ECRAssessment from './components/ECRAssessment';
+import ECRResults from './components/ECRResults';
+import CRTAssessment from './components/CRTAssessment';
+import MBTIAssessment from './components/MBTIAssessment';
+import MBTIResults from './components/MBTIResults';
+import RMETAssessment from './components/RMETAssessment';
+import RMETResults from './components/RMETResults';
+import { TestsPage } from './pages/TestsPage';
 
 function HomePage() {
-  const { flags } = useFeatureFlags();
-
   return (
-    <div id="top" className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
-      {/* Header */}
-      <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
-        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-          <a href="#top" className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
-            Mesearch
-          </a>
-          <nav className="flex items-center gap-6">
-            <a
-              href="#tests"
-              className="text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)] transition-colors duration-300 text-sm tracking-wide uppercase"
-            >
-              Tests
-            </a>
-            <a
-              href="#about"
-              className="text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)] transition-colors duration-300 text-sm tracking-wide uppercase"
-            >
-              About
-            </a>
-            <div className="w-px h-5 bg-[var(--color-border)]" />
-            <UserMenu />
-            <ThemeToggle />
-            <GitHubIcon />
-          </nav>
-        </div>
-      </header>
-
+    <Layout>
       <main>
         {/* Hero Section */}
         <section className="relative mx-auto max-w-6xl px-6 py-32 text-center overflow-hidden">
@@ -171,135 +58,12 @@ function HomePage() {
               <li>Question the nature of your reality.</li>
             </ul>
           </div>
-          <a
-            href="#tests"
+          <Link
+            to="/tests"
             className="btn-gold inline-block px-10 py-4 rounded text-sm tracking-widest uppercase"
           >
             Explore Tests
-          </a>
-        </section>
-
-        {/* Divider */}
-        <div className="divider-elegant mx-auto max-w-md" />
-
-        {/* Tests Section */}
-        <section id="tests" className="mx-auto max-w-6xl px-6 py-24 scroll-mt-24">
-          <div className="text-center mb-16">
-            <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">Assessments</p>
-            <h3 className="font-display text-4xl font-medium text-[var(--color-text-primary)] transition-colors duration-300">Featured Tests</h3>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <TestCard
-              title="Big Five"
-              subtitle="IPIP-NEO"
-              slug="big-five"
-              keywords={['Traits', 'Behavior', 'Stability']}
-              description="The gold standard in personality psychology. Measures Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism."
-              time="15 min"
-              seriousness={5}
-              fun={3}
-            />
-            <TestCard
-              title="HEXACO"
-              subtitle="Six Dimensions"
-              slug="hexaco"
-              link="/hexaco"
-              keywords={['Ethics', 'Honesty', 'Integrity']}
-              description="Six-factor model including Honesty-Humility. Predicts ethical behavior and workplace conduct with precision."
-              time="12 min"
-              seriousness={5}
-              fun={2}
-            />
-            <TestCard
-              title="Enneagram"
-              subtitle="Nine Types"
-              slug="enneagram"
-              keywords={['Motivations', 'Growth', 'Archetypes']}
-              description="Explore your core motivations through nine distinct personality archetypes. Renowned for personal growth insights."
-              time="10 min"
-              seriousness={2}
-              fun={5}
-            />
-          </div>
-
-          {/* IAT Section */}
-          <div className="mt-12">
-            <div className="text-center mb-6">
-              <span className="inline-block px-3 py-1 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-400 text-xs tracking-wide uppercase">
-                Research-Backed (Controversial)
-              </span>
-            </div>
-            <div className="max-w-md mx-auto">
-              <TestCard
-                title="IAT"
-                subtitle="Implicit Association Test"
-                slug="iat"
-                keywords={['Reaction Time', 'Automatic Associations', 'Self-Reflection']}
-                description="Measure automatic associations through reaction time. Educational tool for exploring implicit cognition. Low individual reliability."
-                time="5-10 min"
-                seriousness={3}
-                fun={4}
-              />
-            </div>
-          </div>
-
-          {/* Mini-Test - Admin/Test Users Only */}
-          {flags.mini_test && (
-            <div className="mt-8" data-testid="mini-test-section">
-              <div className="text-center mb-6">
-                <span className="inline-block px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs tracking-wide uppercase">
-                  Debug / Testing Only
-                </span>
-              </div>
-              <div className="max-w-md mx-auto">
-                <TestCard
-                  title="Mini-Test"
-                  subtitle="5 Questions"
-                  slug="mini-test"
-                  keywords={['Debug', 'Testing', 'Quick']}
-                  description="A 5-question sampler for debugging and automated testing. One question from each Big Five dimension."
-                  time="1 min"
-                  seriousness={1}
-                  fun={1}
-                />
-              </div>
-            </div>
-          )}
-        </section>
-
-        {/* Divider */}
-        <div className="divider-elegant mx-auto max-w-md" />
-
-        {/* About Section */}
-        <section id="about" className="relative py-24 overflow-hidden scroll-mt-24">
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-bg-primary)] via-[var(--color-accent-purple)] to-[var(--color-bg-primary)] opacity-50 transition-colors duration-300" />
-          <div className="relative mx-auto max-w-6xl px-6 text-center">
-            <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">Methodology</p>
-            <h3 className="font-display text-4xl font-medium text-[var(--color-text-primary)] mb-6 transition-colors duration-300">
-              The Science Behind It
-            </h3>
-            <p className="text-[var(--color-text-secondary)] text-lg max-w-2xl mx-auto mb-12 leading-relaxed font-light transition-colors duration-300">
-              Each test is rated on two dimensions: Seriousness reflects the depth of research
-              supporting its validity, while Fun captures how engaging the experience is.
-              Some tests excel at both. Some tests are dogshit. We decide, you report!
-            </p>
-            <div className="flex justify-center gap-16">
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-3">
-                  <span className="text-[var(--color-text-secondary)] text-sm">Seriousness</span>
-                  <RatingDots value={5} />
-                </div>
-                <p className="text-[var(--color-text-muted)] text-sm transition-colors duration-300">Strong empirical support</p>
-              </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-3">
-                  <span className="text-[var(--color-text-secondary)] text-sm">Fun</span>
-                  <RatingDots value={5} />
-                </div>
-                <p className="text-[var(--color-text-muted)] text-sm transition-colors duration-300">Engaging and enjoyable</p>
-              </div>
-            </div>
-          </div>
+          </Link>
         </section>
       </main>
 
@@ -307,101 +71,23 @@ function HomePage() {
       <footer className="border-t border-[var(--color-border)] py-12 transition-colors duration-300">
         <div className="mx-auto max-w-6xl px-6 text-center">
           <p className="font-display text-xl text-gold-gradient mb-4">Mesearch</p>
+          <a
+            href="mailto:hello@mesearcher.com"
+            className="text-[var(--color-text-muted)] hover:text-[var(--color-champagne)] transition-colors duration-300 text-sm mb-4 inline-block"
+          >
+            hello@mesearcher.com
+          </a>
           <p className="text-[var(--color-text-muted)]/50 text-xs">&copy; 2026</p>
         </div>
       </footer>
-    </div>
-  );
-}
-
-function RatingDots({ value, max = 5 }: { value: number; max?: number }) {
-  return (
-    <div className="flex gap-1">
-      {Array.from({ length: max }).map((_, i) => (
-        <div
-          key={i}
-          className={`w-1.5 h-1.5 rounded-full ${
-            i < value
-              ? 'bg-[var(--color-champagne)]'
-              : 'bg-[var(--color-border)]'
-          }`}
-        />
-      ))}
-    </div>
-  );
-}
-
-function TestCard({
-  title,
-  subtitle,
-  slug,
-  keywords,
-  description,
-  time,
-  seriousness,
-  fun,
-  link,
-}: {
-  title: string;
-  subtitle: string;
-  slug: string;
-  keywords: string[];
-  description: string;
-  time: string;
-  seriousness: number;
-  fun: number;
-  link?: string;
-}) {
-  const href = link || `/test/${slug}`;
-  return (
-    <div className="card-premium rounded-lg p-8 group">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex gap-6">
-          <div className="flex items-center gap-2">
-            <span className="text-[var(--color-text-muted)] text-[10px] tracking-wide uppercase">Seriousness</span>
-            <RatingDots value={seriousness} />
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-[var(--color-text-muted)] text-[10px] tracking-wide uppercase">Fun</span>
-            <RatingDots value={fun} />
-          </div>
-        </div>
-        <span className="text-[var(--color-text-muted)] text-xs tracking-wide">{time}</span>
-      </div>
-      <h4 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-1 transition-colors duration-300">{title}</h4>
-      <p className="text-[var(--color-champagne)]/70 text-sm mb-4 tracking-wide">{subtitle}</p>
-      <p className="text-[var(--color-text-muted)] text-xs mb-3 tracking-wide">
-        {keywords.join(' · ')}
-      </p>
-      <p className="text-[var(--color-text-secondary)] text-sm mb-8 leading-relaxed transition-colors duration-300">{description}</p>
-      <Link
-        to={href}
-        className="btn-ghost block w-full py-3 rounded text-center text-xs tracking-widest uppercase"
-      >
-        Begin Assessment
-      </Link>
-    </div>
+    </Layout>
   );
 }
 
 // Generic placeholder for tests not yet implemented
 function ComingSoonTestPage() {
   return (
-    <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
-      {/* Header */}
-      <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
-        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-          <Link to="/" className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
-            Mesearch
-          </Link>
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-            <GitHubIcon />
-          </div>
-        </div>
-      </header>
-
-      {/* Content */}
+    <Layout>
       <main className="mx-auto max-w-2xl px-6 py-24 text-center">
         <div className="card-premium rounded-lg p-12">
           <div className="w-16 h-16 mx-auto mb-8 rounded-full border border-[var(--color-champagne)]/30 flex items-center justify-center">
@@ -433,7 +119,7 @@ function ComingSoonTestPage() {
           </Link>
         </div>
       </main>
-    </div>
+    </Layout>
   );
 }
 
@@ -507,20 +193,7 @@ function EnneagramTestPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
-      {/* Header */}
-      <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
-        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-          <Link to="/" className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
-            Mesearch
-          </Link>
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-            <GitHubIcon />
-          </div>
-        </div>
-      </header>
-
+    <Layout>
       <main className="mx-auto max-w-3xl px-6 py-12">
         {phase === 'intro' && (
           <div className="text-center">
@@ -648,7 +321,7 @@ function EnneagramTestPage() {
           <EnneagramResults result={result} onRetake={handleRetake} />
         )}
       </main>
-    </div>
+    </Layout>
   );
 }
 
@@ -661,6 +334,14 @@ function TestRouter() {
     return <EnneagramTestPage />;
   }
 
+  if (slug === 'communication-styles') {
+    return <LoveLanguagesAssessment />;
+  }
+
+  if (slug === 'ecr') {
+    return <ECRAssessment />;
+  }
+
   if (slug === 'mini-test') {
     // Only allow access if feature flag is enabled
     if (!flags.mini_test) {
@@ -671,6 +352,26 @@ function TestRouter() {
 
   if (slug === 'iat') {
     return <IATAssessment />;
+  }
+
+  if (slug === 'crt') {
+    return <CRTAssessment />;
+  }
+
+  if (slug === 'mbti') {
+    return <MBTIAssessment />;
+  }
+
+  if (slug === 'mfq') {
+    return <MFQAssessment />;
+  }
+
+  if (slug === 'rmet') {
+    return <RMETAssessment />;
+  }
+
+  if (slug === 'sd3') {
+    return <SD3Assessment />;
   }
 
   // All other tests show coming soon
@@ -691,9 +392,25 @@ export default function App() {
         <FeatureFlagsProvider>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/tests" element={<TestsPage />} />
             <Route path="/my-results" element={<ResultsHistory />} />
+            <Route path="/results/:id" element={<ResultDetail />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/u/:username" element={<PublicProfile />} />
+            <Route path="/u/:username/results/:id" element={<PublicResultDetail />} />
             <Route path="/test/big-five" element={<BigFiveAssessment />} />
             <Route path="/test/big-five/results" element={<BigFiveResults />} />
+            <Route path="/test/communication-styles" element={<LoveLanguagesAssessment />} />
+            <Route path="/test/communication-styles/results" element={<LoveLanguagesResults />} />
+            <Route path="/test/ecr/results" element={<ECRResults />} />
+            <Route path="/test/mbti" element={<MBTIAssessment />} />
+            <Route path="/test/mbti/results" element={<MBTIResults />} />
+            <Route path="/test/mfq" element={<MFQAssessment />} />
+            <Route path="/test/mfq/results" element={<MFQResults />} />
+            <Route path="/test/rmet" element={<RMETAssessment />} />
+            <Route path="/test/rmet/results" element={<RMETResults />} />
+            <Route path="/test/sd3" element={<SD3Assessment />} />
+            <Route path="/test/sd3/results" element={<SD3Results />} />
             <Route path="/test/:slug" element={<TestRouter />} />
             <Route
               path="/hexaco"

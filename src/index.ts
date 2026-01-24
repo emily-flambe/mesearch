@@ -5,6 +5,8 @@ import type { Env } from './types';
 import auth from './api/auth';
 import flags from './api/flags';
 import results from './api/results';
+import profile from './api/profile';
+import publicApi from './api/public';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -23,6 +25,9 @@ app.get('/api/health', (c) => {
 app.route('/api/auth', auth);
 app.route('/api/flags', flags);
 app.route('/api/results', results);
+app.route('/api/profile', profile);
+// Public profile routes - outside /api to bypass Cloudflare Access
+app.route('/p', publicApi);
 
 // 404 handler for API routes
 app.notFound(async (c) => {

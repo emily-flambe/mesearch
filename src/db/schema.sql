@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS users (
   display_name TEXT,
   avatar_url TEXT,
   google_id TEXT UNIQUE,
+  username TEXT UNIQUE,              -- For public profile URLs (/u/:username)
+  is_public INTEGER DEFAULT 0,       -- 0 = private, 1 = public profile
   email_verified INTEGER DEFAULT 0,  -- 1 if verified
   created_at INTEGER DEFAULT (unixepoch()),
   updated_at INTEGER DEFAULT (unixepoch())
@@ -20,6 +22,7 @@ CREATE TABLE IF NOT EXISTS results (
   user_id TEXT NOT NULL,
   test_type TEXT NOT NULL,
   scores TEXT NOT NULL,              -- JSON blob of scores
+  is_public INTEGER DEFAULT 0,       -- 0 = private, 1 = publicly visible
   completed_at INTEGER DEFAULT (unixepoch()),
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
@@ -27,6 +30,8 @@ CREATE TABLE IF NOT EXISTS results (
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE INDEX IF NOT EXISTS idx_users_google_id ON users(google_id);
+CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
 CREATE INDEX IF NOT EXISTS idx_results_user ON results(user_id);
 CREATE INDEX IF NOT EXISTS idx_results_user_test ON results(user_id, test_type);
 CREATE INDEX IF NOT EXISTS idx_results_completed ON results(completed_at);
+CREATE INDEX IF NOT EXISTS idx_results_public ON results(user_id, is_public);

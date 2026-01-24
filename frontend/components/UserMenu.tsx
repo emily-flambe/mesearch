@@ -25,10 +25,10 @@ export function UserMenu() {
   }
 
   if (!user) {
-    // For local dev, use dev-login; for production, Access protects /api/results
-    // Clicking "Sign In" will trigger authentication when they try to save results
+    // For local dev, use dev-login; for production, use /api/auth/login
+    // which is protected by Cloudflare Access and will trigger authentication
     const isLocalDev = window.location.hostname === 'localhost';
-    const loginUrl = isLocalDev ? '/api/auth/dev-login' : '/my-results';
+    const loginUrl = isLocalDev ? '/api/auth/dev-login' : '/api/auth/login';
 
     return (
       <a
@@ -72,11 +72,11 @@ export function UserMenu() {
             </p>
           </div>
           <Link
-            to="/my-results"
+            to="/settings"
             onClick={() => setIsOpen(false)}
             className="block px-4 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] transition-colors"
           >
-            My Results
+            Settings
           </Link>
           <button
             onClick={() => {

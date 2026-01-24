@@ -2,10 +2,13 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Mini-Test Feature Flag', () => {
   test.describe('Regular Users (No Access)', () => {
-    test('mini-test section is NOT visible on homepage for regular users', async ({ page }) => {
+    test('mini-test section is NOT visible on tests page for regular users', async ({ page }) => {
       // Login as a regular user (not admin, no +test in email)
       await page.goto('/api/auth/dev-login?email=regular@example.com');
       await expect(page).toHaveURL('/');
+
+      // Go to tests page where mini-test section would be displayed
+      await page.goto('/tests');
 
       // Mini-test section should NOT be visible
       await expect(page.getByTestId('mini-test-section')).not.toBeVisible();
@@ -24,7 +27,7 @@ test.describe('Mini-Test Feature Flag', () => {
     });
 
     test('unauthenticated users cannot see mini-test', async ({ page }) => {
-      await page.goto('/');
+      await page.goto('/tests');
 
       // Mini-test section should NOT be visible
       await expect(page.getByTestId('mini-test-section')).not.toBeVisible();
@@ -36,6 +39,9 @@ test.describe('Mini-Test Feature Flag', () => {
       // Login with +test in email (URL encode the + as %2B)
       await page.goto('/api/auth/dev-login?email=user%2Btest@example.com');
       await expect(page).toHaveURL('/');
+
+      // Go to tests page where mini-test section is displayed
+      await page.goto('/tests');
 
       // Mini-test section should be visible
       await expect(page.getByTestId('mini-test-section')).toBeVisible();
@@ -82,6 +88,9 @@ test.describe('Mini-Test Feature Flag', () => {
       await page.goto('/api/auth/dev-login?email=emily.cogsdill@gmail.com');
       await expect(page).toHaveURL('/');
 
+      // Go to tests page where mini-test section is displayed
+      await page.goto('/tests');
+
       // Mini-test section should be visible
       await expect(page.getByTestId('mini-test-section')).toBeVisible();
     });
@@ -127,6 +136,43 @@ test.describe('Mini-Test Feature Flag', () => {
 
       // Should see Mini-Test in the results (use first() since there may be multiple)
       await expect(page.getByRole('heading', { name: 'Mini-Test' }).first()).toBeVisible();
+    });
+
+    test('View Details link shows result detail page', async ({ page }) => {
+      // Login with +test in email (URL encode the + as %2B)
+      await page.goto('/api/auth/dev-login?email=user%2Btest@example.com');
+      await expect(page).toHaveURL('/');
+
+      // Complete a mini-test first to ensure there's a result
+      await page.goto('/test/mini-test');
+      await page.getByTestId('mini-test-start').click();
+      for (let i = 0; i < 5; i++) {
+        await page.getByTestId('mini-test-option-4').click();
+        await page.waitForTimeout(300);
+      }
+      await expect(page.getByTestId('mini-test-results')).toBeVisible();
+
+      // Navigate to results history
+      await page.goto('/my-results');
+
+      // Should see Mini-Test result
+      await expect(page.getByRole('heading', { name: 'Mini-Test' }).first()).toBeVisible();
+
+      // Click the View Details link for the first result
+      await page.getByRole('link', { name: 'View Details' }).first().click();
+
+      // Should be on the result detail page with /results/ in URL
+      await expect(page).toHaveURL(/\/results\/.+/);
+
+      // Should see the result detail content
+      await expect(page.getByTestId('result-detail-content')).toBeVisible();
+
+      // Should see Result Details as the heading and Mini-Test as the test type label
+      await expect(page.getByRole('heading', { name: 'Result Details' })).toBeVisible();
+      await expect(page.getByText('Mini-Test')).toBeVisible();
+
+      // Should see dimension scores
+      await expect(page.getByText('Dimension Scores')).toBeVisible();
     });
   });
 });

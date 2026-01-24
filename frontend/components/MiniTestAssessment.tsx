@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Layout } from './Layout';
 import { miniTestItems, miniTestDimensionColors, type MiniTestItem } from '../data/mini-test-items';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -98,16 +99,7 @@ export default function MiniTestAssessment() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300">
-      {/* Header */}
-      <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
-        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-          <Link to="/" className="font-display text-2xl font-semibold tracking-wide text-gold-gradient">
-            Mesearch
-          </Link>
-        </div>
-      </header>
-
+    <Layout>
       <main className="mx-auto max-w-3xl px-6 py-12">
         {phase === 'intro' && (
           <div className="text-center">
@@ -291,6 +283,6 @@ export default function MiniTestAssessment() {
           </div>
         )}
       </main>
-    </div>
+    </Layout>
   );
 }
