@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   flowersInsectsIAT,
@@ -41,6 +41,24 @@ export default function IATAssessment() {
 
   const currentBlock = config.blocks[currentBlockIndex];
   const currentStimulus = blockTrials[currentTrialIndex];
+
+  // Refs to track current state for use in setTimeout callbacks (avoids stale closures)
+  const stateRef = useRef({
+    currentTrialIndex,
+    currentBlockIndex,
+    blockTrialsLength: blockTrials.length,
+    allTrialResults,
+  });
+
+  // Keep stateRef in sync - use useLayoutEffect to ensure synchronous update
+  useLayoutEffect(() => {
+    stateRef.current = {
+      currentTrialIndex,
+      currentBlockIndex,
+      blockTrialsLength: blockTrials.length,
+      allTrialResults,
+    };
+  });
 
   // Pre-generate all block trials on mount
   const blockTrialsRef = useRef<Map<number, string[]>>(new Map());
@@ -95,11 +113,12 @@ export default function IATAssessment() {
   }, [config]);
 
   // Handle trial response
+  // Note: stimulus is passed from IATTrial to avoid stale closure issues
   const handleTrialResponse = useCallback(
-    (responseKey: 'E' | 'I', responseTime: number) => {
-      if (!currentBlock || !currentStimulus) return;
+    (responseKey: 'E' | 'I', responseTime: number, stimulus: string) => {
+      if (!currentBlock || !stimulus) return;
 
-      const category = getCategoryForStimulus(config, currentStimulus);
+      const category = getCategoryForStimulus(config, stimulus);
       if (!category) return;
 
       const correctKey = getCorrectResponse(currentBlock, category);
@@ -109,7 +128,7 @@ export default function IATAssessment() {
       const trialResult = createTrialResult({
         blockNumber: currentBlock.blockNumber,
         trialNumber: currentTrialIndex + 1,
-        stimulus: currentStimulus,
+        stimulus: stimulus,
         correctCategory: category,
         responseKey,
         correctKey,
@@ -129,12 +148,16 @@ export default function IATAssessment() {
       }
 
       // Move to next trial after interval
+      // Use stateRef to get current values and avoid stale closure issues
       setTimeout(() => {
-        if (currentTrialIndex + 1 >= blockTrials.length) {
+        const { currentTrialIndex: trialIdx, currentBlockIndex: blockIdx,
+                blockTrialsLength, allTrialResults: allResults } = stateRef.current;
+
+        if (trialIdx + 1 >= blockTrialsLength) {
           // Block complete
-          if (currentBlockIndex + 1 >= config.blocks.length) {
+          if (blockIdx + 1 >= config.blocks.length) {
             // All blocks complete - calculate results
-            const newResults = [...allTrialResults, trialResult];
+            const newResults = [...allResults, trialResult];
             const calculatedResults = calculateDScore(newResults, config.id);
             setResults(calculatedResults);
             setPhase('results');
@@ -151,16 +174,8 @@ export default function IATAssessment() {
         }
       }, INTER_TRIAL_INTERVAL);
     },
-    [
-      config,
-      currentBlock,
-      currentStimulus,
-      currentTrialIndex,
-      blockTrials.length,
-      currentBlockIndex,
-      allTrialResults,
-      saveResults,
-    ]
+    // Dependencies - use stateRef for values accessed in setTimeout
+    [config, currentBlock, saveResults]
   );
 
   // Continue to next block

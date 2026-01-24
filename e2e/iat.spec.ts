@@ -2,16 +2,12 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Implicit Association Test (IAT)', () => {
   test.describe('IAT Accessibility', () => {
-    test('IAT is visible on homepage after scrolling', async ({ page }) => {
-      await page.goto('/');
+    test('IAT is visible on tests page', async ({ page }) => {
+      await page.goto('/tests');
 
-      // Scroll down to the tests section
-      await page.click('a[href="#tests"]');
-      await page.waitForTimeout(500);
-
-      // IAT section should be visible after scrolling
-      await expect(page.getByText('Research-Backed (Controversial)')).toBeVisible({ timeout: 5000 });
+      // IAT card should be visible on tests page
       await expect(page.getByRole('heading', { name: 'IAT' })).toBeVisible();
+      await expect(page.getByText('Implicit Association Test')).toBeVisible();
     });
 
     test('can navigate to IAT directly via URL', async ({ page }) => {
@@ -121,6 +117,54 @@ test.describe('Implicit Association Test (IAT)', () => {
       // The trial count should have advanced
       const trialInfo = await page.getByText(/Trial \d+ of 20/).textContent();
       expect(trialInfo).toBeDefined();
+    });
+
+    test('completes first block without getting stuck', async ({ page }) => {
+      test.setTimeout(120000); // 2 minute timeout for this test
+
+      await page.goto('/test/iat');
+
+      // Start IAT
+      await page.getByTestId('iat-start').click();
+
+      // Begin block 1
+      await page.getByTestId('iat-begin-block').click();
+
+      // Wait for first trial
+      await expect(page.getByTestId('iat-trial')).toBeVisible();
+
+      // Complete all 20 trials in block 1
+      for (let i = 0; i < 25; i++) { // Extra iterations in case of errors
+        // Check if we're still in trial phase
+        const isInTrial = await page.getByTestId('iat-trial').isVisible().catch(() => false);
+        if (!isInTrial) {
+          console.log(`Exited trial phase after ${i} iterations`);
+          break;
+        }
+
+        // Get current trial info
+        const trialText = await page.getByText(/Trial \d+ of 20/).textContent().catch(() => null);
+        console.log(`Iteration ${i}: ${trialText}`);
+
+        // Try pressing E first
+        await page.keyboard.press('e');
+        await page.waitForTimeout(200);
+
+        // If error feedback is shown, press I
+        const hasError = await page.getByTestId('iat-error-feedback').isVisible().catch(() => false);
+        if (hasError) {
+          console.log('  Wrong key, pressing I');
+          await page.keyboard.press('i');
+          await page.waitForTimeout(200);
+        }
+
+        // Wait for trial transition (inter-trial interval is 250ms + React render time)
+        await page.waitForTimeout(400);
+      }
+
+      // After completing block 1, should see block break screen with continue button
+      await expect(page.getByTestId('iat-continue')).toBeVisible({ timeout: 15000 });
+      console.log('Successfully completed first block!');
     });
   });
 

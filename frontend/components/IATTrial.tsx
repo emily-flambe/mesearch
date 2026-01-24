@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { getCategoryColor } from '../data/iat-items';
 
 interface IATTrialProps {
@@ -6,7 +6,7 @@ interface IATTrialProps {
   correctCategory: string;
   leftCategories: string[];
   rightCategories: string[];
-  onResponse: (responseKey: 'E' | 'I', responseTime: number) => void;
+  onResponse: (responseKey: 'E' | 'I', responseTime: number, stimulus: string) => void;
   showFeedback: boolean;
   feedbackType: 'correct' | 'incorrect' | null;
 }
@@ -22,19 +22,45 @@ export default function IATTrial({
 }: IATTrialProps) {
   const stimulusOnsetRef = useRef<number>(0);
   const hasRespondedRef = useRef<boolean>(false);
+  // Use ref for error state to avoid race condition with effect-based handler switching
+  const showErrorFeedbackRef = useRef<boolean>(false);
   const [showErrorFeedback, setShowErrorFeedback] = useState(false);
+
+  // Use refs to always have access to current props in keyboard handler
+  // This avoids stale closure issues entirely
+  const propsRef = useRef({
+    stimulus,
+    correctCategory,
+    leftCategories,
+    rightCategories,
+    onResponse,
+    showFeedback,
+  });
+
+  // Keep refs in sync with props - use useLayoutEffect to ensure synchronous update
+  useLayoutEffect(() => {
+    propsRef.current = {
+      stimulus,
+      correctCategory,
+      leftCategories,
+      rightCategories,
+      onResponse,
+      showFeedback,
+    };
+  });
 
   // Reset state when stimulus changes
   useEffect(() => {
     hasRespondedRef.current = false;
+    showErrorFeedbackRef.current = false;
     setShowErrorFeedback(false);
     // Use performance.now() for millisecond-accurate timing
     stimulusOnsetRef.current = performance.now();
   }, [stimulus]);
 
-  // Handle keyboard input
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent) => {
+  // Set up keyboard listener - use stable callback that reads from refs
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       // Only respond to E or I keys
       const key = event.key.toLowerCase();
       if (key !== 'e' && key !== 'i') return;
@@ -42,58 +68,49 @@ export default function IATTrial({
       // Prevent double responses
       if (hasRespondedRef.current) return;
 
+      // Get current props from ref
+      const { stimulus: currentStimulus, correctCategory: currentCategory,
+              leftCategories: left, rightCategories: right,
+              onResponse: respond, showFeedback: feedback } = propsRef.current;
+
       // Calculate response time
       const responseTime = performance.now() - stimulusOnsetRef.current;
       const responseKey = key === 'e' ? 'E' : 'I';
 
       // Check if response is correct
       const isCorrect = responseKey === 'E'
-        ? leftCategories.includes(correctCategory)
-        : rightCategories.includes(correctCategory);
+        ? left.includes(currentCategory)
+        : right.includes(currentCategory);
 
-      if (!isCorrect && showFeedback) {
+      // If we're in error state, only accept correct responses
+      if (showErrorFeedbackRef.current) {
+        if (isCorrect) {
+          // Correct response after error - record it
+          hasRespondedRef.current = true;
+          showErrorFeedbackRef.current = false;
+          setShowErrorFeedback(false);
+          respond(responseKey as 'E' | 'I', responseTime, currentStimulus);
+        }
+        // Wrong response while in error state - ignore (keep showing error)
+        return;
+      }
+
+      // Not in error state - normal processing
+      if (!isCorrect && feedback) {
         // Show error feedback but don't record the response yet
+        showErrorFeedbackRef.current = true;
         setShowErrorFeedback(true);
         return;
       }
 
       // Record the response
       hasRespondedRef.current = true;
-      onResponse(responseKey as 'E' | 'I', responseTime);
-    },
-    [leftCategories, rightCategories, correctCategory, onResponse, showFeedback]
-  );
+      respond(responseKey as 'E' | 'I', responseTime, currentStimulus);
+    };
 
-  // Handle correct response after error
-  const handleCorrectAfterError = useCallback(
-    (event: KeyboardEvent) => {
-      if (!showErrorFeedback) return;
-
-      const key = event.key.toLowerCase();
-      if (key !== 'e' && key !== 'i') return;
-
-      const responseKey = key === 'e' ? 'E' : 'I';
-      const isCorrect = responseKey === 'E'
-        ? leftCategories.includes(correctCategory)
-        : rightCategories.includes(correctCategory);
-
-      if (isCorrect) {
-        // Now record the full response time (including error correction)
-        const responseTime = performance.now() - stimulusOnsetRef.current;
-        hasRespondedRef.current = true;
-        setShowErrorFeedback(false);
-        onResponse(responseKey as 'E' | 'I', responseTime);
-      }
-    },
-    [showErrorFeedback, leftCategories, rightCategories, correctCategory, onResponse]
-  );
-
-  // Set up keyboard listener
-  useEffect(() => {
-    const handler = showErrorFeedback ? handleCorrectAfterError : handleKeyDown;
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [handleKeyDown, handleCorrectAfterError, showErrorFeedback]);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []); // Empty deps - handler reads from refs
 
   // Determine the color for the stimulus based on its category
   const stimulusColor = getCategoryColor(correctCategory);
