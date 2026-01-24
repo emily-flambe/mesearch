@@ -96,8 +96,8 @@ test.describe('Moral Foundations Questionnaire Assessment', () => {
     await expect(page.getByText('6 of 30')).toBeVisible();
   });
 
-  test('shows MFQ card on homepage', async ({ page }) => {
-    await page.goto('/');
+  test('shows MFQ card on tests page', async ({ page }) => {
+    await page.goto('/tests');
 
     // Verify the MFQ test card is visible
     await expect(page.getByText('Moral Foundations')).toBeVisible();

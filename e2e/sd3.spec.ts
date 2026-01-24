@@ -88,8 +88,8 @@ test.describe('Short Dark Triad (SD3) Assessment', () => {
     await expect(page.getByTestId('sd3-progress')).toHaveText('6 of 27');
   });
 
-  test('SD3 test card is visible on home page', async ({ page }) => {
-    await page.goto('/');
+  test('SD3 test card is visible on tests page', async ({ page }) => {
+    await page.goto('/tests');
 
     // Verify the SD3 test card is displayed - scope to the card to avoid strict mode violations
     const sd3Card = page.locator('.card-premium', { has: page.getByRole('heading', { name: 'Dark Triad' }) });
@@ -99,8 +99,8 @@ test.describe('Short Dark Triad (SD3) Assessment', () => {
     await expect(sd3Card.getByText('Machiavellianism, Narcissism, and Psychopathy')).toBeVisible();
   });
 
-  test('can navigate to SD3 from home page', async ({ page }) => {
-    await page.goto('/');
+  test('can navigate to SD3 from tests page', async ({ page }) => {
+    await page.goto('/tests');
 
     // Find the SD3 test card and click "Begin Assessment"
     // The card contains "Dark Triad" heading and has a Begin Assessment link

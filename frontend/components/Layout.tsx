@@ -115,7 +115,7 @@ export function Layout({ children }: LayoutProps) {
           </Link>
           <nav className="flex items-center gap-6">
             <Link
-              to="/#tests"
+              to="/tests"
               className="text-[var(--color-text-secondary)] hover:text-[var(--color-champagne)] transition-colors duration-300 text-sm tracking-wide uppercase"
             >
               Tests

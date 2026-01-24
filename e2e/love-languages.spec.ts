@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Communication Styles Assessment', () => {
-  test.describe('Homepage', () => {
-    test('communication styles card is visible on homepage', async ({ page }) => {
-      await page.goto('/');
+  test.describe('Tests Page', () => {
+    test('communication styles card is visible on tests page', async ({ page }) => {
+      await page.goto('/tests');
 
       // Should see the Communication Styles test card
       await expect(page.getByRole('heading', { name: 'Communication Styles' })).toBeVisible();

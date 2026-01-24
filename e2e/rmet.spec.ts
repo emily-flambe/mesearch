@@ -159,8 +159,8 @@ test.describe('RMET Assessment', () => {
     await expect(page.getByText('2 of 37')).toBeVisible();
   });
 
-  test('displays RMET card on home page', async ({ page }) => {
-    await page.goto('/');
+  test('displays RMET card on tests page', async ({ page }) => {
+    await page.goto('/tests');
 
     // Should see RMET test card
     await expect(page.getByRole('heading', { name: 'RMET' })).toBeVisible();
