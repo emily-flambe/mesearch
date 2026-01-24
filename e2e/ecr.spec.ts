@@ -140,8 +140,8 @@ test.describe('ECR Attachment Style Assessment', () => {
     await expect(page.getByTestId('ecr-progress')).toContainText('1 of 9');
   });
 
-  test('ECR card is visible on homepage', async ({ page }) => {
-    await page.goto('/');
+  test('ECR card is visible on tests page', async ({ page }) => {
+    await page.goto('/tests');
 
     // Verify ECR test card is present
     await expect(page.getByText('Attachment Style')).toBeVisible();

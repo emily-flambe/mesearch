@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Layout } from './Layout';
 import {
   type MFQResults as Results,
   type FoundationScore,
@@ -34,37 +35,34 @@ export default function MFQResults({ initialResults, showHeader = true, showActi
   }, [initialResults]);
 
   if (!results) {
-    return (
-      <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
-        {showHeader && <Header />}
-        <main className="mx-auto max-w-2xl px-6 py-16 text-center">
-          <div className="card-premium rounded-lg p-10">
-            <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-4">
-              No Results Found
-            </h2>
-            <p className="text-[var(--color-text-secondary)] mb-8">
-              You haven&apos;t completed the Moral Foundations Questionnaire yet.
-            </p>
-            <button
-              onClick={() => navigate('/test/mfq')}
-              className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase"
-            >
-              Take the Test
-            </button>
-          </div>
-        </main>
-      </div>
+    const content = (
+      <main className="mx-auto max-w-2xl px-6 py-16 text-center">
+        <div className="card-premium rounded-lg p-10">
+          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-4">
+            No Results Found
+          </h2>
+          <p className="text-[var(--color-text-secondary)] mb-8">
+            You haven&apos;t completed the Moral Foundations Questionnaire yet.
+          </p>
+          <button
+            onClick={() => navigate('/test/mfq')}
+            className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase"
+          >
+            Take the Test
+          </button>
+        </div>
+      </main>
     );
+
+    return showHeader ? <Layout>{content}</Layout> : content;
   }
 
   const foundationScores = results.foundations;
 
-  return (
-    <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
-      {showHeader && <Header />}
-      <main className="mx-auto max-w-4xl px-6 py-12">
-        {/* Title */}
-        <div className="text-center mb-12">
+  const mainContent = (
+    <main className="mx-auto max-w-4xl px-6 py-12">
+      {/* Title */}
+      <div className="text-center mb-12">
           <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">
             Your Results
           </p>
@@ -130,40 +128,26 @@ export default function MFQResults({ initialResults, showHeader = true, showActi
           </div>
         )}
 
-        {/* Citation and Disclaimer */}
-        <div className="mt-12 text-center space-y-4">
-          <div className="bg-[var(--color-bg-secondary)] rounded-lg p-6">
-            <h4 className="text-[var(--color-text-secondary)] text-xs uppercase tracking-wider mb-2">
-              Citation
-            </h4>
-            <p className="text-[var(--color-text-muted)] text-xs leading-relaxed">
-              {citation}
-            </p>
-          </div>
-          <p className="text-[var(--color-text-muted)] text-xs leading-relaxed max-w-2xl mx-auto">
-            This assessment provides a snapshot of your moral intuitions based on self-reported responses.
-            Results should be used for self-reflection and personal understanding, not as clinical diagnoses.
-            Moral foundations can be influenced by context and may change over time.
+      {/* Citation and Disclaimer */}
+      <div className="mt-12 text-center space-y-4">
+        <div className="bg-[var(--color-bg-secondary)] rounded-lg p-6">
+          <h4 className="text-[var(--color-text-secondary)] text-xs uppercase tracking-wider mb-2">
+            Citation
+          </h4>
+          <p className="text-[var(--color-text-muted)] text-xs leading-relaxed">
+            {citation}
           </p>
         </div>
-      </main>
-    </div>
-  );
-}
-
-function Header() {
-  return (
-    <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
-      <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-        <Link
-          to="/"
-          className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
-        >
-          Mesearch
-        </Link>
+        <p className="text-[var(--color-text-muted)] text-xs leading-relaxed max-w-2xl mx-auto">
+          This assessment provides a snapshot of your moral intuitions based on self-reported responses.
+          Results should be used for self-reflection and personal understanding, not as clinical diagnoses.
+          Moral foundations can be influenced by context and may change over time.
+        </p>
       </div>
-    </header>
+    </main>
   );
+
+  return showHeader ? <Layout>{mainContent}</Layout> : mainContent;
 }
 
 interface RadarChartProps {

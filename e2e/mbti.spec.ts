@@ -7,8 +7,8 @@ test.describe('Myers-Briggs Style Test (OEJTS)', () => {
     await page.evaluate(() => localStorage.clear());
   });
 
-  test('MBTI test card is visible on homepage', async ({ page }) => {
-    await page.goto('/');
+  test('MBTI test card is visible on tests page', async ({ page }) => {
+    await page.goto('/tests');
 
     // MBTI card should be visible
     await expect(page.getByRole('heading', { name: 'Myers-Briggs' })).toBeVisible();
@@ -16,7 +16,7 @@ test.describe('Myers-Briggs Style Test (OEJTS)', () => {
   });
 
   test('can navigate to MBTI assessment and see intro', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/tests');
 
     // Click on the MBTI test card's "Begin Assessment" link
     const mbtiCard = page.locator('.card-premium', { hasText: 'Myers-Briggs' });

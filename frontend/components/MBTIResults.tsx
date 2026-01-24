@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Layout } from './Layout';
 import {
   type MBTIResults as Results,
   type DimensionScore,
@@ -35,27 +36,26 @@ export default function MBTIResults({ initialResults, showHeader = true, showAct
   }, [initialResults]);
 
   if (!results) {
-    return (
-      <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
-        {showHeader && <Header />}
-        <main className="mx-auto max-w-2xl px-6 py-16 text-center">
-          <div className="card-premium rounded-lg p-10">
-            <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-4">
-              No Results Found
-            </h2>
-            <p className="text-[var(--color-text-secondary)] mb-8">
-              You haven&apos;t completed the Myers-Briggs style assessment yet.
-            </p>
-            <button
-              onClick={() => navigate('/test/mbti')}
-              className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase"
-            >
-              Take the Test
-            </button>
-          </div>
-        </main>
-      </div>
+    const content = (
+      <main className="mx-auto max-w-2xl px-6 py-16 text-center">
+        <div className="card-premium rounded-lg p-10">
+          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-4">
+            No Results Found
+          </h2>
+          <p className="text-[var(--color-text-secondary)] mb-8">
+            You haven&apos;t completed the Myers-Briggs style assessment yet.
+          </p>
+          <button
+            onClick={() => navigate('/test/mbti')}
+            className="btn-gold px-8 py-3 rounded text-sm tracking-widest uppercase"
+          >
+            Take the Test
+          </button>
+        </div>
+      </main>
     );
+
+    return showHeader ? <Layout>{content}</Layout> : content;
   }
 
   const typeInfo = typeDescriptions[results.type] || {
@@ -63,13 +63,8 @@ export default function MBTIResults({ initialResults, showHeader = true, showAct
     description: 'A unique combination of cognitive preferences.',
   };
 
-  return (
-    <div
-      className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}
-      data-testid="mbti-results"
-    >
-      {showHeader && <Header />}
-      <main className="mx-auto max-w-4xl px-6 py-12">
+  const mainContent = (
+    <main className="mx-auto max-w-4xl px-6 py-12" data-testid="mbti-results">
         {/* Title */}
         <div className="text-center mb-12">
           <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">
@@ -150,39 +145,25 @@ export default function MBTIResults({ initialResults, showHeader = true, showAct
           </div>
         )}
 
-        {/* Attribution */}
-        <div className="mt-12 text-center">
-          <p className="text-[var(--color-text-muted)] text-xs leading-relaxed max-w-2xl mx-auto">
-            Based on the Open Extended Jungian Type Scales (OEJTS) by Eric Jorgenson at Open
-            Psychometrics. Licensed under Creative Commons.{' '}
-            <a
-              href="https://openpsychometrics.org/tests/OEJTS/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--color-champagne)] hover:underline"
-            >
-              Learn more
-            </a>
-          </p>
-        </div>
-      </main>
-    </div>
-  );
-}
-
-function Header() {
-  return (
-    <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
-      <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-        <Link
-          to="/"
-          className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
-        >
-          Mesearch
-        </Link>
+      {/* Attribution */}
+      <div className="mt-12 text-center">
+        <p className="text-[var(--color-text-muted)] text-xs leading-relaxed max-w-2xl mx-auto">
+          Based on the Open Extended Jungian Type Scales (OEJTS) by Eric Jorgenson at Open
+          Psychometrics. Licensed under Creative Commons.{' '}
+          <a
+            href="https://openpsychometrics.org/tests/OEJTS/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[var(--color-champagne)] hover:underline"
+          >
+            Learn more
+          </a>
+        </p>
       </div>
-    </header>
+    </main>
   );
+
+  return showHeader ? <Layout>{mainContent}</Layout> : mainContent;
 }
 
 interface DimensionCardProps {

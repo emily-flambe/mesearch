@@ -2,10 +2,13 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Mini-Test Feature Flag', () => {
   test.describe('Regular Users (No Access)', () => {
-    test('mini-test section is NOT visible on homepage for regular users', async ({ page }) => {
+    test('mini-test section is NOT visible on tests page for regular users', async ({ page }) => {
       // Login as a regular user (not admin, no +test in email)
       await page.goto('/api/auth/dev-login?email=regular@example.com');
       await expect(page).toHaveURL('/');
+
+      // Go to tests page where mini-test section would be displayed
+      await page.goto('/tests');
 
       // Mini-test section should NOT be visible
       await expect(page.getByTestId('mini-test-section')).not.toBeVisible();
@@ -24,7 +27,7 @@ test.describe('Mini-Test Feature Flag', () => {
     });
 
     test('unauthenticated users cannot see mini-test', async ({ page }) => {
-      await page.goto('/');
+      await page.goto('/tests');
 
       // Mini-test section should NOT be visible
       await expect(page.getByTestId('mini-test-section')).not.toBeVisible();
@@ -36,6 +39,9 @@ test.describe('Mini-Test Feature Flag', () => {
       // Login with +test in email (URL encode the + as %2B)
       await page.goto('/api/auth/dev-login?email=user%2Btest@example.com');
       await expect(page).toHaveURL('/');
+
+      // Go to tests page where mini-test section is displayed
+      await page.goto('/tests');
 
       // Mini-test section should be visible
       await expect(page.getByTestId('mini-test-section')).toBeVisible();
@@ -81,6 +87,9 @@ test.describe('Mini-Test Feature Flag', () => {
       // Login as admin
       await page.goto('/api/auth/dev-login?email=emily.cogsdill@gmail.com');
       await expect(page).toHaveURL('/');
+
+      // Go to tests page where mini-test section is displayed
+      await page.goto('/tests');
 
       // Mini-test section should be visible
       await expect(page.getByTestId('mini-test-section')).toBeVisible();

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Layout } from './Layout';
 import {
   type CommunicationStylesResults,
   deserializeResults,
@@ -40,33 +41,19 @@ export default function LoveLanguagesResults({ initialResults, showHeader = true
   }, [navigate, initialResults]);
 
   if (!results) {
-    return (
-      <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] flex items-center justify-center" : ""}>
-        <div className="text-[var(--color-text-muted)]">Loading results...</div>
-      </div>
-    );
+    const loading = <div className="text-[var(--color-text-muted)]">Loading results...</div>;
+    return showHeader ? (
+      <Layout>
+        <div className="min-h-[50vh] flex items-center justify-center">{loading}</div>
+      </Layout>
+    ) : loading;
   }
 
   const primaryStyle = styleInfo[results.primary];
   const secondaryStyle = styleInfo[results.secondary];
 
-  return (
-    <div className={showHeader ? "min-h-screen bg-[var(--color-bg-primary)] transition-colors duration-300" : ""}>
-      {/* Header */}
-      {showHeader && (
-        <header className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md transition-colors duration-300">
-          <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-            <Link
-              to="/"
-              className="font-display text-2xl font-semibold tracking-wide text-gold-gradient"
-            >
-              Mesearch
-            </Link>
-          </div>
-        </header>
-      )}
-
-      <main className="mx-auto max-w-3xl px-6 py-12" data-testid="love-languages-results">
+  const mainContent = (
+    <main className="mx-auto max-w-3xl px-6 py-12" data-testid="love-languages-results">
         {/* Results Header */}
         <div className="text-center mb-12">
           <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">
@@ -261,24 +248,25 @@ export default function LoveLanguagesResults({ initialResults, showHeader = true
           </p>
         </div>
 
-        {/* Actions */}
-        {showActions && (
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              to="/test/communication-styles"
-              className="btn-ghost px-8 py-4 rounded text-sm tracking-widest uppercase text-center"
-            >
-              Retake Assessment
-            </Link>
-            <Link
-              to="/"
-              className="btn-gold px-8 py-4 rounded text-sm tracking-widest uppercase text-center"
-            >
-              Return Home
-            </Link>
-          </div>
-        )}
-      </main>
-    </div>
+      {/* Actions */}
+      {showActions && (
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Link
+            to="/test/communication-styles"
+            className="btn-ghost px-8 py-4 rounded text-sm tracking-widest uppercase text-center"
+          >
+            Retake Assessment
+          </Link>
+          <Link
+            to="/"
+            className="btn-gold px-8 py-4 rounded text-sm tracking-widest uppercase text-center"
+          >
+            Return Home
+          </Link>
+        </div>
+      )}
+    </main>
   );
+
+  return showHeader ? <Layout>{mainContent}</Layout> : mainContent;
 }

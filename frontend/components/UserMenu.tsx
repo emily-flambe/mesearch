@@ -72,13 +72,6 @@ export function UserMenu() {
             </p>
           </div>
           <Link
-            to="/my-results"
-            onClick={() => setIsOpen(false)}
-            className="block px-4 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] transition-colors"
-          >
-            My Results
-          </Link>
-          <Link
             to="/settings"
             onClick={() => setIsOpen(false)}
             className="block px-4 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] transition-colors"
