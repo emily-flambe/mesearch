@@ -5,7 +5,7 @@ test.describe('Authentication - Unauthenticated', () => {
     await page.goto('/');
 
     // Check that the page loads
-    await expect(page.getByRole('link', { name: 'Mesearch' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Mesearch', exact: true })).toBeVisible();
 
     // Check for Sign In link (when not logged in)
     await expect(page.getByRole('link', { name: 'Sign In' })).toBeVisible();
