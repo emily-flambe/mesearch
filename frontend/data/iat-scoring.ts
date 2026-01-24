@@ -84,10 +84,18 @@ const D_THRESHOLDS = {
  * - Compatible: Flowers+Good, Insects+Bad (Blocks 3-4)
  * - Incompatible: Insects+Good, Flowers+Bad (Blocks 6-7)
  *
+ * With counterbalancing, block 4 and 7 swap their condition assignment:
+ * - counterbalanced=false: Block 4 = compatible, Block 7 = incompatible
+ * - counterbalanced=true: Block 4 = incompatible, Block 7 = compatible
+ *
  * A positive D-score means slower RT on incompatible trials,
  * suggesting stronger Flowers+Good association.
  */
-export function calculateDScore(trials: TrialResult[], iatId: string): IATResults {
+export function calculateDScore(
+  trials: TrialResult[],
+  iatId: string,
+  counterbalanced: boolean = false
+): IATResults {
   const completedAt = new Date().toISOString();
 
   // Separate trials by block type
@@ -109,10 +117,13 @@ export function calculateDScore(trials: TrialResult[], iatId: string): IATResult
   const validTrials = testBlockTrials.filter((t) => !t.tooFast && !t.tooSlow);
 
   // Separate by block for D-score calculation
-  // Block 4: Compatible (Flowers+Good, Insects+Bad)
-  // Block 7: Incompatible (Insects+Good, Flowers+Bad)
-  const compatibleTrials = validTrials.filter((t) => t.blockNumber === 4);
-  const incompatibleTrials = validTrials.filter((t) => t.blockNumber === 7);
+  // With counterbalancing, the assignment of blocks to conditions is swapped:
+  // - Standard (counterbalanced=false): Block 4 = compatible, Block 7 = incompatible
+  // - Counterbalanced: Block 4 = incompatible, Block 7 = compatible
+  const compatibleBlockNumber = counterbalanced ? 7 : 4;
+  const incompatibleBlockNumber = counterbalanced ? 4 : 7;
+  const compatibleTrials = validTrials.filter((t) => t.blockNumber === compatibleBlockNumber);
+  const incompatibleTrials = validTrials.filter((t) => t.blockNumber === incompatibleBlockNumber);
 
   // Apply error penalty (D2 algorithm: add 600ms for incorrect responses)
   const getAdjustedRT = (trial: TrialResult): number => {

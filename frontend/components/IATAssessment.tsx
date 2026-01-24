@@ -7,6 +7,7 @@ import {
   getCategoryForStimulus,
   getCorrectResponse,
   generateBlockTrials,
+  getCounterbalancedBlocks,
 } from '../data/iat-items';
 import {
   type TrialResult,
@@ -25,7 +26,7 @@ const INTER_TRIAL_INTERVAL = 250; // ms between trials
 
 export default function IATAssessment() {
   const { user } = useAuth();
-  const [config] = useState<IATConfig>(flowersInsectsIAT);
+  const [baseConfig] = useState<IATConfig>(flowersInsectsIAT);
   const [phase, setPhase] = useState<Phase>('intro');
   const [currentBlockIndex, setCurrentBlockIndex] = useState(0);
   const [currentTrialIndex, setCurrentTrialIndex] = useState(0);
@@ -36,8 +37,15 @@ export default function IATAssessment() {
   const [feedbackType, setFeedbackType] = useState<'correct' | 'incorrect' | null>(null);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
-  // Counterbalancing: randomly determine block order
+  // Counterbalancing: randomly determine block order (50% get incompatible pairing first)
+  // This is set once per session and persists for the entire assessment
   const [counterbalanced] = useState(() => Math.random() < 0.5);
+
+  // Generate counterbalanced blocks based on random assignment
+  const [blocks] = useState(() => getCounterbalancedBlocks(baseConfig, counterbalanced));
+
+  // Create effective config with counterbalanced blocks
+  const config = { ...baseConfig, blocks };
 
   const currentBlock = config.blocks[currentBlockIndex];
   const currentStimulus = blockTrials[currentTrialIndex];
@@ -158,7 +166,7 @@ export default function IATAssessment() {
           if (blockIdx + 1 >= config.blocks.length) {
             // All blocks complete - calculate results
             const newResults = [...allResults, trialResult];
-            const calculatedResults = calculateDScore(newResults, config.id);
+            const calculatedResults = calculateDScore(newResults, config.id, counterbalanced);
             setResults(calculatedResults);
             setPhase('results');
             saveResults(calculatedResults);
@@ -175,7 +183,8 @@ export default function IATAssessment() {
       }, INTER_TRIAL_INTERVAL);
     },
     // Dependencies - use stateRef for values accessed in setTimeout
-    [config, currentBlock, saveResults]
+    // counterbalanced is stable (set once at mount) but included for completeness
+    [config, currentBlock, saveResults, counterbalanced]
   );
 
   // Continue to next block

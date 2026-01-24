@@ -37,7 +37,8 @@ export default function IATTrial({
     showFeedback,
   });
 
-  // Keep refs in sync with props - use useLayoutEffect to ensure synchronous update
+  // Keep refs in sync with props AND reset response state atomically
+  // Using useLayoutEffect ensures this happens synchronously before any keypress can be processed
   useLayoutEffect(() => {
     propsRef.current = {
       stimulus,
@@ -47,17 +48,14 @@ export default function IATTrial({
       onResponse,
       showFeedback,
     };
-  });
 
-  // Reset state when stimulus changes
-  useEffect(() => {
-    console.log('[IAT Debug] New stimulus:', stimulus, '- resetting state');
+    // Reset response state atomically with prop updates to prevent race conditions
+    // This ensures a keypress cannot be ignored due to stale hasRespondedRef
     hasRespondedRef.current = false;
     showErrorFeedbackRef.current = false;
     setShowErrorFeedback(false);
-    // Use performance.now() for millisecond-accurate timing
     stimulusOnsetRef.current = performance.now();
-  }, [stimulus]);
+  }, [stimulus, correctCategory, leftCategories, rightCategories, onResponse, showFeedback]);
 
   // Set up keyboard listener - use stable callback that reads from refs
   useEffect(() => {
@@ -71,9 +69,6 @@ export default function IATTrial({
 
       // Prevent double responses
       if (hasRespondedRef.current) return;
-
-      // Debug logging - remove after fixing
-      console.log('[IAT Debug] Key pressed:', key, 'hasResponded:', hasRespondedRef.current, 'showError:', showErrorFeedbackRef.current);
 
       // Get current props from ref
       const { stimulus: currentStimulus, correctCategory: currentCategory,
@@ -93,13 +88,10 @@ export default function IATTrial({
       if (showErrorFeedbackRef.current) {
         if (isCorrect) {
           // Correct response after error - record it
-          console.log('[IAT Debug] Correct after error, recording response');
           hasRespondedRef.current = true;
           showErrorFeedbackRef.current = false;
           setShowErrorFeedback(false);
           respond(responseKey as 'E' | 'I', responseTime, currentStimulus);
-        } else {
-          console.log('[IAT Debug] Still wrong key in error state, ignoring');
         }
         // Wrong response while in error state - ignore (keep showing error)
         return;
@@ -108,14 +100,12 @@ export default function IATTrial({
       // Not in error state - normal processing
       if (!isCorrect && feedback) {
         // Show error feedback but don't record the response yet
-        console.log('[IAT Debug] Wrong key, showing error feedback');
         showErrorFeedbackRef.current = true;
         setShowErrorFeedback(true);
         return;
       }
 
       // Record the response
-      console.log('[IAT Debug] Correct! Recording response for:', currentStimulus);
       hasRespondedRef.current = true;
       respond(responseKey as 'E' | 'I', responseTime, currentStimulus);
     };
