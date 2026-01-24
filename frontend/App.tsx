@@ -70,6 +70,12 @@ function HomePage() {
       <footer className="border-t border-[var(--color-border)] py-12 transition-colors duration-300">
         <div className="mx-auto max-w-6xl px-6 text-center">
           <p className="font-display text-xl text-gold-gradient mb-4">Mesearch</p>
+          <a
+            href="mailto:hello@mesearcher.com"
+            className="text-[var(--color-text-muted)] hover:text-[var(--color-champagne)] transition-colors duration-300 text-sm mb-4 inline-block"
+          >
+            hello@mesearcher.com
+          </a>
           <p className="text-[var(--color-text-muted)]/50 text-xs">&copy; 2026</p>
         </div>
       </footer>
