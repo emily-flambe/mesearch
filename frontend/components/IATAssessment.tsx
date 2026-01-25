@@ -211,6 +211,25 @@ export default function IATAssessment() {
     setPhase('trial');
   }, []);
 
+  // Space bar to advance during instructions and block-break phases
+  useEffect(() => {
+    if (phase !== 'instructions' && phase !== 'block-break') return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === 'Space') {
+        event.preventDefault();
+        if (phase === 'instructions') {
+          beginTrials();
+        } else if (phase === 'block-break') {
+          continueToNextBlock();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [phase, beginTrials, continueToNextBlock]);
+
   // Retake the IAT
   const handleRetake = useCallback(() => {
     setPhase('intro');
@@ -385,6 +404,9 @@ export default function IATAssessment() {
               >
                 Start Block
               </button>
+              <p className="text-[var(--color-text-muted)] text-xs mt-3">
+                (or press SPACE to continue)
+              </p>
             </div>
           </div>
         )}
@@ -425,6 +447,9 @@ export default function IATAssessment() {
               >
                 Continue
               </button>
+              <p className="text-[var(--color-text-muted)] text-xs mt-3">
+                (or press SPACE to continue)
+              </p>
             </div>
           </div>
         )}
