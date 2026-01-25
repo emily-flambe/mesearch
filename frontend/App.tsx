@@ -21,6 +21,7 @@ import { Settings } from './pages/Settings';
 import { PublicProfile } from './pages/PublicProfile';
 import { PublicResultDetail } from './pages/PublicResultDetail';
 import MiniTestAssessment from './components/MiniTestAssessment';
+import IATAssessment from './components/IATAssessment';
 import LoveLanguagesAssessment from './components/LoveLanguagesAssessment';
 import LoveLanguagesResults from './components/LoveLanguagesResults';
 import ECRAssessment from './components/ECRAssessment';
@@ -347,6 +348,10 @@ function TestRouter() {
       return <ComingSoonTestPage />;
     }
     return <MiniTestAssessment />;
+  }
+
+  if (slug === 'iat') {
+    return <IATAssessment />;
   }
 
   if (slug === 'crt') {

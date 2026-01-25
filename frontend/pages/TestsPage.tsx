@@ -204,6 +204,16 @@ export function TestsPage() {
             seriousness={2}
             fun={5}
           />
+          <TestCard
+            title="IAT"
+            subtitle="Implicit Association Test"
+            slug="iat"
+            keywords={['Reaction Time', 'Automatic Associations', 'Self-Reflection']}
+            description="Measure automatic associations through reaction time. Educational tool for exploring implicit cognition. Low individual reliability."
+            time="5-10 min"
+            seriousness={3}
+            fun={4}
+          />
         </div>
 
         {/* Mini-Test - Admin/Test Users Only */}
