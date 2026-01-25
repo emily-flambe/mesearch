@@ -12,8 +12,8 @@ export interface TrialResult {
   correctCategory: string;
   responseKey: 'E' | 'I';
   correctKey: 'E' | 'I';
-  responseTime: number; // milliseconds from stimulus onset to response
-  correct: boolean;
+  responseTime: number; // milliseconds from stimulus onset to correct response (includes error correction time)
+  hadError: boolean; // true if user pressed wrong key before correcting
   tooFast: boolean; // < 300ms
   tooSlow: boolean; // > 10000ms
 }
@@ -125,9 +125,11 @@ export function calculateDScore(
   const compatibleTrials = validTrials.filter((t) => t.blockNumber === compatibleBlockNumber);
   const incompatibleTrials = validTrials.filter((t) => t.blockNumber === incompatibleBlockNumber);
 
-  // Apply error penalty (D2 algorithm: add 600ms for incorrect responses)
+  // Apply error penalty (D2 algorithm: add 600ms for error trials)
+  // Note: Response time already includes built-in penalty (time to correct error).
+  // The 600ms is an additional penalty per the D2 algorithm.
   const getAdjustedRT = (trial: TrialResult): number => {
-    if (!trial.correct) {
+    if (trial.hadError) {
       return trial.responseTime + ERROR_PENALTY;
     }
     return trial.responseTime;
@@ -164,7 +166,7 @@ export function calculateDScore(
   // Overall statistics
   const totalTrials = allTrials.length;
   const validTrialCount = validTrials.length;
-  const errorTrials = allTrials.filter((t) => !t.correct);
+  const errorTrials = allTrials.filter((t) => t.hadError);
   const errorRate = errorTrials.length / totalTrials;
   const allRTs = allTrials.map((t) => t.responseTime);
   const averageResponseTime = calculateMean(allRTs);
@@ -251,7 +253,7 @@ export function calculateBlockScores(trials: TrialResult[]): BlockScore[] {
     const blockTrials = trials.filter((t) => t.blockNumber === blockNum);
     const validTrials = blockTrials.filter((t) => !t.tooFast && !t.tooSlow);
     const rts = validTrials.map((t) => t.responseTime);
-    const errors = blockTrials.filter((t) => !t.correct);
+    const errors = blockTrials.filter((t) => t.hadError);
     const tooFast = blockTrials.filter((t) => t.tooFast);
     const tooSlow = blockTrials.filter((t) => t.tooSlow);
 
@@ -363,6 +365,7 @@ export function createTrialResult(params: {
   responseKey: 'E' | 'I';
   correctKey: 'E' | 'I';
   responseTime: number;
+  hadError: boolean;
 }): TrialResult {
   const rtValidity = isValidRT(params.responseTime);
 
@@ -374,7 +377,7 @@ export function createTrialResult(params: {
     responseKey: params.responseKey,
     correctKey: params.correctKey,
     responseTime: params.responseTime,
-    correct: params.responseKey === params.correctKey,
+    hadError: params.hadError,
     tooFast: rtValidity.tooFast,
     tooSlow: rtValidity.tooSlow,
   };

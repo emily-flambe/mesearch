@@ -127,16 +127,16 @@ export default function IATAssessment() {
   }, [config]);
 
   // Handle trial response
-  // Note: stimulus is passed from IATTrial to avoid stale closure issues
+  // Note: stimulus and hadError are passed from IATTrial to avoid stale closure issues
   const handleTrialResponse = useCallback(
-    (responseKey: 'E' | 'I', responseTime: number, stimulus: string) => {
+    (responseKey: 'E' | 'I', responseTime: number, stimulus: string, hadError: boolean) => {
       if (!currentBlock || !stimulus) return;
 
       const category = getCategoryForStimulus(config, stimulus);
       if (!category) return;
 
       const correctKey = getCorrectResponse(currentBlock, category);
-      const isCorrect = responseKey === correctKey;
+      const isCorrect = !hadError;
 
       // Create trial result
       const trialResult = createTrialResult({
@@ -147,6 +147,7 @@ export default function IATAssessment() {
         responseKey,
         correctKey,
         responseTime,
+        hadError,
       });
 
       setAllTrialResults((prev) => [...prev, trialResult]);

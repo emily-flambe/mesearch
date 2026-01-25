@@ -6,7 +6,7 @@ interface IATTrialProps {
   correctCategory: string;
   leftCategories: string[];
   rightCategories: string[];
-  onResponse: (responseKey: 'E' | 'I', responseTime: number, stimulus: string) => void;
+  onResponse: (responseKey: 'E' | 'I', responseTime: number, stimulus: string, hadError: boolean) => void;
   showFeedback: boolean;
   feedbackType: 'correct' | 'incorrect' | null;
 }
@@ -87,11 +87,11 @@ export default function IATTrial({
       // If we're in error state, only accept correct responses
       if (showErrorFeedbackRef.current) {
         if (isCorrect) {
-          // Correct response after error - record it
+          // Correct response after error - record it with hadError=true
           hasRespondedRef.current = true;
           showErrorFeedbackRef.current = false;
           setShowErrorFeedback(false);
-          respond(responseKey as 'E' | 'I', responseTime, currentStimulus);
+          respond(responseKey as 'E' | 'I', responseTime, currentStimulus, true);
         }
         // Wrong response while in error state - ignore (keep showing error)
         return;
@@ -105,9 +105,9 @@ export default function IATTrial({
         return;
       }
 
-      // Record the response
+      // Record the response (no error occurred)
       hasRespondedRef.current = true;
-      respond(responseKey as 'E' | 'I', responseTime, currentStimulus);
+      respond(responseKey as 'E' | 'I', responseTime, currentStimulus, false);
     };
 
     window.addEventListener('keydown', handleKeyDown);

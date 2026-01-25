@@ -105,7 +105,7 @@ describe('IAT Scoring - Response Time Validation', () => {
 
 describe('IAT Scoring - Trial Creation', () => {
   describe('createTrialResult', () => {
-    it('creates a correct trial when response matches', () => {
+    it('creates a trial without error when hadError is false', () => {
       const trial = createTrialResult({
         blockNumber: 4,
         trialNumber: 1,
@@ -114,25 +114,27 @@ describe('IAT Scoring - Trial Creation', () => {
         responseKey: 'E',
         correctKey: 'E',
         responseTime: 500,
+        hadError: false,
       });
 
-      expect(trial.correct).toBe(true);
+      expect(trial.hadError).toBe(false);
       expect(trial.tooFast).toBe(false);
       expect(trial.tooSlow).toBe(false);
     });
 
-    it('creates an incorrect trial when response does not match', () => {
+    it('creates a trial with error when hadError is true', () => {
       const trial = createTrialResult({
         blockNumber: 4,
         trialNumber: 1,
         stimulus: 'Rose',
         correctCategory: 'Flowers',
-        responseKey: 'I',
+        responseKey: 'E',
         correctKey: 'E',
         responseTime: 500,
+        hadError: true,
       });
 
-      expect(trial.correct).toBe(false);
+      expect(trial.hadError).toBe(true);
     });
 
     it('marks too fast trials', () => {
@@ -144,6 +146,7 @@ describe('IAT Scoring - Trial Creation', () => {
         responseKey: 'E',
         correctKey: 'E',
         responseTime: 150,
+        hadError: false,
       });
 
       expect(trial.tooFast).toBe(true);
@@ -159,6 +162,7 @@ describe('IAT Scoring - Trial Creation', () => {
         responseKey: 'E',
         correctKey: 'E',
         responseTime: 15000,
+        hadError: false,
       });
 
       expect(trial.tooFast).toBe(false);
@@ -227,6 +231,7 @@ describe('IAT Scoring - D-Score Calculation', () => {
           responseKey: 'E',
           correctKey: 'E',
           responseTime: block4MeanRT + (Math.random() - 0.5) * 100,
+          hadError: false,
         })
       );
     }
@@ -242,6 +247,7 @@ describe('IAT Scoring - D-Score Calculation', () => {
           responseKey: 'I',
           correctKey: 'I',
           responseTime: block7MeanRT + (Math.random() - 0.5) * 100,
+          hadError: false,
         })
       );
     }
@@ -280,6 +286,7 @@ describe('IAT Scoring - D-Score Calculation', () => {
           responseKey: 'E',
           correctKey: 'E',
           responseTime: 700, // Exact same RT
+          hadError: false,
         })
       );
     }
@@ -295,6 +302,7 @@ describe('IAT Scoring - D-Score Calculation', () => {
           responseKey: 'I',
           correctKey: 'I',
           responseTime: 700, // Same exact RT as block 4
+          hadError: false,
         })
       );
     }
@@ -328,6 +336,7 @@ describe('IAT Scoring - D-Score Calculation', () => {
           responseKey: 'E',
           correctKey: 'E',
           responseTime: 100, // Too fast
+          hadError: false,
         })
       );
     }
@@ -341,7 +350,7 @@ describe('IAT Scoring - D-Score Calculation', () => {
   it('includes error rate in results', () => {
     const trials: TrialResult[] = [];
 
-    // Mix of correct and incorrect trials
+    // Mix of trials with and without errors
     for (let i = 0; i < 20; i++) {
       trials.push(
         createTrialResult({
@@ -349,9 +358,10 @@ describe('IAT Scoring - D-Score Calculation', () => {
           trialNumber: i + 1,
           stimulus: 'Rose',
           correctCategory: 'Flowers',
-          responseKey: i < 15 ? 'E' : 'I', // 5 errors out of 20
+          responseKey: 'E',
           correctKey: 'E',
           responseTime: 600,
+          hadError: i >= 15, // 5 error trials out of 20
         })
       );
     }
@@ -366,6 +376,7 @@ describe('IAT Scoring - D-Score Calculation', () => {
           responseKey: 'I',
           correctKey: 'I',
           responseTime: 700,
+          hadError: false,
         })
       );
     }
@@ -389,6 +400,7 @@ describe('IAT Scoring - Block Scores', () => {
           responseKey: 'E',
           correctKey: 'E',
           responseTime: 500,
+          hadError: false,
         }),
         createTrialResult({
           blockNumber: 4,
@@ -398,6 +410,7 @@ describe('IAT Scoring - Block Scores', () => {
           responseKey: 'E',
           correctKey: 'E',
           responseTime: 600,
+          hadError: false,
         }),
         createTrialResult({
           blockNumber: 7,
@@ -407,6 +420,7 @@ describe('IAT Scoring - Block Scores', () => {
           responseKey: 'I',
           correctKey: 'I',
           responseTime: 700,
+          hadError: false,
         }),
       ];
 
@@ -435,15 +449,17 @@ describe('IAT Scoring - Block Scores', () => {
           responseKey: 'E',
           correctKey: 'E',
           responseTime: 500,
+          hadError: false,
         }),
         createTrialResult({
           blockNumber: 4,
           trialNumber: 2,
           stimulus: 'Tulip',
           correctCategory: 'Flowers',
-          responseKey: 'I', // Error
+          responseKey: 'E',
           correctKey: 'E',
           responseTime: 600,
+          hadError: true, // Error occurred before correct response
         }),
       ];
 
@@ -463,6 +479,7 @@ describe('IAT Scoring - Block Scores', () => {
           responseKey: 'E',
           correctKey: 'E',
           responseTime: 100, // Too fast
+          hadError: false,
         }),
         createTrialResult({
           blockNumber: 4,
@@ -472,6 +489,7 @@ describe('IAT Scoring - Block Scores', () => {
           responseKey: 'E',
           correctKey: 'E',
           responseTime: 15000, // Too slow
+          hadError: false,
         }),
         createTrialResult({
           blockNumber: 4,
@@ -481,6 +499,7 @@ describe('IAT Scoring - Block Scores', () => {
           responseKey: 'E',
           correctKey: 'E',
           responseTime: 500, // Valid
+          hadError: false,
         }),
       ];
 
@@ -508,6 +527,7 @@ describe('IAT Scoring - Serialization', () => {
           responseKey: 'E',
           correctKey: 'E',
           responseTime: 600,
+          hadError: false,
         })
       );
     }
@@ -522,6 +542,7 @@ describe('IAT Scoring - Serialization', () => {
           responseKey: 'I',
           correctKey: 'I',
           responseTime: 750,
+          hadError: false,
         })
       );
     }
