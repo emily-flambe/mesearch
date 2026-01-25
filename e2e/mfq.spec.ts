@@ -99,9 +99,9 @@ test.describe('Moral Foundations Questionnaire Assessment', () => {
   test('shows MFQ card on values category page', async ({ page }) => {
     await page.goto('/tests/values');
 
-    // Verify the MFQ test card is visible
-    await expect(page.getByText('Moral Foundations')).toBeVisible();
-    await expect(page.getByText('Ethics · Values · Politics')).toBeVisible();
+    // Verify the MFQ test card is visible (use exact match to avoid matching "Moral Foundations 2")
+    await expect(page.getByText('Moral Foundations', { exact: true })).toBeVisible();
+    await expect(page.getByText('Ethics · Values · Politics', { exact: true })).toBeVisible();
   });
 
   test('displays different likert scales for relevance vs judgment questions', async ({ page }) => {
