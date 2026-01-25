@@ -32,6 +32,7 @@ import MBTIResults from './components/MBTIResults';
 import RMETAssessment from './components/RMETAssessment';
 import RMETResults from './components/RMETResults';
 import { TestsPage } from './pages/TestsPage';
+import { CategoryPage } from './pages/CategoryPage';
 
 function HomePage() {
   return (
@@ -393,6 +394,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/tests" element={<TestsPage />} />
+            <Route path="/tests/:categoryId" element={<CategoryPage />} />
             <Route path="/my-results" element={<ResultsHistory />} />
             <Route path="/results/:id" element={<ResultDetail />} />
             <Route path="/settings" element={<Settings />} />

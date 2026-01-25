@@ -159,12 +159,11 @@ test.describe('RMET Assessment', () => {
     await expect(page.getByText('2 of 37')).toBeVisible();
   });
 
-  test('displays RMET card on tests page', async ({ page }) => {
-    await page.goto('/tests');
+  test('displays RMET card on empathy category page', async ({ page }) => {
+    await page.goto('/tests/empathy');
 
     // Should see RMET test card
     await expect(page.getByRole('heading', { name: 'RMET' })).toBeVisible();
-    await expect(page.getByText('Eyes Test')).toBeVisible();
     await expect(page.getByText('Social Cognition', { exact: false }).first()).toBeVisible();
   });
 

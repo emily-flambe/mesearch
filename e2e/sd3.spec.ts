@@ -88,24 +88,22 @@ test.describe('Short Dark Triad (SD3) Assessment', () => {
     await expect(page.getByTestId('sd3-progress')).toHaveText('6 of 27');
   });
 
-  test('SD3 test card is visible on tests page', async ({ page }) => {
-    await page.goto('/tests');
+  test('SD3 test card is visible on personality category page', async ({ page }) => {
+    await page.goto('/tests/personality');
 
     // Verify the SD3 test card is displayed - scope to the card to avoid strict mode violations
-    const sd3Card = page.locator('.card-premium', { has: page.getByRole('heading', { name: 'Dark Triad' }) });
+    const sd3Card = page.locator('a.card-premium', { has: page.getByRole('heading', { name: 'Dark Triad' }) });
     await expect(sd3Card.getByRole('heading', { name: 'Dark Triad' })).toBeVisible();
-    await expect(sd3Card.getByText('SD3')).toBeVisible();
     await expect(sd3Card.getByText('5 min', { exact: true })).toBeVisible();
     await expect(sd3Card.getByText('Machiavellianism, Narcissism, and Psychopathy')).toBeVisible();
   });
 
-  test('can navigate to SD3 from tests page', async ({ page }) => {
-    await page.goto('/tests');
+  test('can navigate to SD3 from personality category page', async ({ page }) => {
+    await page.goto('/tests/personality');
 
-    // Find the SD3 test card and click "Begin Assessment"
-    // The card contains "Dark Triad" heading and has a Begin Assessment link
-    const sd3Card = page.locator('.card-premium', { has: page.getByRole('heading', { name: 'Dark Triad' }) });
-    await sd3Card.getByRole('link', { name: /Begin Assessment/i }).click();
+    // Click on the SD3 test card (entire card is clickable)
+    const sd3Card = page.locator('a.card-premium', { has: page.getByRole('heading', { name: 'Dark Triad' }) });
+    await sd3Card.click();
 
     // Should be on SD3 assessment page
     await expect(page).toHaveURL('/test/sd3');

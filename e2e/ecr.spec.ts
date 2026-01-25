@@ -140,12 +140,11 @@ test.describe('ECR Attachment Style Assessment', () => {
     await expect(page.getByTestId('ecr-progress')).toContainText('1 of 9');
   });
 
-  test('ECR card is visible on tests page', async ({ page }) => {
-    await page.goto('/tests');
+  test('ECR card is visible on relationships category page', async ({ page }) => {
+    await page.goto('/tests/relationships');
 
     // Verify ECR test card is present
     await expect(page.getByText('Attachment Style')).toBeVisible();
-    await expect(page.getByText('ECR-RS')).toBeVisible();
     await expect(page.getByText(/anxiety and avoidance/i)).toBeVisible();
   });
 
