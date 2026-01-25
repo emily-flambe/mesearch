@@ -405,7 +405,7 @@ export default function IATAssessment() {
                 Start Block
               </button>
               <p className="text-[var(--color-text-muted)] text-xs mt-3">
-                (or press SPACE to continue)
+                or press SPACE to continue
               </p>
             </div>
           </div>
@@ -448,7 +448,7 @@ export default function IATAssessment() {
                 Continue
               </button>
               <p className="text-[var(--color-text-muted)] text-xs mt-3">
-                (or press SPACE to continue)
+                or press SPACE to continue
               </p>
             </div>
           </div>
