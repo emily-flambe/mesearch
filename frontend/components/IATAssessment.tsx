@@ -396,7 +396,7 @@ export default function IATAssessment() {
             leftCategories={currentBlock.leftCategories}
             rightCategories={currentBlock.rightCategories}
             onResponse={handleTrialResponse}
-            showFeedback={currentBlock.type === 'practice'}
+            showFeedback={true}
             feedbackType={feedbackType}
           />
         )}
