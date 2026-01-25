@@ -235,19 +235,74 @@ export default function SDO7Results({
         </div>
       )}
 
-      {/* Citation */}
-      <div className="mt-12 text-center">
-        <p className="text-[var(--color-text-muted)] text-xs leading-relaxed max-w-2xl mx-auto mb-4">
-          This assessment measures attitudes about group-based hierarchy based on self-reported
-          responses. Results should be used for self-reflection and understanding your current
-          social attitudes, not as character judgments or permanent labels.
-        </p>
-        <p className="text-[var(--color-text-muted)] text-xs italic">
-          Citation: Ho, A.K., Sidanius, J., Kteily, N., Sheehy-Skeffington, J., Pratto, F.,
-          Henkel, K.E., Foels, R., & Stewart, A.L. (2015). The nature of social dominance
-          orientation: Theorizing and measuring preferences for intergroup inequality using
-          the new SDO7 scale. <em>Journal of Personality and Social Psychology</em>, 109(6), 1003-1028.
-        </p>
+      {/* Citation & Sources */}
+      <div className="mt-12 space-y-6">
+        <div className="text-center">
+          <p className="text-[var(--color-text-muted)] text-xs leading-relaxed max-w-2xl mx-auto mb-4">
+            This assessment measures attitudes about group-based hierarchy based on self-reported
+            responses. Results should be used for self-reflection and understanding your current
+            social attitudes, not as character judgments or permanent labels.
+          </p>
+          <p className="text-[var(--color-text-muted)] text-xs italic">
+            Citation: Ho, A.K., Sidanius, J., Kteily, N., Sheehy-Skeffington, J., Pratto, F.,
+            Henkel, K.E., Foels, R., & Stewart, A.L. (2015). The nature of social dominance
+            orientation: Theorizing and measuring preferences for intergroup inequality using
+            the new SDO7 scale. <em>Journal of Personality and Social Psychology</em>, 109(6), 1003-1028.
+          </p>
+        </div>
+
+        {/* Sources & Further Reading */}
+        <div className="bg-[var(--color-bg-secondary)] rounded-lg p-6">
+          <h4 className="text-[var(--color-text-secondary)] text-xs uppercase tracking-wider mb-4">
+            Sources & Further Reading
+          </h4>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <a
+                href="https://doi.org/10.1037/pspi0000033"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--color-champagne)] hover:underline"
+              >
+                Original SDO7 Scale Paper (Ho et al., 2015)
+              </a>
+              <span className="text-[var(--color-text-muted)]"> — Journal of Personality and Social Psychology</span>
+            </li>
+            <li>
+              <a
+                href="https://en.wikipedia.org/wiki/Social_dominance_orientation"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--color-champagne)] hover:underline"
+              >
+                Social Dominance Orientation Overview
+              </a>
+              <span className="text-[var(--color-text-muted)]"> — Wikipedia</span>
+            </li>
+            <li>
+              <a
+                href="https://www.hbs.edu/faculty/Pages/item.aspx?num=49073"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--color-champagne)] hover:underline"
+              >
+                Research Summary on SDO and Intergroup Relations
+              </a>
+              <span className="text-[var(--color-text-muted)]"> — Harvard Business School</span>
+            </li>
+            <li>
+              <a
+                href="https://scholar.google.com/scholar?q=social+dominance+orientation"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--color-champagne)] hover:underline"
+              >
+                Academic Research on Social Dominance
+              </a>
+              <span className="text-[var(--color-text-muted)]"> — Google Scholar</span>
+            </li>
+          </ul>
+        </div>
       </div>
     </main>
   );

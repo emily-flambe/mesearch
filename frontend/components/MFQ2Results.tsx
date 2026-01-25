@@ -159,6 +159,82 @@ export default function MFQ2Results({ initialResults, showHeader = true, showAct
             {citation}
           </p>
         </div>
+
+        {/* Sources & Further Reading */}
+        <div className="bg-[var(--color-bg-secondary)] rounded-lg p-6">
+          <h4 className="text-[var(--color-text-secondary)] text-xs uppercase tracking-wider mb-4">
+            Sources & Further Reading
+          </h4>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <a
+                href="https://doi.org/10.1037/pspp0000470"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--color-champagne)] hover:underline"
+              >
+                Original MFQ-2 Paper (Atari et al., 2023)
+              </a>
+              <span className="text-[var(--color-text-muted)]"> — Journal of Personality and Social Psychology</span>
+            </li>
+            <li>
+              <a
+                href="https://moralfoundations.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--color-champagne)] hover:underline"
+              >
+                MoralFoundations.org
+              </a>
+              <span className="text-[var(--color-text-muted)]"> — Official resource from Jonathan Haidt&apos;s research team</span>
+            </li>
+            <li>
+              <a
+                href="https://en.wikipedia.org/wiki/Moral_foundations_theory"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--color-champagne)] hover:underline"
+              >
+                Moral Foundations Theory Overview
+              </a>
+              <span className="text-[var(--color-text-muted)]"> — Wikipedia</span>
+            </li>
+            <li>
+              <a
+                href="https://www.amazon.com/Righteous-Mind-Divided-Politics-Religion/dp/0307455777"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--color-champagne)] hover:underline"
+              >
+                The Righteous Mind by Jonathan Haidt
+              </a>
+              <span className="text-[var(--color-text-muted)]"> — Accessible book on moral psychology</span>
+            </li>
+            <li>
+              <a
+                href="https://www.ted.com/talks/jonathan_haidt_the_moral_roots_of_liberals_and_conservatives"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--color-champagne)] hover:underline"
+              >
+                TED Talk: The Moral Roots of Liberals and Conservatives
+              </a>
+              <span className="text-[var(--color-text-muted)]"> — Jonathan Haidt&apos;s TED presentation</span>
+            </li>
+            <li>
+              <a
+                href="https://scholar.google.com/scholar?q=moral+foundations+theory"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--color-champagne)] hover:underline"
+              >
+                Academic Research on Moral Foundations
+              </a>
+              <span className="text-[var(--color-text-muted)]"> — Google Scholar</span>
+            </li>
+          </ul>
+        </div>
+
         <p className="text-[var(--color-text-muted)] text-xs leading-relaxed max-w-2xl mx-auto">
           This assessment provides a snapshot of your moral intuitions based on self-reported responses.
           Results should be used for self-reflection and personal understanding, not as clinical diagnoses.

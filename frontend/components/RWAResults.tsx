@@ -196,17 +196,83 @@ export default function RWAResults({ initialResults, showHeader = true, showActi
         </div>
       )}
 
-      {/* Citation */}
-      <div className="mt-12 text-center">
-        <p className="text-[var(--color-text-muted)] text-xs leading-relaxed max-w-2xl mx-auto mb-4">
-          This assessment is based on self-reported responses and measures attitudes, not character
-          traits or political affiliations. Results should be used for self-reflection and personal
-          insight, not as judgments of moral worth.
-        </p>
-        <p className="text-[var(--color-text-muted)] text-xs italic">
-          Citation: Bizumic, B., & Duckitt, J. (2018). Investigating right wing authoritarianism with
-          a very short authoritarianism scale. <em>Journal of Social and Political Psychology</em>.
-        </p>
+      {/* Citation & Sources */}
+      <div className="mt-12 space-y-6">
+        <div className="text-center">
+          <p className="text-[var(--color-text-muted)] text-xs leading-relaxed max-w-2xl mx-auto mb-4">
+            This assessment is based on self-reported responses and measures attitudes, not character
+            traits or political affiliations. Results should be used for self-reflection and personal
+            insight, not as judgments of moral worth.
+          </p>
+          <p className="text-[var(--color-text-muted)] text-xs italic">
+            Citation: Bizumic, B., & Duckitt, J. (2018). Investigating right wing authoritarianism with
+            a very short authoritarianism scale. <em>Journal of Social and Political Psychology</em>, 6(1), 129-150.
+          </p>
+        </div>
+
+        {/* Sources & Further Reading */}
+        <div className="bg-[var(--color-bg-secondary)] rounded-lg p-6">
+          <h4 className="text-[var(--color-text-secondary)] text-xs uppercase tracking-wider mb-4">
+            Sources & Further Reading
+          </h4>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <a
+                href="https://doi.org/10.5964/jspp.v6i1.837"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--color-champagne)] hover:underline"
+              >
+                Original RWA-VSA Paper (Bizumic & Duckitt, 2018)
+              </a>
+              <span className="text-[var(--color-text-muted)]"> — Journal of Social and Political Psychology</span>
+            </li>
+            <li>
+              <a
+                href="https://en.wikipedia.org/wiki/Right-wing_authoritarianism"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--color-champagne)] hover:underline"
+              >
+                Right-Wing Authoritarianism Overview
+              </a>
+              <span className="text-[var(--color-text-muted)]"> — Wikipedia</span>
+            </li>
+            <li>
+              <a
+                href="https://www.vox.com/2016/3/1/11127424/trump-authoritarianism"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--color-champagne)] hover:underline"
+              >
+                The Rise of American Authoritarianism
+              </a>
+              <span className="text-[var(--color-text-muted)]"> — Vox (accessible overview)</span>
+            </li>
+            <li>
+              <a
+                href="https://www.theauthoritarians.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--color-champagne)] hover:underline"
+              >
+                The Authoritarians by Bob Altemeyer
+              </a>
+              <span className="text-[var(--color-text-muted)]"> — Free online book by the researcher who developed RWA</span>
+            </li>
+            <li>
+              <a
+                href="https://scholar.google.com/scholar?q=right+wing+authoritarianism"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--color-champagne)] hover:underline"
+              >
+                Academic Research on Authoritarianism
+              </a>
+              <span className="text-[var(--color-text-muted)]"> — Google Scholar</span>
+            </li>
+          </ul>
+        </div>
       </div>
     </main>
   );
