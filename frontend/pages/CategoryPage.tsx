@@ -36,8 +36,7 @@ function TestCard({ test }: { test: TestInfo }) {
         </div>
         <span className="text-[var(--color-text-muted)] text-xs tracking-wide">{test.time}</span>
       </div>
-      <h4 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-1 transition-colors duration-300">{test.title}</h4>
-      <p className="text-[var(--color-champagne)]/70 text-sm mb-4 tracking-wide">{test.subtitle}</p>
+      <h4 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-3 transition-colors duration-300">{test.title}</h4>
       <p className="text-[var(--color-text-muted)] text-xs mb-3 tracking-wide">
         {test.keywords.join(' · ')}
       </p>
