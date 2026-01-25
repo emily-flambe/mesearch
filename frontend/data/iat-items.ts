@@ -226,54 +226,97 @@ export function getCategoryColor(category: string): string {
 }
 
 // Generate counterbalanced block configuration
-// Per IAT methodology, half of participants should receive incompatible pairing first
-// This function swaps the combined blocks (3-4 and 6-7) when counterbalanced=true
+// Per IAT methodology, there are two independent randomizations:
+// 1. targetSideSwapped: Which side targets appear on initially (Flowers left vs right)
+// 2. pairingOrderSwapped: Which pairing comes first (compatible vs incompatible)
+// This creates 4 possible conditions (2×2 design)
 export function getCounterbalancedBlocks(
   config: IATConfig,
-  counterbalanced: boolean
+  pairingOrderSwapped: boolean,
+  targetSideSwapped: boolean = false
 ): IATBlockConfig[] {
-  if (!counterbalanced) {
-    // Standard order: compatible pairing first (blocks 3-4), then incompatible (blocks 6-7)
-    return config.blocks;
-  }
-
-  // Counterbalanced order: incompatible pairing first
-  // We need to swap the category assignments in blocks 3-4 and 6-7
   return config.blocks.map((block) => {
-    // Blocks 1-2 and 5 remain unchanged (single category discrimination)
-    if (block.blockNumber === 1 || block.blockNumber === 2 || block.blockNumber === 5) {
-      return block;
+    let newBlock = { ...block };
+
+    // Handle target side randomization (affects blocks 1, 3-4, 5, 6-7)
+    // When targetSideSwapped=true, Insects starts on left instead of Flowers
+    if (targetSideSwapped) {
+      if (block.blockNumber === 1) {
+        // Swap Block 1: Insects on left, Flowers on right
+        newBlock = {
+          ...newBlock,
+          leftCategories: ['Insects'],
+          rightCategories: ['Flowers'],
+          instructions: 'Press E for Insects, press I for Flowers.\n\nSort the items as quickly as you can while making as few mistakes as possible.',
+        };
+      } else if (block.blockNumber === 5) {
+        // Block 5 reverses from Block 1, so if Block 1 has Insects-left,
+        // Block 5 should have Flowers-left (opposite of standard)
+        newBlock = {
+          ...newBlock,
+          leftCategories: ['Flowers'],
+          rightCategories: ['Insects'],
+          instructions: 'ATTENTION: The categories have switched sides!\n\nPress E for Flowers, press I for Insects.\n\nThis may feel awkward at first - that is normal.',
+        };
+      }
     }
 
-    // For combined blocks (3-4 and 6-7), swap the pairings
-    // Original block 3-4: Flowers+Good vs Insects+Bad
-    // Counterbalanced block 3-4: Insects+Good vs Flowers+Bad
-    // (and vice versa for blocks 6-7)
-    if (block.blockNumber === 3 || block.blockNumber === 4) {
-      // Swap to incompatible pairing
-      return {
-        ...block,
-        leftCategories: ['Insects', 'Good'],
-        rightCategories: ['Flowers', 'Bad'],
-        instructions: block.instructions
-          .replace('Flowers or Good', 'Insects or Good')
-          .replace('Insects or Bad', 'Flowers or Bad'),
-      };
+    // Handle pairing order randomization (affects combined blocks 3-4 and 6-7)
+    // When pairingOrderSwapped=true, incompatible pairing comes first
+    if (pairingOrderSwapped) {
+      if (block.blockNumber === 3 || block.blockNumber === 4) {
+        // Swap to incompatible pairing first
+        const leftTarget = targetSideSwapped ? 'Flowers' : 'Insects';
+        const rightTarget = targetSideSwapped ? 'Insects' : 'Flowers';
+        newBlock = {
+          ...newBlock,
+          leftCategories: [leftTarget, 'Good'],
+          rightCategories: [rightTarget, 'Bad'],
+          instructions: newBlock.instructions
+            .replace(/Press E for \w+ or Good/, `Press E for ${leftTarget} or Good`)
+            .replace(/Press I for \w+ or Bad/, `Press I for ${rightTarget} or Bad`),
+        };
+      } else if (block.blockNumber === 6 || block.blockNumber === 7) {
+        // Swap to compatible pairing
+        const leftTarget = targetSideSwapped ? 'Insects' : 'Flowers';
+        const rightTarget = targetSideSwapped ? 'Flowers' : 'Insects';
+        newBlock = {
+          ...newBlock,
+          leftCategories: [leftTarget, 'Good'],
+          rightCategories: [rightTarget, 'Bad'],
+          instructions: newBlock.instructions
+            .replace(/Press E for \w+ or Good/, `Press E for ${leftTarget} or Good`)
+            .replace(/Press I for \w+ or Bad/, `Press I for ${rightTarget} or Bad`),
+        };
+      }
+    } else {
+      // Standard pairing order, but still need to handle target side swap
+      if (targetSideSwapped) {
+        if (block.blockNumber === 3 || block.blockNumber === 4) {
+          // Compatible pairing with swapped targets: Insects+Good on left
+          newBlock = {
+            ...newBlock,
+            leftCategories: ['Insects', 'Good'],
+            rightCategories: ['Flowers', 'Bad'],
+            instructions: newBlock.instructions
+              .replace(/Press E for \w+ or Good/, 'Press E for Insects or Good')
+              .replace(/Press I for \w+ or Bad/, 'Press I for Flowers or Bad'),
+          };
+        } else if (block.blockNumber === 6 || block.blockNumber === 7) {
+          // Incompatible pairing with swapped targets: Flowers+Good on left
+          newBlock = {
+            ...newBlock,
+            leftCategories: ['Flowers', 'Good'],
+            rightCategories: ['Insects', 'Bad'],
+            instructions: newBlock.instructions
+              .replace(/Press E for \w+ or Good/, 'Press E for Flowers or Good')
+              .replace(/Press I for \w+ or Bad/, 'Press I for Insects or Bad'),
+          };
+        }
+      }
     }
 
-    if (block.blockNumber === 6 || block.blockNumber === 7) {
-      // Swap to compatible pairing
-      return {
-        ...block,
-        leftCategories: ['Flowers', 'Good'],
-        rightCategories: ['Insects', 'Bad'],
-        instructions: block.instructions
-          .replace('Insects or Good', 'Flowers or Good')
-          .replace('Flowers or Bad', 'Insects or Bad'),
-      };
-    }
-
-    return block;
+    return newBlock;
   });
 }
 

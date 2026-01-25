@@ -37,12 +37,18 @@ export default function IATAssessment() {
   const [feedbackType, setFeedbackType] = useState<'correct' | 'incorrect' | null>(null);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
-  // Counterbalancing: randomly determine block order (50% get incompatible pairing first)
-  // This is set once per session and persists for the entire assessment
-  const [counterbalanced] = useState(() => Math.random() < 0.5);
+  // Counterbalancing per IAT methodology (2×2 design = 4 conditions):
+  // 1. pairingOrderSwapped: Which combined pairing comes first (compatible vs incompatible)
+  // 2. targetSideSwapped: Which target starts on the left (Flowers vs Insects)
+  // Both are independently randomized 50/50, set once per session
+  const [pairingOrderSwapped] = useState(() => Math.random() < 0.5);
+  const [targetSideSwapped] = useState(() => Math.random() < 0.5);
 
-  // Generate counterbalanced blocks based on random assignment
-  const [blocks] = useState(() => getCounterbalancedBlocks(baseConfig, counterbalanced));
+  // Generate counterbalanced blocks based on random assignments
+  const [blocks] = useState(() => getCounterbalancedBlocks(baseConfig, pairingOrderSwapped, targetSideSwapped));
+
+  // For backwards compatibility with scoring function
+  const counterbalanced = pairingOrderSwapped;
 
   // Create effective config with counterbalanced blocks
   const config = { ...baseConfig, blocks };

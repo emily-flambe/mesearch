@@ -25,8 +25,8 @@ test.describe('Implicit Association Test (IAT)', () => {
 
       // Should see disclaimer
       await expect(page.getByText('Important Disclaimer')).toBeVisible();
-      await expect(page.getByText('IMPORTANT: This is an educational demonstration')).toBeVisible();
-      await expect(page.getByText('Individual IAT results have LOW reliability')).toBeVisible();
+      await expect(page.getByText('educational demonstration of the Implicit Association Test')).toBeVisible();
+      await expect(page.getByText('NOT a diagnosis')).toBeVisible();
     });
   });
 
@@ -38,8 +38,9 @@ test.describe('Implicit Association Test (IAT)', () => {
       await page.getByTestId('iat-start').click();
 
       // Should see block 1 instructions - text appears in header and card
+      // Note: With counterbalancing, Flowers or Insects may appear on either side
       await expect(page.getByRole('heading', { name: 'Instructions' })).toBeVisible();
-      await expect(page.getByText('Press E for Flowers')).toBeVisible();
+      await expect(page.getByText(/Press E for (Flowers|Insects)/)).toBeVisible();
       await expect(page.getByTestId('iat-begin-block')).toBeVisible();
     });
 
@@ -191,11 +192,11 @@ test.describe('Implicit Association Test (IAT)', () => {
       await expect(page.getByText('Educational Self-Reflection Tool')).toBeVisible();
     });
 
-    test('intro page mentions low reliability', async ({ page }) => {
+    test('intro page mentions result variability', async ({ page }) => {
       await page.goto('/test/iat');
 
-      // Should mention reliability concerns
-      await expect(page.getByText(/reliability/i)).toBeVisible();
+      // Should mention that results can vary
+      await expect(page.getByText(/results can vary/i)).toBeVisible();
     });
 
     test('intro page discourages diagnosis use', async ({ page }) => {
