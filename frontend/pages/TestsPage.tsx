@@ -6,29 +6,19 @@ import { useFeatureFlags } from '../contexts/FeatureFlagsContext';
 function CategoryCard({ category }: { category: Category }) {
   const testCount = category.tests.length;
   return (
-    <div className="card-premium rounded-lg p-8 group">
-      <div className="flex items-center justify-between mb-6">
-        <span className="text-4xl">{category.icon}</span>
+    <Link to={`/tests/${category.id}`} className="card-premium rounded-lg p-8 block hover:border-[var(--color-champagne)]/30 transition-colors">
+      <div className="mb-6">
         <span className="text-[var(--color-text-muted)] text-xs tracking-wide">
           {testCount} {testCount === 1 ? 'test' : 'tests'}
         </span>
       </div>
-      <h4 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-1 transition-colors duration-300">
+      <h4 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-4 transition-colors duration-300">
         {category.title}
       </h4>
-      <p className="text-[var(--color-champagne)]/70 text-sm mb-4 tracking-wide">
-        {category.subtitle}
-      </p>
-      <p className="text-[var(--color-text-secondary)] text-sm mb-8 leading-relaxed transition-colors duration-300">
+      <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed transition-colors duration-300">
         {category.description}
       </p>
-      <Link
-        to={`/tests/${category.id}`}
-        className="btn-ghost block w-full py-3 rounded text-center text-xs tracking-widest uppercase"
-      >
-        Explore Category
-      </Link>
-    </div>
+    </Link>
   );
 }
 

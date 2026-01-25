@@ -102,10 +102,9 @@ test.describe('Short Dark Triad (SD3) Assessment', () => {
   test('can navigate to SD3 from personality category page', async ({ page }) => {
     await page.goto('/tests/personality');
 
-    // Find the SD3 test card and click "Begin Assessment"
-    // The card contains "Dark Triad" heading and has a Begin Assessment link
-    const sd3Card = page.locator('.card-premium', { has: page.getByRole('heading', { name: 'Dark Triad' }) });
-    await sd3Card.getByRole('link', { name: /Begin Assessment/i }).click();
+    // Click on the SD3 test card (entire card is clickable)
+    const sd3Card = page.locator('a.card-premium', { has: page.getByRole('heading', { name: 'Dark Triad' }) });
+    await sd3Card.click();
 
     // Should be on SD3 assessment page
     await expect(page).toHaveURL('/test/sd3');

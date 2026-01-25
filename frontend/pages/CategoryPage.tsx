@@ -22,7 +22,7 @@ function RatingDots({ value, max = 5 }: { value: number; max?: number }) {
 function TestCard({ test }: { test: TestInfo }) {
   const href = test.link || `/test/${test.slug}`;
   return (
-    <div className="card-premium rounded-lg p-8 group">
+    <Link to={href} className="card-premium rounded-lg p-8 block hover:border-[var(--color-champagne)]/30 transition-colors">
       <div className="flex items-center justify-between mb-6">
         <div className="flex gap-6">
           <div className="flex items-center gap-2">
@@ -41,14 +41,8 @@ function TestCard({ test }: { test: TestInfo }) {
       <p className="text-[var(--color-text-muted)] text-xs mb-3 tracking-wide">
         {test.keywords.join(' · ')}
       </p>
-      <p className="text-[var(--color-text-secondary)] text-sm mb-8 leading-relaxed transition-colors duration-300">{test.description}</p>
-      <Link
-        to={href}
-        className="btn-ghost block w-full py-3 rounded text-center text-xs tracking-widest uppercase"
-      >
-        Begin Assessment
-      </Link>
-    </div>
+      <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed transition-colors duration-300">{test.description}</p>
+    </Link>
   );
 }
 
@@ -94,8 +88,6 @@ export function CategoryPage() {
 
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="text-4xl mb-4">{category.icon}</div>
-          <p className="text-[var(--color-champagne)] text-xs tracking-[0.3em] uppercase mb-4">{category.subtitle}</p>
           <h1 className="font-display text-4xl md:text-5xl font-medium text-[var(--color-text-primary)] transition-colors duration-300 mb-4">
             {category.title}
           </h1>

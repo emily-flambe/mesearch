@@ -19,9 +19,9 @@ test.describe('Cognitive Reflection Test (CRT)', () => {
     test('can navigate to CRT from category page', async ({ page }) => {
       await page.goto('/tests/cognitive');
 
-      // Find the CRT card and click the begin button
-      const crtCard = page.locator('.card-premium', { has: page.getByRole('heading', { name: 'CRT' }) });
-      await crtCard.getByRole('link', { name: 'Begin Assessment' }).click();
+      // Click on the CRT card (entire card is clickable)
+      const crtCard = page.locator('a.card-premium', { has: page.getByRole('heading', { name: 'CRT' }) });
+      await crtCard.click();
 
       // Should see the CRT intro page
       await expect(page.getByRole('heading', { name: 'Cognitive Reflection Test' })).toBeVisible();

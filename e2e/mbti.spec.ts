@@ -18,9 +18,9 @@ test.describe('Myers-Briggs Style Test (OEJTS)', () => {
   test('can navigate to MBTI assessment and see intro', async ({ page }) => {
     await page.goto('/tests/personality');
 
-    // Click on the MBTI test card's "Begin Assessment" link
-    const mbtiCard = page.locator('.card-premium', { hasText: 'Myers-Briggs' });
-    await mbtiCard.getByRole('link', { name: 'Begin Assessment' }).click();
+    // Click on the MBTI test card (entire card is clickable)
+    const mbtiCard = page.locator('a.card-premium', { hasText: 'Myers-Briggs' });
+    await mbtiCard.click();
 
     // Should be on the MBTI intro page
     await expect(page).toHaveURL('/test/mbti');

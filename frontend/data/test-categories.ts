@@ -15,7 +15,6 @@ export interface Category {
   title: string;
   subtitle: string;
   description: string;
-  icon: string;
   tests: TestInfo[];
 }
 
@@ -25,7 +24,6 @@ export const categories: Category[] = [
     title: 'Personality',
     subtitle: 'Trait-based assessments',
     description: 'Explore your fundamental personality traits through scientifically validated and popular frameworks.',
-    icon: '🎭',
     tests: [
       {
         title: 'Big Five',
@@ -85,7 +83,6 @@ export const categories: Category[] = [
     title: 'Implicit Association Tests',
     subtitle: 'Reaction-time based measures',
     description: 'Measure automatic associations through reaction time. Educational tools for exploring implicit cognition.',
-    icon: '⚡',
     tests: [
       {
         title: 'Flowers-Insects IAT',
@@ -104,7 +101,6 @@ export const categories: Category[] = [
     title: 'Empathy & Social Cognition',
     subtitle: 'Understanding others',
     description: 'Assess your ability to understand emotions, mental states, and social dynamics.',
-    icon: '👁️',
     tests: [
       {
         title: 'RMET',
@@ -123,7 +119,6 @@ export const categories: Category[] = [
     title: 'Values & Morality',
     subtitle: 'Ethical frameworks',
     description: 'Discover your moral intuitions and the values that guide your ethical decision-making.',
-    icon: '⚖️',
     tests: [
       {
         title: 'Moral Foundations',
@@ -142,7 +137,6 @@ export const categories: Category[] = [
     title: 'Cognitive',
     subtitle: 'Thinking patterns',
     description: 'Explore how you think, reason, and make decisions.',
-    icon: '🧠',
     tests: [
       {
         title: 'CRT',
@@ -161,7 +155,6 @@ export const categories: Category[] = [
     title: 'Relationships',
     subtitle: 'Connection patterns',
     description: 'Understand how you connect with others, express appreciation, and form attachments.',
-    icon: '💕',
     tests: [
       {
         title: 'Attachment Style',
