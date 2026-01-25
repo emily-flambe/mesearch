@@ -22,6 +22,10 @@ import { PublicProfile } from './pages/PublicProfile';
 import { PublicResultDetail } from './pages/PublicResultDetail';
 import MiniTestAssessment from './components/MiniTestAssessment';
 import IATAssessment from './components/IATAssessment';
+import RaceIATAssessment from './components/RaceIATAssessment';
+import SkinToneIATAssessment from './components/SkinToneIATAssessment';
+import GenderCareerIATAssessment from './components/GenderCareerIATAssessment';
+import WeaponsIATAssessment from './components/WeaponsIATAssessment';
 import LoveLanguagesAssessment from './components/LoveLanguagesAssessment';
 import LoveLanguagesResults from './components/LoveLanguagesResults';
 import ECRAssessment from './components/ECRAssessment';
@@ -413,6 +417,10 @@ export default function App() {
             <Route path="/test/rmet/results" element={<RMETResults />} />
             <Route path="/test/sd3" element={<SD3Assessment />} />
             <Route path="/test/sd3/results" element={<SD3Results />} />
+            <Route path="/test/race-iat" element={<RaceIATAssessment />} />
+            <Route path="/test/skin-tone-iat" element={<SkinToneIATAssessment />} />
+            <Route path="/test/gender-career-iat" element={<GenderCareerIATAssessment />} />
+            <Route path="/test/weapons-iat" element={<WeaponsIATAssessment />} />
             <Route path="/test/:slug" element={<TestRouter />} />
             <Route
               path="/hexaco"
