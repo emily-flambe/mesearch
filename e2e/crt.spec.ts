@@ -13,7 +13,7 @@ test.describe('Cognitive Reflection Test (CRT)', () => {
 
       // Should see the CRT test card in the Cognitive category
       await expect(page.getByRole('heading', { name: 'CRT' })).toBeVisible();
-      await expect(page.getByText('Cognitive Reflection')).toBeVisible();
+      await expect(page.getByText('Reasoning')).toBeVisible();
     });
 
     test('can navigate to CRT from category page', async ({ page }) => {

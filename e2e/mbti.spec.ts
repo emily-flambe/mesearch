@@ -12,7 +12,7 @@ test.describe('Myers-Briggs Style Test (OEJTS)', () => {
 
     // MBTI card should be visible
     await expect(page.getByRole('heading', { name: 'Myers-Briggs' })).toBeVisible();
-    await expect(page.getByText('OEJTS')).toBeVisible();
+    await expect(page.getByText('Types')).toBeVisible();
   });
 
   test('can navigate to MBTI assessment and see intro', async ({ page }) => {

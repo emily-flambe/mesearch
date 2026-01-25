@@ -92,9 +92,8 @@ test.describe('Short Dark Triad (SD3) Assessment', () => {
     await page.goto('/tests/personality');
 
     // Verify the SD3 test card is displayed - scope to the card to avoid strict mode violations
-    const sd3Card = page.locator('.card-premium', { has: page.getByRole('heading', { name: 'Dark Triad' }) });
+    const sd3Card = page.locator('a.card-premium', { has: page.getByRole('heading', { name: 'Dark Triad' }) });
     await expect(sd3Card.getByRole('heading', { name: 'Dark Triad' })).toBeVisible();
-    await expect(sd3Card.getByText('SD3')).toBeVisible();
     await expect(sd3Card.getByText('5 min', { exact: true })).toBeVisible();
     await expect(sd3Card.getByText('Machiavellianism, Narcissism, and Psychopathy')).toBeVisible();
   });

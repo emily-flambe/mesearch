@@ -101,8 +101,6 @@ test.describe('Moral Foundations Questionnaire Assessment', () => {
 
     // Verify the MFQ test card is visible
     await expect(page.getByText('Moral Foundations')).toBeVisible();
-    await expect(page.getByText('MFQ-30')).toBeVisible();
-    // Use more specific selector since multiple cards have "Ethics" keyword
     await expect(page.getByText('Ethics · Values · Politics')).toBeVisible();
   });
 

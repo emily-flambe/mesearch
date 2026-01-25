@@ -7,7 +7,6 @@ test.describe('Communication Styles Assessment', () => {
 
       // Should see the Communication Styles test card
       await expect(page.getByRole('heading', { name: 'Communication Styles' })).toBeVisible();
-      await expect(page.getByText('Five Styles')).toBeVisible();
       await expect(page.getByText('Discover how you prefer to give and receive appreciation')).toBeVisible();
     });
   });

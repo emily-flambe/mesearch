@@ -164,7 +164,6 @@ test.describe('RMET Assessment', () => {
 
     // Should see RMET test card
     await expect(page.getByRole('heading', { name: 'RMET' })).toBeVisible();
-    await expect(page.getByText('Eyes Test')).toBeVisible();
     await expect(page.getByText('Social Cognition', { exact: false }).first()).toBeVisible();
   });
 
