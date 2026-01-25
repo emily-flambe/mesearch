@@ -355,8 +355,6 @@ Implicit associations are influenced by cultural exposure and do not necessarily
 5. RESULTS ARE FOR REFLECTION ONLY
 Use this as an opportunity for self-awareness and learning, not as a definitive assessment of who you are.
 
-NOTE: This version uses placeholder text labels. Future versions will include face images for more accurate measurement.
-
 By proceeding, you acknowledge that:
 - You understand this measures implicit associations, not prejudice
 - You may encounter results that surprise you or feel uncomfortable
@@ -364,30 +362,26 @@ By proceeding, you acknowledge that:
   categories: {
     target1: {
       name: 'Black faces',
-      // Placeholder labels - future versions will use actual face images
+      // Face images from Project Implicit
       items: [
-        'Black Face 1',
-        'Black Face 2',
-        'Black Face 3',
-        'Black Face 4',
-        'Black Face 5',
-        'Black Face 6',
-        'Black Face 7',
-        'Black Face 8',
+        '/images/iat/race/bf14_nc.jpg',
+        '/images/iat/race/bf23_nc.jpg',
+        '/images/iat/race/bf56_nc.jpg',
+        '/images/iat/race/bm14_nc.jpg',
+        '/images/iat/race/bm23_nc.jpg',
+        '/images/iat/race/bm56_nc.jpg',
       ],
     },
     target2: {
       name: 'White faces',
-      // Placeholder labels - future versions will use actual face images
+      // Face images from Project Implicit
       items: [
-        'White Face 1',
-        'White Face 2',
-        'White Face 3',
-        'White Face 4',
-        'White Face 5',
-        'White Face 6',
-        'White Face 7',
-        'White Face 8',
+        '/images/iat/race/wf2_nc.jpg',
+        '/images/iat/race/wf3_nc.jpg',
+        '/images/iat/race/wf6_nc.jpg',
+        '/images/iat/race/wm1_nc.jpg',
+        '/images/iat/race/wm4_nc.jpg',
+        '/images/iat/race/wm6_nc.jpg',
       ],
     },
     attribute1: {
@@ -620,8 +614,6 @@ ETHICAL FRAMING:
 - Results are most meaningful for self-reflection, not self-judgment
 - Use this as an opportunity for awareness, not a definitive assessment
 
-NOTE: This version uses placeholder text labels. Future versions will include face images for a more valid assessment.
-
 By proceeding, you acknowledge that:
 1. You may encounter results that differ from your conscious beliefs
 2. You will use your results for self-reflection, not self-criticism
@@ -629,28 +621,30 @@ By proceeding, you acknowledge that:
   categories: {
     target1: {
       name: 'Light Skin',
+      // Face images from Project Implicit (A suffix = light skin)
       items: [
-        'Light Skin 1',
-        'Light Skin 2',
-        'Light Skin 3',
-        'Light Skin 4',
-        'Light Skin 5',
-        'Light Skin 6',
-        'Light Skin 7',
-        'Light Skin 8',
+        '/images/iat/skin-tone/TONE0031A.jpg',
+        '/images/iat/skin-tone/TONE0041A.jpg',
+        '/images/iat/skin-tone/TONE0051A.jpg',
+        '/images/iat/skin-tone/TONE0061A.jpg',
+        '/images/iat/skin-tone/TONE0071A.jpg',
+        '/images/iat/skin-tone/TONE0081A.jpg',
+        '/images/iat/skin-tone/TONE0091A.jpg',
+        '/images/iat/skin-tone/TONE0101A.jpg',
       ],
     },
     target2: {
       name: 'Dark Skin',
+      // Face images from Project Implicit (B suffix = dark skin)
       items: [
-        'Dark Skin 1',
-        'Dark Skin 2',
-        'Dark Skin 3',
-        'Dark Skin 4',
-        'Dark Skin 5',
-        'Dark Skin 6',
-        'Dark Skin 7',
-        'Dark Skin 8',
+        '/images/iat/skin-tone/TONE0031B.jpg',
+        '/images/iat/skin-tone/TONE0041B.jpg',
+        '/images/iat/skin-tone/TONE0051B.jpg',
+        '/images/iat/skin-tone/TONE0061B.jpg',
+        '/images/iat/skin-tone/TONE0071B.jpg',
+        '/images/iat/skin-tone/TONE0081B.jpg',
+        '/images/iat/skin-tone/TONE0091B.jpg',
+        '/images/iat/skin-tone/TONE0101B.jpg',
       ],
     },
     attribute1: {
@@ -759,8 +753,6 @@ This is an extremely sensitive assessment that examines implicit associations re
 
 IMPORTANT CONTEXT:
 - This test replicates research paradigms used to study implicit weapon bias
-- It currently uses PLACEHOLDER TEXT LABELS instead of actual images
-- Future versions will include photographs of faces and images of objects
 - Your results reflect automatic associations, NOT your character, values, or conscious beliefs
 
 WHAT THIS TEST DOES NOT MEASURE:
@@ -789,37 +781,53 @@ By proceeding, you acknowledge that:
   categories: {
     target1: {
       name: 'Black Faces',
+      // Face images from Project Implicit
       items: [
-        'Black Face 1',
-        'Black Face 2',
-        'Black Face 3',
-        'Black Face 4',
-        'Black Face 5',
-        'Black Face 6',
-        'Black Face 7',
-        'Black Face 8',
+        '/images/iat/weapons/bf14.jpg',
+        '/images/iat/weapons/bf23.jpg',
+        '/images/iat/weapons/bf56.jpg',
+        '/images/iat/weapons/bm14.jpg',
+        '/images/iat/weapons/bm23.jpg',
+        '/images/iat/weapons/bm56.jpg',
       ],
     },
     target2: {
       name: 'White Faces',
+      // Face images from Project Implicit
       items: [
-        'White Face 1',
-        'White Face 2',
-        'White Face 3',
-        'White Face 4',
-        'White Face 5',
-        'White Face 6',
-        'White Face 7',
-        'White Face 8',
+        '/images/iat/weapons/wf2.jpg',
+        '/images/iat/weapons/wf3.jpg',
+        '/images/iat/weapons/wf6.jpg',
+        '/images/iat/weapons/wm1.jpg',
+        '/images/iat/weapons/wm4.jpg',
+        '/images/iat/weapons/wm6.jpg',
       ],
     },
     attribute1: {
       name: 'Weapons',
-      items: ['Gun', 'Knife', 'Sword', 'Bomb', 'Grenade', 'Rifle', 'Pistol', 'Dagger'],
+      // Weapon images from Project Implicit
+      items: [
+        '/images/iat/weapons/Waxe.jpg',
+        '/images/iat/weapons/Wcannon.jpg',
+        '/images/iat/weapons/Wgrenade.jpg',
+        '/images/iat/weapons/Wmace.jpg',
+        '/images/iat/weapons/Wrevolver.jpg',
+        '/images/iat/weapons/Wrifle.jpg',
+        '/images/iat/weapons/Wsword.jpg',
+      ],
     },
     attribute2: {
       name: 'Harmless',
-      items: ['Phone', 'Wallet', 'Camera', 'Keys', 'Sunglasses', 'Umbrella', 'Book', 'Flashlight'],
+      // Harmless object images from Project Implicit
+      items: [
+        '/images/iat/weapons/Hbottle.jpg',
+        '/images/iat/weapons/Hcamera.jpg',
+        '/images/iat/weapons/Hcoke.jpg',
+        '/images/iat/weapons/Hice_cream.jpg',
+        '/images/iat/weapons/Hphone.jpg',
+        '/images/iat/weapons/Hwalkman.jpg',
+        '/images/iat/weapons/Hwallet.jpg',
+      ],
     },
   },
   // Standard 7-block IAT structure
