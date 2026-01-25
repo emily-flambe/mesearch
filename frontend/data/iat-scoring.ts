@@ -204,6 +204,9 @@ export function interpretDScore(dScore: number): DScoreInterpretation {
 
 /**
  * Get human-readable interpretation text for D-score
+ *
+ * Language modeled after Project Implicit (implicit.harvard.edu)
+ * Uses "implicit preference" terminology and emphasizes reflection over diagnosis
  */
 export function getDScoreInterpretationText(
   dScore: number,
@@ -214,22 +217,25 @@ export function getDScoreInterpretationText(
   // For Flowers-Insects IAT:
   // Positive D = Flowers+Good association (most people)
   // Negative D = Insects+Good association (uncommon)
+  //
+  // Labels (Slight/Moderate/Strong) reflect effect sizes based on
+  // scientific conventions for communicating IAT results.
 
   switch (interpretation) {
     case 'strong_preference_a':
-      return 'Your results suggest a strong automatic association between Insects and Good (compared to Flowers and Good). This is an unusual pattern.';
+      return 'Your result suggests a strong implicit preference for Insects over Flowers. This means you were noticeably faster when Insects and Good shared a response key. This is an uncommon pattern.';
     case 'moderate_preference_a':
-      return 'Your results suggest a moderate automatic association between Insects and Good (compared to Flowers and Good). This is an uncommon pattern.';
+      return 'Your result suggests a moderate implicit preference for Insects over Flowers. This means you were faster when Insects and Good shared a response key. This is an uncommon pattern.';
     case 'slight_preference_a':
-      return 'Your results suggest a slight automatic association between Insects and Good (compared to Flowers and Good).';
+      return 'Your result suggests a slight implicit preference for Insects over Flowers. This means you were somewhat faster when Insects and Good shared a response key.';
     case 'little_to_no_preference':
-      return 'Your results suggest little to no difference in automatic associations between Flowers+Good and Insects+Good.';
+      return 'Your result suggests little to no implicit preference between Flowers and Insects. Your response times were similar regardless of which concepts shared a response key.';
     case 'slight_preference_b':
-      return 'Your results suggest a slight automatic association between Flowers and Good (compared to Insects and Good). This is a common pattern.';
+      return 'Your result suggests a slight implicit preference for Flowers over Insects. This means you were somewhat faster when Flowers and Good shared a response key. This is a common pattern.';
     case 'moderate_preference_b':
-      return 'Your results suggest a moderate automatic association between Flowers and Good (compared to Insects and Good). This is a common pattern.';
+      return 'Your result suggests a moderate implicit preference for Flowers over Insects. This means you were faster when Flowers and Good shared a response key. This is a common pattern.';
     case 'strong_preference_b':
-      return 'Your results suggest a strong automatic association between Flowers and Good (compared to Insects and Good). This is the most common pattern.';
+      return 'Your result suggests a strong implicit preference for Flowers over Insects. This means you were noticeably faster when Flowers and Good shared a response key. This is the most common pattern.';
   }
 }
 
@@ -310,21 +316,22 @@ export function isValidRT(rt: number): { valid: boolean; tooFast: boolean; tooSl
 
 /**
  * Get the standard disclaimer text
+ *
+ * Language modeled after Project Implicit (implicit.harvard.edu)
+ * Based on their FAQs and ethical guidelines
  */
 export function getDisclaimer(): string {
-  return `IMPORTANT LIMITATIONS OF THIS RESULT
+  return `UNDERSTANDING YOUR RESULT
 
-1. LOW INDIVIDUAL RELIABILITY: IAT scores have a test-retest reliability of approximately 0.50. This means your score could differ substantially if you take the test again.
+Take this result as an opportunity for self-reflection, not as a definitive assessment.
 
-2. NOT A DIAGNOSIS: This result does not indicate your conscious beliefs, values, or character. It measures automatic associations only.
+• YOUR RESULT MAY VARY: IAT scores can differ if you take the test again. Factors like fatigue, distraction, and recent experiences all influence results—similar to how blood pressure varies between doctor visits.
 
-3. MANY FACTORS AFFECT SCORES: Fatigue, distraction, familiarity with the task, and random variation all influence IAT results.
+• NOT A MEASURE OF PREJUDICE: An implicit preference does not mean you are prejudiced. The IAT measures associations that are not necessarily personally endorsed and may even contradict your conscious beliefs.
 
-4. EDUCATIONAL PURPOSE: This tool is designed for self-reflection and learning about implicit cognition. It should not be used to make important decisions.
+• LIMITED PREDICTIVE VALUE: A single IAT score is unlikely to predict an individual's behavior in a specific situation. IAT results are most meaningful when looking at patterns across many people.
 
-5. DO NOT SHARE: Project Implicit, the creators of the IAT, explicitly recommend against sharing individual results. Results are most meaningful at the group level.
-
-If you're interested in learning more about the IAT and its limitations, visit implicit.harvard.edu.`;
+• FOR REFLECTION ONLY: This tool is designed for learning about implicit cognition. It should not be used for hiring decisions, selection purposes, or any consequential judgments about yourself or others.`;
 }
 
 /**

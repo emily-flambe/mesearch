@@ -48,7 +48,7 @@ export default function IATResultsDisplay({ results, onRetake }: IATResultsDispl
             <span
               className={`inline-block px-4 py-2 rounded-full text-sm font-medium border ${badge.color}`}
             >
-              {badge.text} Automatic Association
+              {badge.text} Implicit Preference
             </span>
           </div>
 
@@ -171,6 +171,62 @@ export default function IATResultsDisplay({ results, onRetake }: IATResultsDispl
           </div>
         </div>
 
+        {/* Learn More Section */}
+        <div className="bg-[var(--color-bg-tertiary)] rounded-lg p-4 mb-8">
+          <p className="text-[var(--color-text-secondary)] text-sm font-medium mb-3">
+            Learn More About the IAT
+          </p>
+          <div className="space-y-2 text-xs">
+            <a
+              href="https://implicit.harvard.edu/implicit/iatdetails.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-[var(--color-text-muted)] hover:text-[var(--color-champagne)] transition-colors"
+            >
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              How the IAT Works — Project Implicit
+            </a>
+            <a
+              href="https://implicit.harvard.edu/implicit/faqs.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-[var(--color-text-muted)] hover:text-[var(--color-champagne)] transition-colors"
+            >
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              Frequently Asked Questions — Project Implicit
+            </a>
+            <a
+              href="https://implicit.harvard.edu/implicit/ethics.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-[var(--color-text-muted)] hover:text-[var(--color-champagne)] transition-colors"
+            >
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              Ethical Considerations — Project Implicit
+            </a>
+            <a
+              href="https://pubmed.ncbi.nlm.nih.gov/12916565/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-[var(--color-text-muted)] hover:text-[var(--color-champagne)] transition-colors"
+            >
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              Greenwald et al. (2003) — IAT Scoring Algorithm (Academic Paper)
+            </a>
+          </div>
+          <p className="text-[var(--color-text-muted)] text-xs mt-3 italic">
+            The IAT was developed by Anthony Greenwald (University of Washington), Mahzarin Banaji (Harvard), and Brian Nosek (University of Virginia).
+          </p>
+        </div>
+
         {/* Actions */}
         <div className="flex gap-4 justify-center">
           <button
@@ -185,18 +241,6 @@ export default function IATResultsDisplay({ results, onRetake }: IATResultsDispl
           >
             Return Home
           </Link>
-        </div>
-
-        {/* Learn More Link */}
-        <div className="mt-6 text-center">
-          <a
-            href="https://implicit.harvard.edu/implicit/faqs.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[var(--color-text-muted)] text-xs hover:text-[var(--color-champagne)] transition-colors"
-          >
-            Learn more about the IAT and its limitations
-          </a>
         </div>
       </div>
     </div>

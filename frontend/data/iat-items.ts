@@ -42,16 +42,15 @@ export const flowersInsectsIAT: IATConfig = {
   id: 'flowers-insects',
   name: 'Flowers vs. Insects IAT',
   description:
-    'This IAT measures the strength of automatic associations between Flowers/Insects and Good/Bad. Most people find it easier to associate Flowers with Good and Insects with Bad.',
-  disclaimer: `IMPORTANT: This is an educational demonstration of the Implicit Association Test.
+    'This IAT measures implicit preferences between Flowers and Insects by comparing how quickly you sort words when different concepts share a response key. Most people find it easier to pair Flowers with Good and Insects with Bad.',
+  disclaimer: `This is an educational demonstration of the Implicit Association Test (IAT), developed by researchers at Harvard, the University of Virginia, and the University of Washington.
 
-- Individual IAT results have LOW reliability (test-retest ~0.50)
-- Your result may differ if you take the test again
-- This is NOT a diagnosis of your beliefs or character
-- Results reflect automatic associations, not conscious attitudes
-- Many factors affect IAT scores: fatigue, distraction, familiarity with concepts
+• Your result may differ from your conscious beliefs
+• Results can vary between sessions due to fatigue, distraction, or recent experiences
+• This is NOT a diagnosis—the IAT measures associations, not prejudice or character
+• Use your result as an opportunity for self-reflection, not a definitive assessment
 
-This tool is for SELF-REFLECTION only. Do not use it to make judgments about yourself or others.`,
+By proceeding, you acknowledge that you may encounter interpretations you find surprising or objectionable.`,
   categories: {
     target1: {
       name: 'Flowers',
