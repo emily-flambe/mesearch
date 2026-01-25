@@ -7,6 +7,8 @@ import BigFiveAssessment from './components/BigFiveAssessment';
 import BigFiveResults from './components/BigFiveResults';
 import MFQAssessment from './components/MFQAssessment';
 import MFQResults from './components/MFQResults';
+import MFQ2Assessment from './components/MFQ2Assessment';
+import MFQ2Results from './components/MFQ2Results';
 import SD3Assessment from './components/SD3Assessment';
 import SD3Results from './components/SD3Results';
 import { enneagramItems, likertScale, type LikertValue } from './data/enneagram-items';
@@ -35,6 +37,10 @@ import MBTIAssessment from './components/MBTIAssessment';
 import MBTIResults from './components/MBTIResults';
 import RMETAssessment from './components/RMETAssessment';
 import RMETResults from './components/RMETResults';
+import SDO7Assessment from './components/SDO7Assessment';
+import SDO7Results from './components/SDO7Results';
+import RWAAssessment from './components/RWAAssessment';
+import RWAResults from './components/RWAResults';
 import { TestsPage } from './pages/TestsPage';
 import { CategoryPage } from './pages/CategoryPage';
 
@@ -413,6 +419,8 @@ export default function App() {
             <Route path="/test/mbti/results" element={<MBTIResults />} />
             <Route path="/test/mfq" element={<MFQAssessment />} />
             <Route path="/test/mfq/results" element={<MFQResults />} />
+            <Route path="/test/mfq2" element={<MFQ2Assessment />} />
+            <Route path="/test/mfq2/results" element={<MFQ2Results />} />
             <Route path="/test/rmet" element={<RMETAssessment />} />
             <Route path="/test/rmet/results" element={<RMETResults />} />
             <Route path="/test/sd3" element={<SD3Assessment />} />
@@ -421,6 +429,10 @@ export default function App() {
             <Route path="/test/skin-tone-iat" element={<SkinToneIATAssessment />} />
             <Route path="/test/gender-career-iat" element={<GenderCareerIATAssessment />} />
             <Route path="/test/weapons-iat" element={<WeaponsIATAssessment />} />
+            <Route path="/test/sdo7" element={<SDO7Assessment />} />
+            <Route path="/test/sdo7/results" element={<SDO7Results />} />
+            <Route path="/test/rwa" element={<RWAAssessment />} />
+            <Route path="/test/rwa/results" element={<RWAResults />} />
             <Route path="/test/:slug" element={<TestRouter />} />
             <Route
               path="/hexaco"
