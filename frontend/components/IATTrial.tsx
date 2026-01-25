@@ -167,23 +167,23 @@ export default function IATTrial({
         {stimulus}
       </div>
 
-      {/* Error feedback */}
+      {/* Error feedback - red X per IAT methodology */}
       {showErrorFeedback && (
         <div
-          className="absolute bottom-24 text-red-500 text-xl font-medium animate-pulse"
+          className="absolute bottom-24 text-red-500 text-6xl font-bold"
           data-testid="iat-error-feedback"
         >
-          X - Wrong key! Press the correct key.
+          X
         </div>
       )}
 
-      {/* Visual feedback for correct/incorrect */}
+      {/* Correct feedback - green checkmark */}
       {feedbackType === 'correct' && (
         <div
-          className="absolute bottom-24 text-green-500 text-xl"
+          className="absolute bottom-24 text-green-500 text-6xl"
           data-testid="iat-correct-feedback"
         >
-          Correct
+          ✓
         </div>
       )}
     </div>
