@@ -7,8 +7,8 @@ test.describe('Implicit Association Test (IAT)', () => {
 
       // IAT card should be visible on IAT category page
       await expect(page.getByRole('heading', { name: 'Flowers-Insects IAT' })).toBeVisible();
-      // Check for keywords within the test card
-      await expect(page.getByText('Reaction Time')).toBeVisible();
+      // Check for test description
+      await expect(page.getByText('Measure automatic associations between flowers/insects')).toBeVisible();
     });
 
     test('can navigate to IAT directly via URL', async ({ page }) => {
