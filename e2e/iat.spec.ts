@@ -2,12 +2,13 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Implicit Association Test (IAT)', () => {
   test.describe('IAT Accessibility', () => {
-    test('IAT is visible on tests page', async ({ page }) => {
-      await page.goto('/tests');
+    test('IAT is visible on iat category page', async ({ page }) => {
+      await page.goto('/tests/iat');
 
-      // IAT card should be visible on tests page
-      await expect(page.getByRole('heading', { name: 'IAT' })).toBeVisible();
-      await expect(page.getByText('Implicit Association Test')).toBeVisible();
+      // IAT card should be visible on IAT category page
+      await expect(page.getByRole('heading', { name: 'Flowers-Insects IAT' })).toBeVisible();
+      // Check for the subtitle within the test card
+      await expect(page.getByText('Implicit Association Test', { exact: true })).toBeVisible();
     });
 
     test('can navigate to IAT directly via URL', async ({ page }) => {

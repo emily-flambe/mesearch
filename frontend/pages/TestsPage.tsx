@@ -1,6 +1,36 @@
 import { Link } from 'react-router-dom';
 import { Layout } from '../components/Layout';
+import { categories, Category } from '../data/test-categories';
 import { useFeatureFlags } from '../contexts/FeatureFlagsContext';
+
+function CategoryCard({ category }: { category: Category }) {
+  const testCount = category.tests.length;
+  return (
+    <div className="card-premium rounded-lg p-8 group">
+      <div className="flex items-center justify-between mb-6">
+        <span className="text-4xl">{category.icon}</span>
+        <span className="text-[var(--color-text-muted)] text-xs tracking-wide">
+          {testCount} {testCount === 1 ? 'test' : 'tests'}
+        </span>
+      </div>
+      <h4 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-1 transition-colors duration-300">
+        {category.title}
+      </h4>
+      <p className="text-[var(--color-champagne)]/70 text-sm mb-4 tracking-wide">
+        {category.subtitle}
+      </p>
+      <p className="text-[var(--color-text-secondary)] text-sm mb-8 leading-relaxed transition-colors duration-300">
+        {category.description}
+      </p>
+      <Link
+        to={`/tests/${category.id}`}
+        className="btn-ghost block w-full py-3 rounded text-center text-xs tracking-widest uppercase"
+      >
+        Explore Category
+      </Link>
+    </div>
+  );
+}
 
 function RatingDots({ value, max = 5 }: { value: number; max?: number }) {
   return (
@@ -19,51 +49,32 @@ function RatingDots({ value, max = 5 }: { value: number; max?: number }) {
   );
 }
 
-function TestCard({
-  title,
-  subtitle,
-  slug,
-  keywords,
-  description,
-  time,
-  seriousness,
-  fun,
-  link,
-}: {
-  title: string;
-  subtitle: string;
-  slug: string;
-  keywords: string[];
-  description: string;
-  time: string;
-  seriousness: number;
-  fun: number;
-  link?: string;
-}) {
-  const href = link || `/test/${slug}`;
+function MiniTestCard() {
   return (
     <div className="card-premium rounded-lg p-8 group">
       <div className="flex items-center justify-between mb-6">
         <div className="flex gap-6">
           <div className="flex items-center gap-2">
             <span className="text-[var(--color-text-muted)] text-[10px] tracking-wide uppercase">Seriousness</span>
-            <RatingDots value={seriousness} />
+            <RatingDots value={1} />
           </div>
           <div className="flex items-center gap-2">
             <span className="text-[var(--color-text-muted)] text-[10px] tracking-wide uppercase">Fun</span>
-            <RatingDots value={fun} />
+            <RatingDots value={1} />
           </div>
         </div>
-        <span className="text-[var(--color-text-muted)] text-xs tracking-wide">{time}</span>
+        <span className="text-[var(--color-text-muted)] text-xs tracking-wide">1 min</span>
       </div>
-      <h4 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-1 transition-colors duration-300">{title}</h4>
-      <p className="text-[var(--color-champagne)]/70 text-sm mb-4 tracking-wide">{subtitle}</p>
+      <h4 className="font-display text-2xl font-medium text-[var(--color-text-primary)] mb-1 transition-colors duration-300">Mini-Test</h4>
+      <p className="text-[var(--color-champagne)]/70 text-sm mb-4 tracking-wide">5 Questions</p>
       <p className="text-[var(--color-text-muted)] text-xs mb-3 tracking-wide">
-        {keywords.join(' · ')}
+        Debug · Testing · Quick
       </p>
-      <p className="text-[var(--color-text-secondary)] text-sm mb-8 leading-relaxed transition-colors duration-300">{description}</p>
+      <p className="text-[var(--color-text-secondary)] text-sm mb-8 leading-relaxed transition-colors duration-300">
+        A 5-question sampler for debugging and automated testing. One question from each Big Five dimension.
+      </p>
       <Link
-        to={href}
+        to="/test/mini-test"
         className="btn-ghost block w-full py-3 rounded text-center text-xs tracking-widest uppercase"
       >
         Begin Assessment
@@ -84,136 +95,16 @@ export function TestsPage() {
             Explore Tests
           </h1>
           <p className="text-[var(--color-text-secondary)] max-w-2xl mx-auto leading-relaxed">
-            Each test is rated on two dimensions: Seriousness reflects the depth of research
-            supporting its validity, while Fun captures how engaging the experience is.
+            Browse our collection of personality assessments organized by category.
+            Each test is rated on Seriousness (research validity) and Fun (engagement).
           </p>
         </div>
 
-        {/* Primary Tests - High scientific validity */}
-        <div className="grid md:grid-cols-3 gap-8">
-          <TestCard
-            title="Big Five"
-            subtitle="IPIP-NEO"
-            slug="big-five"
-            keywords={['Traits', 'Behavior', 'Stability']}
-            description="The gold standard in personality psychology. Measures Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism."
-            time="15 min"
-            seriousness={5}
-            fun={3}
-          />
-          <TestCard
-            title="HEXACO"
-            subtitle="Six Dimensions"
-            slug="hexaco"
-            link="/hexaco"
-            keywords={['Ethics', 'Honesty', 'Integrity']}
-            description="Six-factor model including Honesty-Humility. Predicts ethical behavior and workplace conduct with precision."
-            time="12 min"
-            seriousness={5}
-            fun={2}
-          />
-          <TestCard
-            title="Attachment Style"
-            subtitle="ECR-RS"
-            slug="ecr"
-            keywords={['Relationships', 'Anxiety', 'Avoidance']}
-            description="Understand your attachment patterns in close relationships. Measures anxiety and avoidance on continuous dimensions."
-            time="5 min"
-            seriousness={5}
-            fun={4}
-          />
-        </div>
-
-        {/* Second Row */}
-        <div className="grid md:grid-cols-3 gap-8 mt-8">
-          <TestCard
-            title="Moral Foundations"
-            subtitle="MFQ-30"
-            slug="mfq"
-            keywords={['Ethics', 'Values', 'Politics']}
-            description="Discover your moral intuitions across five foundations: Care, Fairness, Loyalty, Authority, and Purity. Based on Jonathan Haidt's research."
-            time="10 min"
-            seriousness={4}
-            fun={4}
-          />
-          <TestCard
-            title="Dark Triad"
-            subtitle="SD3"
-            slug="sd3"
-            keywords={['Strategy', 'Confidence', 'Boldness']}
-            description="Measures subclinical Machiavellianism, Narcissism, and Psychopathy. High engagement due to 'forbidden' appeal."
-            time="5 min"
-            seriousness={4}
-            fun={5}
-          />
-          <TestCard
-            title="CRT"
-            subtitle="Cognitive Reflection"
-            slug="crt"
-            keywords={['Reasoning', 'Reflection', 'Intuition']}
-            description="Test your ability to override intuitive wrong answers through deliberate reflection. The famous 'bat and ball' problem and more."
-            time="5 min"
-            seriousness={4}
-            fun={5}
-          />
-        </div>
-
-        {/* Third Row */}
-        <div className="grid md:grid-cols-3 gap-8 mt-8">
-          <TestCard
-            title="RMET"
-            subtitle="Eyes Test"
-            slug="rmet"
-            keywords={['Social Cognition', 'Empathy', 'Theory of Mind']}
-            description="Measure your ability to recognize emotions and mental states from eye expressions. Research-backed assessment of social cognition."
-            time="10 min"
-            seriousness={4}
-            fun={4}
-          />
-          <TestCard
-            title="Myers-Briggs"
-            subtitle="OEJTS"
-            slug="mbti"
-            keywords={['Types', 'Cognitive', 'Popular']}
-            description="The world's most popular personality test. Discover your type across four dichotomies: E/I, S/N, T/F, J/P."
-            time="10 min"
-            seriousness={2}
-            fun={5}
-          />
-          <TestCard
-            title="Enneagram"
-            subtitle="Nine Types"
-            slug="enneagram"
-            keywords={['Motivations', 'Growth', 'Archetypes']}
-            description="Explore your core motivations through nine distinct personality archetypes. Renowned for personal growth insights."
-            time="10 min"
-            seriousness={2}
-            fun={5}
-          />
-        </div>
-
-        {/* Fourth Row */}
-        <div className="grid md:grid-cols-3 gap-8 mt-8">
-          <TestCard
-            title="Communication Styles"
-            subtitle="Five Styles"
-            slug="communication-styles"
-            keywords={['Relationships', 'Appreciation', 'Connection']}
-            description="Discover how you prefer to give and receive appreciation. Learn your primary style for deeper connections."
-            time="5 min"
-            seriousness={2}
-            fun={5}
-          />
-          <TestCard
-            title="IAT"
-            subtitle="Implicit Association Test"
-            slug="iat"
-            keywords={['Reaction Time', 'Automatic Associations', 'Self-Reflection']}
-            description="Measure automatic associations through reaction time. Educational tool for exploring implicit cognition. Low individual reliability."
-            time="5-10 min"
-            seriousness={3}
-            fun={4}
-          />
+        {/* Category Cards Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {categories.map((category) => (
+            <CategoryCard key={category.id} category={category} />
+          ))}
         </div>
 
         {/* Mini-Test - Admin/Test Users Only */}
@@ -225,16 +116,7 @@ export function TestsPage() {
               </span>
             </div>
             <div className="max-w-md mx-auto">
-              <TestCard
-                title="Mini-Test"
-                subtitle="5 Questions"
-                slug="mini-test"
-                keywords={['Debug', 'Testing', 'Quick']}
-                description="A 5-question sampler for debugging and automated testing. One question from each Big Five dimension."
-                time="1 min"
-                seriousness={1}
-                fun={1}
-              />
+              <MiniTestCard />
             </div>
           </div>
         )}

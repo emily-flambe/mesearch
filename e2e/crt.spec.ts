@@ -8,16 +8,16 @@ test.describe('Cognitive Reflection Test (CRT)', () => {
   });
 
   test.describe('Navigation and Intro', () => {
-    test('CRT card is visible on tests page', async ({ page }) => {
-      await page.goto('/tests');
+    test('CRT card is visible on cognitive category page', async ({ page }) => {
+      await page.goto('/tests/cognitive');
 
-      // Should see the CRT test card
+      // Should see the CRT test card in the Cognitive category
       await expect(page.getByRole('heading', { name: 'CRT' })).toBeVisible();
       await expect(page.getByText('Cognitive Reflection')).toBeVisible();
     });
 
-    test('can navigate to CRT from tests page', async ({ page }) => {
-      await page.goto('/tests');
+    test('can navigate to CRT from category page', async ({ page }) => {
+      await page.goto('/tests/cognitive');
 
       // Find the CRT card and click the begin button
       const crtCard = page.locator('.card-premium', { has: page.getByRole('heading', { name: 'CRT' }) });
