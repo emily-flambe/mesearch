@@ -164,7 +164,16 @@ export default function IATTrial({
         style={{ color: stimulusColor }}
         data-testid="iat-stimulus"
       >
-        {stimulus}
+        {stimulus.endsWith('.jpg') || stimulus.endsWith('.png') ? (
+          <img
+            src={stimulus}
+            alt=""
+            className="w-48 h-48 object-contain mx-auto"
+            draggable={false}
+          />
+        ) : (
+          stimulus
+        )}
       </div>
 
       {/* Error feedback - red X per IAT methodology */}
